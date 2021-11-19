@@ -1,0 +1,38 @@
+{
+  "name": "bot-name",
+  "main": "src/index.js",
+  "repository": "your github url",
+  "author": "Your name",
+  "license": "MIT",
+  "scripts": {
+    "start": "node .",
+    "test": "eslint ./ --fix",
+    "dev": "nodemon .",
+    "lint": "eslint ./",
+    "lint:fix": "eslint ./ --fix"
+  },
+  "dependencies": {
+    "@discordjs/builders": "^0.8.2",
+    "chalk": "^3.0.0",
+    "discord.js": "^13.2.0",
+    "dokdo": "^0.5.1",
+    "fs": "^0.0.1-security",
+    "i18n": "^0.13.3",
+    "module-alias": "^2.2.2",
+    "mongodb": "^4.1.4",
+    "strip-ansi": "^5.2.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.1.0",
+    "nodemon": "^2.0.14"
+  },
+  "_moduleAliases": {
+		"@root": ".",
+		"@config": "config.js",
+    "@class": "src/structures",
+		"@events": "src/events",
+		"@commands": "src/commands"
+	}
+}

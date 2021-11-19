@@ -1,0 +1,21 @@
+entrypoint="index.js"
+
+[interpreter]
+command = [
+  "prybar-nodejs",
+  "-q",
+  "--ps1",
+  "\u0001\u001b[33m\u0002\u0001\u001b[00m\u0002 ",
+  "-i"
+]
+
+[packager]
+language = "nodejs-npm"
+[packager.features]
+packageSearch = true
+guessImports = true
+
+[languages.js]
+pattern = "**/*.js"
+[languages.js.languageServer]
+start = ["typescript-language-server", "--stdio"]
