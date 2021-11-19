@@ -59,19 +59,12 @@ class Logger {
    */
   constructor(scope) {
     this.scope = scope
-    
-    let level = config.logger.level
 
-    if(config.logger.dev) {
-      return level = 'debug'
-    }
-
-    console.log(config.logger.level)
     this.logger = createLogger({
       levels: myCustomLevels.levels,
       transports: [
         new transports.Console({
-          level: config.logger.level,
+          level: config.logger.dev ? 'debug' : config.logger.level,
           format: combine(
             splat(),
             colorize(),
@@ -90,10 +83,14 @@ class Logger {
    * @param  {...any} args 
    */
   log(message, ...args) {
-    console.log(this.logger.lev)
     this.logger.info(message, ...args, { label: this.scope })
   }
 
+  /**
+   * 
+   * @param {string} message 
+   * @param  {...any} args 
+   */
   info(message, ...args) {
     this.logger.info(message, ...args, { label: this.scope })
   }

@@ -33,6 +33,8 @@
 		"@config": "config.js",
     "@class": "src/structures",
 		"@events": "src/events",
-		"@commands": "src/commands"
+		"@commands": "src/commands",
+    "@manager": "src/managers",
+    "@utils": "src/utils"
 	}
 }

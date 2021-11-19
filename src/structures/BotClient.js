@@ -1,10 +1,12 @@
-const { Client } = require('discord.js')
+const { Client, Collection } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
 
 const config = require('@config')
-const Logger = require('./Logger')
+const Logger = require('../utils/Logger')
 const logger = new Logger('bot')
+
+
 /**
  * Discord Bot Client
  * @extends {Client}
@@ -14,12 +16,13 @@ class BotClient extends Client {
    * BotClient constructor
    * @param {import('discord.js').ClientOptions} options Discord client options
    */
-  constructor(options, BUILD_VERSION) {
+  constructor(options = { parse: ['users', 'roles'], repliedUser: false }, BUILD_VERSION) {
     super(options)
 
     logger.info('Loading config data...')
 
     this.VERSION = BUILD_VERSION
+
     if (fs.existsSync(path.join(path.resolve(), 'config.js'))) {
       /**
        * @type {import('../../config')}
@@ -29,6 +32,16 @@ class BotClient extends Client {
     } else {
       logger.fatal('Config file not found!')
     }
+
+    /**
+     * @type {Collection<string, Command>}
+     */
+    this.commands = new Collection()
+
+    /**
+     * @type {Collection<string, Command>}
+     */
+    this.events = new Collection()
   }
 
   /**

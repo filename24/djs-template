@@ -1,34 +1,46 @@
 const { Collection } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
-const Logger = require('@class/Logger')
-const { pathToFileURL } = require('url')
+const Logger = require('@utils/Logger')
+const BaseManager = require('./BaseManager')
+
 /**
- * @type {import('../structures/Logger')}
+ * @type {import('../utils/Logger')}
  */
 const logger = new Logger('CommandManager')
 
-class CommandManager {
-  constructor(client) {
-    this.client = client
-    /**
-     * @type {Collection<string, Command>}
-     */
-    this.commands = new Collection()
+/**
+ * @typedef {Object} Command
+ * @property {string} name
+ * @property {string} description
+ * @property {string} usage
+ * @property {string[]} aliases 
+ * @property {void} execute
+ */
 
-    /**
-     * @type {Collection<string, string>}
-     */
-    this.aliases = new Collection()
+/**
+ * @extends {BaseManager}
+ */
+class CommandManager extends BaseManager {
+  /**
+   * Command Manager constructor
+   * @param {import('../structures/BotClient')} client Bot client
+   */
+  constructor(client) {
+    super(client)
+
+    this.commands = client.commands
+    this.aliases = client.aliases
 
   }
 
   /**
    * Load commmands from a directory
    * @param {string} commandPath commandPath is the path to the folder containing the commands
-   * @returns {void}
    */
-  async loadCommands(commandPath = path.join(__dirname, '../commands')) {
+  async load(commandPath = path.join(__dirname, '../commands')) {
+    logger.debug('Loading commands...')
+
     const commandFolder = fs.readdirSync(commandPath)
 
     try {
@@ -42,14 +54,17 @@ class CommandManager {
             try {
               if (!commandFile.endsWith('.js')) return logger.debug(`Not a Javascript file ${commandFile}. Skipping.`)
 
-              const command = require(`@commands/${commandFolder}/${commandFile}`)
+              let command = require(`@commands/${commandFolder}/${commandFile}`)
+
+              if(!command.name) return logger.debug(`Command ${commandFile} has no name. Skipping.`)
 
               this.commands.set(command.name, command)
-              this.aliases.set(command.name, command.name)
 
               logger.debug(`Loaded command ${command.name}`)
             } catch (error) {
               logger.error(`Error loading command '${commandFile}'.\n` + error.stack)
+            } finally {
+              logger.debug(`Succesfully loaded commands. count: ${this.commands.size}`)
             }
           })
         } catch (error) {
@@ -61,23 +76,29 @@ class CommandManager {
     }
   }
 
-  getCommand(command) {
-    if (this.commands.has(command)) {
-      return this.commands.get(command)
-    } else if (this.aliases.has(command)) {
-      return this.commands.get(this.aliases.get(command))
+  /**
+   * 
+   * @param {string} commandName
+   * @returns {null|Command}
+   */
+  get(commandName) {
+    if (this.commands.has(commandName)) {
+      return this.commands.get(commandName)
+    } else {
+      this.commands.forEach(commandData => {
+        if (commandData.aliases.includes(commandName)) return commandData
+      })
     }
     return null
   }
 
-  reloadCommands(commandPath = path.join(__dirname, '../commands')) {
+  reload(commandPath = path.join(__dirname, '../commands')) {
     logger.debug('Reloading commands...')
 
     this.commands.clear()
-    this.aliases.clear()
 
-    this.loadCommands(commandPath).then(() => {
-      logger.debug('Commands reloaded!')
+    this.load(commandPath).then(() => {
+      logger.debug('Succesfully reloaded commands.')
     })
   }
 }

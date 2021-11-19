@@ -1,6 +1,6 @@
 require('module-alias/register')
 
-const Logger = require('./structures/Logger')
+const Logger = require('./utils/Logger')
 const logger = new Logger('main')
 const path = require('path')
 /**
@@ -25,14 +25,20 @@ console.log(require('chalk').cyanBright(`
 
 logger.log('Starting up...')
 
+process.on('uncaughtException', (e) => logger.error(e))
+process.on('unhandledRejection', (e) => logger.error(e))
+
 const BotClient = require('./structures/BotClient')
 const CommandManager = require('./managers/CommandManager')
+const EventManager = require('./managers/EventManager')
 
-const client = new BotClient(config.bot.options, BUILD_VERSION)
-const commandManager = new CommandManager(client)
+let client = new BotClient(config.bot.options, BUILD_VERSION)
+let commandManager = new CommandManager(client)
+let eventManager = new EventManager(client)
 
-commandManager.loadCommands(path.join(__dirname, 'commands'))
-commandManager.reloadCommands()
+commandManager.load(path.join(__dirname, 'commands'))
+eventManager.load(path.join(__dirname, 'events'))
+
 client.start(config.bot.token)
 
 
