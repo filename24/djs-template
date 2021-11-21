@@ -36,14 +36,14 @@ class EventManager extends BaseManager {
         if(!event.name) return this.logger.debug(`Event ${eventFile} has no name. Skipping.`)
 
         this.events.set(event.name, event)
+        this.logger.debug(`Loaded event ${eventFile}`)
       } catch (error) {
         this.logger.error(`Error loading events '${eventFile}'.\n` + error.stack)
-      } finally {
-        this.logger.debug(`Succesfully loaded events. count: ${this.events.size}`)
-
-        this.start()
-      }
+      } 
     })
+    this.logger.debug(`Succesfully loaded events. count: ${this.events.size}`)
+
+    this.start()
   }
 
   async start() {
@@ -79,8 +79,11 @@ class EventManager extends BaseManager {
   }
 
   /**
-   * @param {string} eventName 
-   * @param {function} fn 
+   * @param {import('discord.js').ClientEvents} eventName 
+   * @param {Function} fn
+   * @example EventManager.register('ready', (client) => {
+   *  console.log(`${client.user.tag} is ready!`)
+   * })
    */
   register(eventName, fn) {
     this.events.set(eventName, fn)

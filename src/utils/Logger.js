@@ -100,15 +100,6 @@ class Logger {
    * @param {string} message 
    * @param  {...any} args 
    */
-  debug(message, ...args) {
-    this.logger.debug(message, ...args, { label: this.scope })
-  }
-
-  /**
-   * 
-   * @param {string} message 
-   * @param  {...any} args 
-   */
   warn(message, ...args) {
     this.logger.warn(message, ...args, { label: this.scope })
   }

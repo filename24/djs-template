@@ -1,9 +1,12 @@
 const { Client, Collection } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
-
-const config = require('@config')
 const Logger = require('../utils/Logger')
+
+/**
+ * @type {import('../../config')}
+ */
+const config = require('@config')
 const logger = new Logger('bot')
 
 
@@ -42,13 +45,18 @@ class BotClient extends Client {
      * @type {Collection<string, Command>}
      */
     this.events = new Collection()
+    
+    /**
+     * @type {Collection<string, Command>}
+     */
+    this.errors = new Collection()
   }
 
   /**
    * Loggin in the bot
    * @param {string} token Discord bot token
    */
-  async start(token) {
+  async start(token = config.bot.token) {
     logger.info('Logging in bot...')
     await this.login(token)
   }

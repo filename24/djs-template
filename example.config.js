@@ -1,5 +1,6 @@
 module.exports = {
   bot: {
+    sharding: false, 
     options: {
       intents: [32767],
       allowedMentions: { parse: ['users', 'roles'], repliedUser: false },
@@ -9,7 +10,16 @@ module.exports = {
     prefix: '!',
     cooldown: 2000,
   },
-
+  report: {
+    type: 'webhook',
+    webhook: {
+      url: '',
+    },
+    text: {
+      guildID: '',
+      channelID: ''
+    }
+  },
   database: {
     url: 'mongodb://localhost:27017/',
     options: {

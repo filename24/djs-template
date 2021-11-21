@@ -1,6 +1,7 @@
-const Discord = require('discord.js');
+const Discord = require('discord.js')
 const CommandManager = require('@manager/CommandManager')
 const Logger = require('@utils/Logger')
+const ErrorManager = require('@manager/ErrorManager')
 
 let logger = new Logger('Event: messageCreate')
 
@@ -15,19 +16,22 @@ module.exports = {
      * @type {import('../managers/CommandManager')}
      */
     let commandManager = new CommandManager(client)
+    /**
+     * @type {import('../managers/ErrorManager')}
+     */
+    let errorManager = new ErrorManager(client)
 
-    if (message.author.bot) return;
-    if (!message.content.startsWith(client.config.bot.prefix)) return;
+    if (message.author.bot) return
+    if (!message.content.startsWith(client.config.bot.prefix)) return
 
-    let args = message.content.slice(client.config.bot.prefix.length).trim().split(/ +/g);
-    let commandName = args.shift().toLowerCase();
-    let command = commandManager.get(commandName);
+    let args = message.content.slice(client.config.bot.prefix.length).trim().split(/ +/g)
+    let commandName = args.shift().toLowerCase()
+    let command = commandManager.get(commandName)
 
-    if (!command) return;
     try {
-      await command.execute(client, message, args);
+      await command?.execute(client, message, args)
     } catch (error) {
-      logger.error(error.stack);
+      errorManager.report(error, message)
     }
   }
 }

@@ -1,4 +1,3 @@
-const { Collection } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
 const Logger = require('@utils/Logger')
@@ -72,7 +71,7 @@ class CommandManager extends BaseManager {
         }
       })
     } catch (error) {
-      logger.error(`Error fetching folder list.\n` + error.stack)
+      logger.error('Error fetching folder list.\n' + error.stack)
     }
   }
 
@@ -86,7 +85,10 @@ class CommandManager extends BaseManager {
       return this.commands.get(commandName)
     } else {
       this.commands.forEach(commandData => {
+        console.log(commandName)
+        console.log(commandData)
         if (commandData.aliases.includes(commandName)) return commandData
+        
       })
     }
     return null

@@ -29,12 +29,12 @@
     "nodemon": "^2.0.14"
   },
   "_moduleAliases": {
-		"@root": ".",
-		"@config": "config.js",
+    "@root": ".",
+    "@config": "config.js",
     "@class": "src/structures",
-		"@events": "src/events",
-		"@commands": "src/commands",
+    "@events": "src/events",
+    "@commands": "src/commands",
     "@manager": "src/managers",
     "@utils": "src/utils"
-	}
+  }
 }
