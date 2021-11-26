@@ -4,10 +4,7 @@ const path = require('path')
 const Dokdo = new require('dokdo')
 const Logger = require('../utils/Logger')
 
-/**
- * @type {import('../../config')}
- */
-const config = require('@config')
+const config = require('../../config')
 const logger = new Logger('bot')
 
 
@@ -17,11 +14,13 @@ const logger = new Logger('bot')
  * @property {string} description
  * @property {string} usage
  * @property {string[]} aliases
- * @property {boolean} isSlash 
+ * @property {boolean} [isSlash]
+ * @property {import('@discordjs/builders').SlashCommandBuilder} [data]
  * @property {void} execute
  * @property {Object} [slash]
  * @property {string} slash.name
  * @property {string} slash.description
+ * @property {import('@discordjs/builders').SlashCommandBuilder} slash.data
  * @property {void} slash.execute
  */
 
@@ -52,10 +51,7 @@ class BotClient extends Client {
     this.VERSION = BUILD_VERSION
 
     if (fs.existsSync(path.join(path.resolve(), 'config.js'))) {
-      /**
-       * @type {import('../../config')}
-       */
-      this.config = require('@config')
+      this.config = require('../../config')
       logger.info('Config data loaded.')
     } else {
       logger.fatal('Config file not found!')
