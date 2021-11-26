@@ -2,10 +2,8 @@ const chalk = require('chalk')
 const stripColor = require('strip-ansi')
 const { createLogger, format, transports, addColors } = require('winston')
 const { printf, splat, colorize, timestamp, ms, combine } = format
-/**
- * @type {import('../../config')}
- */
-let config = require('@config')
+
+let config = require('../../config')
 
 let colors = {
   fatal: chalk.bgWhite.red.bold,

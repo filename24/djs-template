@@ -1,7 +1,4 @@
-const Logger = require('@utils/Logger')
-/**
- * @param {import('../utils/Logger')}
- */
+const Logger = require('../utils/Logger')
 let logger = new Logger('bot')
 
 module.exports = {

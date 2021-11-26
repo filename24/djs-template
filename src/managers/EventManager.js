@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const Logger = require('@utils/Logger')
+const Logger = require('../utils/Logger')
 const BaseManager = require('./BaseManager')
 
 /**
@@ -14,9 +14,6 @@ class EventManager extends BaseManager {
   constructor(client) {
     super(client)
 
-    /**
-     * @type {import('../utils/Logger')}
-     */
     this.logger = new Logger('EventManager')
 
     this.events = client.events
@@ -31,7 +28,7 @@ class EventManager extends BaseManager {
       try {
         if(!eventFile.endsWith('.js')) return this.logger.debug(`Not a Javascript file ${eventFile}. Skipping.`)
         
-        let event = require(`@events/${eventFile}`)
+        let event = require(`../events/${eventFile}`)
 
         if(!event.name) return this.logger.debug(`Event ${eventFile} has no name. Skipping.`)
 

@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
-const CommandManager = require('@manager/CommandManager')
-const Logger = require('@utils/Logger')
-const ErrorManager = require('@manager/ErrorManager')
+const CommandManager = require('../managers/CommandManager')
+const Logger = require('../utils/Logger')
+const ErrorManager = require('../managers/ErrorManager')
 
 let logger = new Logger('Event: messageCreate')
 
@@ -12,13 +12,7 @@ module.exports = {
    * @param {Discord.Message} message 
    */
   async execute(client, message) {
-    /**
-     * @type {import('../managers/CommandManager')}
-     */
     let commandManager = new CommandManager(client)
-    /**
-     * @type {import('../managers/ErrorManager')}
-     */
     let errorManager = new ErrorManager(client)
 
     if (message.author.bot) return

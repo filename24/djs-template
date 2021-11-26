@@ -1,13 +1,8 @@
-require('module-alias/register')
-
 const Logger = require('./utils/Logger')
 const logger = new Logger('main')
 const path = require('path')
 
-/**
- * @type {import('../config')}
- */
-let config = require('@config')
+let config = require('../config')
 
 let BUILD_VERSION = '0.0.1-dev'
 let BUILD_NUMBER = new Date().getFullYear() + '.' + new Date().getMonth() + '.' + new Date().getDate()
