@@ -38,12 +38,6 @@ let eventManager = new EventManager(client)
 commandManager.load(path.join(__dirname, 'commands'))
 eventManager.load(path.join(__dirname, 'events'))
 
-const Dokdo = require('dokdo')
-const DokdoHandler = new Dokdo(client, { prefix: '!' })
-
-client.on('messageCreate', async (message) => {
-        DokdoHandler.run(message)
-})
 client.start(config.bot.token)
 
 
