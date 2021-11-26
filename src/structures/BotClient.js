@@ -1,6 +1,7 @@
 const { Client, Collection } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
+const Dokdo = new require('dokdo')
 const Logger = require('../utils/Logger')
 
 /**
@@ -10,6 +11,30 @@ const config = require('@config')
 const logger = new Logger('bot')
 
 
+/**
+ * @typedef {Object} Command
+ * @property {string} name
+ * @property {string} description
+ * @property {string} usage
+ * @property {string[]} aliases
+ * @property {boolean} isSlash 
+ * @property {void} execute
+ * @property {Object} [slash]
+ * @property {string} slash.name
+ * @property {string} slash.description
+ * @property {void} slash.execute
+ */
+
+/**
+ * @typedef {Object} Event
+ * @property {string} name
+ * @property {boolean} [once]
+ * @property {void} execute
+ */
+
+/**
+ * @typedef {string} Error
+ */
 /**
  * Discord Bot Client
  * @extends {Client}
@@ -42,14 +67,19 @@ class BotClient extends Client {
     this.commands = new Collection()
 
     /**
-     * @type {Collection<string, Command>}
+     * @type {Collection<string, Event>}
      */
     this.events = new Collection()
     
     /**
-     * @type {Collection<string, Command>}
+     * @type {Collection<string, Error>}
      */
     this.errors = new Collection()
+
+    /**
+     * @type {Dokdo}
+     */
+    this.dokdo = new Dokdo(this, { prefix: this.config.bot.prefix })
   }
 
   /**
