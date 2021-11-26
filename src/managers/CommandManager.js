@@ -1,21 +1,17 @@
 const fs = require('fs')
 const path = require('path')
-const Logger = require('@utils/Logger')
+const Logger = require('../utils/Logger')
 const BaseManager = require('./BaseManager')
 
-/**
- * @type {import('../utils/Logger')}
- */
-const logger = new Logger('CommandManager')
 
 /**
- * @typedef {Object} Command
- * @property {string} name
- * @property {string} description
- * @property {string} usage
- * @property {string[]} aliases 
- * @property {void} execute
+ * @typedef {Object} executeOptions
+ * @property {import('../structures/BotClient')} client
+ * @property {import('discord.js').Message} message
+ * @property {string[]} args
  */
+
+const logger = new Logger('CommandManager')
 
 /**
  * @extends {BaseManager}
@@ -29,13 +25,12 @@ class CommandManager extends BaseManager {
     super(client)
 
     this.commands = client.commands
-    this.aliases = client.aliases
-
   }
 
   /**
    * Load commmands from a directory
    * @param {string} commandPath commandPath is the path to the folder containing the commands
+   * @returns {import("discord.js").Collection<string, import('../structures/BotClient').Command>}
    */
   async load(commandPath = path.join(__dirname, '../commands')) {
     logger.debug('Loading commands...')
@@ -53,7 +48,7 @@ class CommandManager extends BaseManager {
             try {
               if (!commandFile.endsWith('.js')) return logger.debug(`Not a Javascript file ${commandFile}. Skipping.`)
 
-              let command = require(`@commands/${commandFolder}/${commandFile}`)
+              let command = require(`../commands/${folder}/${commandFile}`)
 
               if(!command.name) return logger.debug(`Command ${commandFile} has no name. Skipping.`)
 
@@ -64,6 +59,7 @@ class CommandManager extends BaseManager {
               logger.error(`Error loading command '${commandFile}'.\n` + error.stack)
             } finally {
               logger.debug(`Succesfully loaded commands. count: ${this.commands.size}`)
+              return this.commands
             }
           })
         } catch (error) {
@@ -78,22 +74,21 @@ class CommandManager extends BaseManager {
   /**
    * 
    * @param {string} commandName
-   * @returns {null|Command}
+   * @returns {import('../structures/BotClient').Command}
    */
   get(commandName) {
-    if (this.commands.has(commandName)) {
-      return this.commands.get(commandName)
-    } else {
-      this.commands.forEach(commandData => {
-        console.log(commandName)
-        console.log(commandData)
-        if (commandData.aliases.includes(commandName)) return commandData
-        
-      })
-    }
-    return null
+    if(this.client.commands.has(commandName))
+      return this.client.commands.get(commandName)
+    else if(this.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))) 
+      return this.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
+    
   }
 
+  /**
+   * reloading command
+   * @param {string} commandPath 
+   * @return {Error|string}
+   */
   reload(commandPath = path.join(__dirname, '../commands')) {
     logger.debug('Reloading commands...')
 
@@ -101,6 +96,7 @@ class CommandManager extends BaseManager {
 
     this.load(commandPath).then(() => {
       logger.debug('Succesfully reloaded commands.')
+      return '[200] Succesfully reloaded commands.'
     })
   }
 }
