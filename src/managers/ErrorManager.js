@@ -1,3 +1,4 @@
+const Discord = require('discord.js')
 const BaseManager = require('./BaseManager')
 const Embed = require('../utils/Embed')
 const Logger = require('../utils/Logger')
@@ -40,7 +41,7 @@ class ErrorManager extends BaseManager {
       .setDescription('명령어 실행 도중에 오류가 발생하였습니다. 개발자에게 오류코드를 보내 개발에 지원해주세요.')
       .addField('오류 코드', errorCode, true)
 
-    userSend ? executer.reply({ embeds: [errorEmbed]}) : null
+    userSend ? executer?.reply({ embeds: [errorEmbed]}) : null
     if(config.report.type == 'webhook') {
       let webhook = new Discord.WebhookClient({
         url: config.report.webhook.url,
