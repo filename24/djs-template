@@ -1,3 +1,5 @@
+require('module-alias')()
+
 const Logger = require('./utils/Logger')
 const logger = new Logger('main')
 const path = require('path')
