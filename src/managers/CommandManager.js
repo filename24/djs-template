@@ -1,8 +1,9 @@
-const fs = require('fs')
-const path = require('path')
 const Logger = require('../utils/Logger')
 const BaseManager = require('./BaseManager')
-
+const ErrorManager = require('./ErrorManager')
+const Discord = require('discord.js')
+const fs = require('fs')
+const path = require('path')
 
 /**
  * @typedef {Object} executeOptions
@@ -59,6 +60,7 @@ class CommandManager extends BaseManager {
               logger.error(`Error loading command '${commandFile}'.\n` + error.stack)
             } finally {
               logger.debug(`Succesfully loaded commands. count: ${this.commands.size}`)
+              // eslint-disable-next-line no-unsafe-finally
               return this.commands
             }
           })
@@ -98,6 +100,56 @@ class CommandManager extends BaseManager {
       logger.debug('Succesfully reloaded commands.')
       return '[200] Succesfully reloaded commands.'
     })
+  }
+
+  /**
+   * Slash Command setup tool
+   * @param {Discord.Snowflake} [guildID]
+   * @returns {number}
+   */
+  async slashCommandSetup(guildID) {
+    let errorManager = new ErrorManager(this.client)
+
+    logger.scope = 'CommandManager: SlashSetup'
+
+    let slashCommands = []
+    for (let command of this.client.commands) {
+      if(command[1].isSlash || command[1].slash) {
+        slashCommands.push(command[1].isSlash ? command[1].data : command[1].slash?.data)
+      }
+    }
+
+    if(!guildID) {
+      logger.warn('guildID not gived switching global command...')
+      logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`)
+      this.client.guilds.cache.forEach(async guild => {
+        try {
+          guild.commands.set(slashCommands)
+
+          return slashCommands.length
+        } catch (error) {
+          if(error.code === Discord.Constants.APIErrors.MISSING_ACCESS) return logger.warn(`Missing access to ${guild.name}`)
+
+          errorManager.report(error)
+        }
+
+        logger.debug(`Succesfully set commands for ${guild.name}`)
+
+      })
+    } else {
+      logger.info(`Slash Command requesting ${guildID}`)
+      try {
+        let guild = this.client.guilds.cache.get(guildID)
+
+        guild.commands.set(slashCommands)
+
+        return slashCommands.length
+      } catch (error) {
+        if(error.code === Discord.Constants.APIErrors.MISSING_ACCESS) return Discord.Constants.APIErrors.MISSING_ACCESS
+        errorManager.report(error)
+      }
+      
+    }
   }
 }
 
