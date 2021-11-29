@@ -1,7 +1,7 @@
 {
   "name": "bot-name",
   "main": "src/index.js",
-  "repository": "your github url",
+  "repository": "https://github.com/MadeGOD/djs-template",
   "author": "Your name",
   "license": "MIT",
   "scripts": {
@@ -27,5 +27,19 @@
   "devDependencies": {
     "eslint": "^8.1.0",
     "nodemon": "^2.0.14"
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "src/commands/",
+    "example.*"
+  ],
+  "_moduleAliases": {
+    "@root": ".",
+    "@config": "config.js",
+    "@classes": "src/structures",
+    "@events": "src/events",
+    "@commands": "src/commands",
+    "@managers": "src/managers",
+    "@utils": "src/utils"
   }
 }
