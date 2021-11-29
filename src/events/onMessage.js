@@ -1,9 +1,5 @@
-const Discord = require('discord.js')
 const CommandManager = require('../managers/CommandManager')
-const Logger = require('../utils/Logger')
 const ErrorManager = require('../managers/ErrorManager')
-
-let logger = new Logger('Event: messageCreate')
 
 module.exports = {
   name: 'messageCreate',
