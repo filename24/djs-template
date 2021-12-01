@@ -7,7 +7,7 @@ const path = require('path')
 let config = require('../config')
 
 let BUILD_VERSION = '0.0.1-dev'
-let BUILD_NUMBER = new Date().getFullYear() + '.' + new Date().getMonth() + '.' + new Date().getDate()
+let BUILD_NUMBER = '2021-12-01'
 
 console.log(require('chalk').cyanBright(`
 =========================================================
