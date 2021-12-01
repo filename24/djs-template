@@ -27,13 +27,16 @@ process.on('unhandledRejection', (e) => logger.error(e.stack))
 const BotClient = require('./structures/BotClient')
 const CommandManager = require('./managers/CommandManager')
 const EventManager = require('./managers/EventManager')
+const DatabaseManager = require('./managers/DatabaseManager')
 
 let client = new BotClient(config.bot.options, BUILD_VERSION)
-let commandManager = new CommandManager(client)
-let eventManager = new EventManager(client)
+let command = new CommandManager(client)
+let event = new EventManager(client)
+let database = new DatabaseManager(client)
 
-commandManager.load(path.join(__dirname, 'commands'))
-eventManager.load(path.join(__dirname, 'events'))
+command.load(path.join(__dirname, 'commands'))
+event.load(path.join(__dirname, 'events'))
+database.load()
 
 client.start(config.bot.token)
 

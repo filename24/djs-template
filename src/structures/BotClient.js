@@ -76,6 +76,15 @@ class BotClient extends Client {
      * @type {Dokdo}
      */
     this.dokdo = new Dokdo(this, { prefix: this.config.bot.prefix })
+
+    /**
+     * @type {import('mongoose')|import('quick.db')}
+     */
+    this.db
+    /**
+     * @type {Collection<string, import('mongoose').Model>}
+     */
+    this.schemas = new Collection()
   }
 
   /**
