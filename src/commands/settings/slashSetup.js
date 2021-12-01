@@ -43,31 +43,32 @@ module.exports = {
           )
         await i.update({ embeds: [loading], components: [] })
 
-        try {
-          commandManager.slashCommandSetup(message.guild.id)
-
+        commandManager.slashCommandSetup(message.guild.id).then((data) => {
           m.delete()
           message.channel.send({
             embeds: [
               new Embed(client, 'success')
                 .setTitle('로딩완료!')
-                .setDescription(`이제 (/) 명령어를 이용할수 있어요!`),
+                .setDescription(`${data.length}개의 (/) 명령어를 생성했어요!`),
             ],
           })
-        } catch (error) {
-          errorManager.report(error, message, false)
+        }).catch((error) => {
+          
           m.delete()
-          message.channel.send({
-            embeds: [
-              new Embed(client, 'error')
-                .setTitle('Error!')
-                .setDescription(
-                  '제 봇 권한이 부족합니다...\n> 필요한 권한\n`applications.commands`스코프'
-                ),
-            ],
-          })
-        }
-
+          if(error.code === Discord.Constants.APIErrors.MISSING_ACCESS) {
+            message.channel.send({
+              embeds: [
+                new Embed(client, 'error')
+                  .setTitle('Error!')
+                  .setDescription(
+                    '제 봇 권한이 부족합니다...\n> 필요한 권한\n`applications.commands`스코프'
+                  ),
+              ],
+            })
+          } else {
+            errorManager.report(error, message, true)
+          }
+        })
       } else {
         i.reply({
           content: `명령어 요청한 **${message.author.username}**만 사용할수 있어요.`,

@@ -9,15 +9,10 @@ module.exports = {
    * @param {import('discord.js').Interaction} interaction 
    */
   async execute(client, interaction) {
+    let commandManager = new CommandManager(client)
+    let errorManager = new ErrorManager(client)
+
     if(interaction.isCommand()) {
-      /**
-       * @type {import('../managers/CommandManager')}
-       */
-      let commandManager = new CommandManager(client)
-      /**
-        * @type {import('../managers/ErrorManager')}
-        */
-      let errorManager = new ErrorManager(client)
   
       if(interaction.user.bot) return
       if(interaction.channel.type === 'DM') return interaction.reply('DM으로는 명령어 사용이 불가능해요')

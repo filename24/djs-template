@@ -1,7 +1,5 @@
 const Logger = require('../utils/Logger')
 const BaseManager = require('./BaseManager')
-const ErrorManager = require('./ErrorManager')
-const Discord = require('discord.js')
 const fs = require('fs')
 const path = require('path')
 
@@ -12,7 +10,6 @@ const path = require('path')
  * @property {string[]} args
  */
 
-const logger = new Logger('CommandManager')
 
 /**
  * @extends {BaseManager}
@@ -24,7 +21,8 @@ class CommandManager extends BaseManager {
    */
   constructor(client) {
     super(client)
-
+    
+    this.logger = new Logger('CommandManager')
     this.commands = client.commands
   }
 
@@ -34,7 +32,7 @@ class CommandManager extends BaseManager {
    * @returns {import("discord.js").Collection<string, import('../structures/BotClient').Command>}
    */
   async load(commandPath = path.join(__dirname, '../commands')) {
-    logger.debug('Loading commands...')
+    this.logger.debug('Loading commands...')
 
     const commandFolder = fs.readdirSync(commandPath)
 
@@ -47,29 +45,29 @@ class CommandManager extends BaseManager {
 
           commandFiles.forEach((commandFile) => {
             try {
-              if (!commandFile.endsWith('.js')) return logger.debug(`Not a Javascript file ${commandFile}. Skipping.`)
+              if (!commandFile.endsWith('.js')) return this.logger.warn(`Not a Javascript file ${commandFile}. Skipping.`)
 
               let command = require(`../commands/${folder}/${commandFile}`)
 
-              if(!command.name) return logger.debug(`Command ${commandFile} has no name. Skipping.`)
+              if(!command.name) return this.logger.debug(`Command ${commandFile} has no name. Skipping.`)
 
               this.commands.set(command.name, command)
 
-              logger.debug(`Loaded command ${command.name}`)
+              this.logger.debug(`Loaded command ${command.name}`)
             } catch (error) {
-              logger.error(`Error loading command '${commandFile}'.\n` + error.stack)
+              this.logger.error(`Error loading command '${commandFile}'.\n` + error.stack)
             } finally {
-              logger.debug(`Succesfully loaded commands. count: ${this.commands.size}`)
+              this.logger.debug(`Succesfully loaded commands. count: ${this.commands.size}`)
               // eslint-disable-next-line no-unsafe-finally
               return this.commands
             }
           })
         } catch (error) {
-          logger.error(`Error loading command folder '${folder}'.\n` + error.stack)
+          this.logger.error(`Error loading command folder '${folder}'.\n` + error.stack)
         }
       })
     } catch (error) {
-      logger.error('Error fetching folder list.\n' + error.stack)
+      this.logger.error('Error fetching folder list.\n' + error.stack)
     }
   }
 
@@ -89,28 +87,26 @@ class CommandManager extends BaseManager {
   /**
    * reloading command
    * @param {string} commandPath 
-   * @return {Error|string}
+   * @return {string|Error}
    */
   reload(commandPath = path.join(__dirname, '../commands')) {
-    logger.debug('Reloading commands...')
+    this.logger.debug('Reloading commands...')
 
     this.commands.clear()
 
     this.load(commandPath).then(() => {
-      logger.debug('Succesfully reloaded commands.')
+      this.logger.debug('Succesfully reloaded commands.')
       return '[200] Succesfully reloaded commands.'
     })
   }
 
   /**
    * Slash Command setup tool
-   * @param {Discord.Snowflake} [guildID]
-   * @returns {number}
+   * @param {import("discord.js").Snowflake} [guildID]
+   * @returns {Promise<import('@discordjs/builders').SlashCommandBuilder[]>}
    */
   async slashCommandSetup(guildID) {
-    let errorManager = new ErrorManager(this.client)
-
-    logger.scope = 'CommandManager: SlashSetup'
+    this.logger.scope = 'CommandManager: SlashSetup'
 
     let slashCommands = []
     for (let command of this.client.commands) {
@@ -120,34 +116,20 @@ class CommandManager extends BaseManager {
     }
 
     if(!guildID) {
-      logger.warn('guildID not gived switching global command...')
-      logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`)
-      this.client.guilds.cache.forEach(async guild => {
-        try {
-          guild.commands.set(slashCommands)
-
-          return slashCommands.length
-        } catch (error) {
-          if(error.code === Discord.Constants.APIErrors.MISSING_ACCESS) return logger.warn(`Missing access to ${guild.name}`)
-
-          errorManager.report(error)
-        }
-
-        logger.debug(`Succesfully set commands for ${guild.name}`)
-
+      this.logger.warn('guildID not gived switching global command...')
+      this.logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`)
+      
+      this.client.application.commands.set(slashCommands).then((x) => {
+        this.logger.info(`Succesfully set ${x.size} guilds`)
       })
     } else {
-      logger.info(`Slash Command requesting ${guildID}`)
-      try {
-        let guild = this.client.guilds.cache.get(guildID)
+      this.logger.info(`Slash Command requesting ${guildID}`)
 
-        guild.commands.set(slashCommands)
+      let guild = this.client.guilds.cache.get(guildID)
 
-        return slashCommands.length
-      } catch (error) {
-        if(error.code === Discord.Constants.APIErrors.MISSING_ACCESS) return Discord.Constants.APIErrors.MISSING_ACCESS
-        errorManager.report(error)
-      }
+      await guild.commands.set(slashCommands)
+
+      return slashCommands
       
     }
   }
