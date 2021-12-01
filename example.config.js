@@ -11,6 +11,9 @@ module.exports = {
     cooldown: 2000,
   },
   report: {
+    /**
+     * @type {'webhook', 'text'}
+     */
     type: 'webhook',
     webhook: {
       url: '',
@@ -21,13 +24,16 @@ module.exports = {
     }
   },
   database: {
+    /**
+     * @type {'mongodb'|'sqlite'|'quick.db'}
+     */
+    type: 'mongodb',
     url: 'mongodb://localhost:27017/',
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     },
   },
-
   logger: {
     level: 'chat',
     dev: false,
