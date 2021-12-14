@@ -1,7 +1,10 @@
-const Logger = require('../utils/Logger')
-const BaseManager = require('./BaseManager')
-const fs = require('fs')
-const path = require('path')
+import { Collection } from 'discord.js'
+import { Command } from '../../typings'
+
+import Logger from '../utils/Logger'
+import BaseManager from './BaseManager'
+import fs from 'fs'
+import path from 'path'
 
 /**
  * @typedef {Object} executeOptions
@@ -15,23 +18,16 @@ const path = require('path')
  * @extends {BaseManager}
  */
 class CommandManager extends BaseManager {
-  /**
-   * Command Manager constructor
-   * @param {import('../structures/BotClient')} client Bot client
-   */
-  constructor(client) {
+  public logger = new Logger('CommandManager')
+  public commands: Collection<string, Command>
+
+  constructor(client: typeof import('../structures/BotClient')) {
     super(client)
     
-    this.logger = new Logger('CommandManager')
     this.commands = client.commands
   }
 
-  /**
-   * Load commmands from a directory
-   * @param {string} commandPath commandPath is the path to the folder containing the commands
-   * @returns {import("discord.js").Collection<string, import('../structures/BotClient').Command>}
-   */
-  async load(commandPath = path.join(__dirname, '../commands')) {
+  load(commandPath: string = path.join(__dirname, '../commands')): void {
     this.logger.debug('Loading commands...')
 
     const commandFolder = fs.readdirSync(commandPath)
@@ -76,7 +72,7 @@ class CommandManager extends BaseManager {
    * @param {string} commandName
    * @returns {import('../structures/BotClient').Command}
    */
-  get(commandName) {
+  get(commandName: string): import('../structures/BotClient').Command {
     if(this.client.commands.has(commandName))
       return this.client.commands.get(commandName)
     else if(this.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))) 
@@ -89,7 +85,7 @@ class CommandManager extends BaseManager {
    * @param {string} commandPath 
    * @return {string|Error}
    */
-  reload(commandPath = path.join(__dirname, '../commands')) {
+  reload(commandPath: string = path.join(__dirname, '../commands')): string | Error {
     this.logger.debug('Reloading commands...')
 
     this.commands.clear()
@@ -105,7 +101,7 @@ class CommandManager extends BaseManager {
    * @param {import("discord.js").Snowflake} [guildID]
    * @returns {Promise<import('@discordjs/builders').SlashCommandBuilder[]>}
    */
-  async slashCommandSetup(guildID) {
+  async slashCommandSetup(guildID: import("discord.js").Snowflake): Promise<import('@discordjs/builders').SlashCommandBuilder[]> {
     this.logger.scope = 'CommandManager: SlashSetup'
 
     let slashCommands = []
