@@ -1,6 +1,6 @@
-const chalk = require('chalk')
-const stripColor = require('strip-ansi')
-const { createLogger, format, transports, addColors } = require('winston')
+import chalk from 'chalk'
+import stripColor from 'strip-ansi'
+import { createLogger, format, transports, addColors, Logger as iLogger, LeveledLogMethod } from 'winston'
 const { printf, splat, colorize, timestamp, ms, combine } = format
 
 let config = require('../../config')
@@ -10,7 +10,7 @@ let colors = {
   error: chalk.red,
   warn: chalk.yellow,
   info: chalk.cyanBright,
-  chat: text => text,
+  chat: (text: string) => text,
   verbose: chalk.blueBright,
   debug: chalk.blue
 }
@@ -50,12 +50,15 @@ let myCustomLevels = {
 
 addColors(myCustomLevels.colors)
 
-class Logger {
-  /**
-   * Logger constructor
-   * @param {string} scope 
-   */
-  constructor(scope) {
+interface CustomLogger extends iLogger {
+  fatal: LeveledLogMethod
+}
+
+export default class Logger {
+  public scope: string
+  private logger: CustomLogger
+
+  constructor(scope: string) {
     this.scope = scope
 
     this.logger = createLogger({
@@ -75,12 +78,7 @@ class Logger {
     })
   }
 
-  /**
-   * 
-   * @param {string} message 
-   * @param  {...any} args 
-   */
-  log(message, ...args) {
+  public log(message: string, ...args: any[]) {
     this.logger.info(message, ...args, { label: this.scope })
   }
 
@@ -89,7 +87,7 @@ class Logger {
    * @param {string} message 
    * @param  {...any} args 
    */
-  info(message, ...args) {
+  public info(message: string, ...args: any[]) {
     this.logger.info(message, ...args, { label: this.scope })
   }
 
@@ -98,7 +96,7 @@ class Logger {
    * @param {string} message 
    * @param  {...any} args 
    */
-  warn(message, ...args) {
+  public warn(message: string, ...args: any[]) {
     this.logger.warn(message, ...args, { label: this.scope })
   }
 
@@ -107,7 +105,7 @@ class Logger {
    * @param {string} message 
    * @param  {...any} args 
    */
-  error(message, ...args) {
+  public error(message: string, ...args: any[]) {
     this.logger.error(message, ...args, { label: this.scope })
   }
 
@@ -116,21 +114,19 @@ class Logger {
    * @param {string} message message
    * @param  {...any} args 
    */
-  debug(message, ...args) {
+  public debug(message: string, ...args: any[]) {
     this.logger.debug(message, ...args, { label: this.scope })
   }
-  
+
   /**
    * 
    * @param {string} message message
    * @param  {...any} args 
    */
-  fatal(message, ...args) {
+  public fatal(message: string, ...args: any[]) {
     this.logger.fatal(message, ...args, { label: this.scope })
 
 
     process.exit(1)
   }
 }
-
-module.exports = Logger

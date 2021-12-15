@@ -1,16 +1,18 @@
 module.exports = {
-  env: {
-    'commonjs': true,
-    'es2021': true,
-    'node': true
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
   },
-  extends: 'eslint:recommended',
-  parserOptions: {
-    'ecmaVersion': 13
-  },
-  rules: {
-    'indent': ['error', 2],
-    'quotes': ['error', 'single'],
-    'semi': ['error', 'never']
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "prettier/prettier": "warn"
   }
 }

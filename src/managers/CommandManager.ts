@@ -1,33 +1,24 @@
 import { Collection } from 'discord.js'
-import { Command } from '../../typings'
+import { Command, MessageCommand, SlashCommand } from '../../typings'
 
 import Logger from '../utils/Logger'
 import BaseManager from './BaseManager'
-import fs from 'fs'
-import path from 'path'
+import fs = require('fs')
+import path = require('path')
+import BotClient from '../structures/BotClient'
+import { SlashCommandBuilder } from '@discordjs/builders'
 
-/**
- * @typedef {Object} executeOptions
- * @property {import('../structures/BotClient')} client
- * @property {import('discord.js').Message} message
- * @property {string[]} args
- */
-
-
-/**
- * @extends {BaseManager}
- */
-class CommandManager extends BaseManager {
+export default class CommandManager extends BaseManager {
   public logger = new Logger('CommandManager')
   public commands: Collection<string, Command>
 
-  constructor(client: typeof import('../structures/BotClient')) {
+  public constructor(client: BotClient) {
     super(client)
     
     this.commands = client.commands
   }
 
-  load(commandPath: string = path.join(__dirname, '../commands')): void {
+  public load(commandPath: string = path.join(__dirname, '../commands')): void {
     this.logger.debug('Loading commands...')
 
     const commandFolder = fs.readdirSync(commandPath)
@@ -67,12 +58,7 @@ class CommandManager extends BaseManager {
     }
   }
 
-  /**
-   * 
-   * @param {string} commandName
-   * @returns {import('../structures/BotClient').Command}
-   */
-  get(commandName: string): import('../structures/BotClient').Command {
+  public get(commandName: string): Command {
     if(this.client.commands.has(commandName))
       return this.client.commands.get(commandName)
     else if(this.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))) 
@@ -80,36 +66,31 @@ class CommandManager extends BaseManager {
     
   }
 
-  /**
-   * reloading command
-   * @param {string} commandPath 
-   * @return {string|Error}
-   */
-  reload(commandPath: string = path.join(__dirname, '../commands')): string | Error {
+  public reload(commandPath: string = path.join(__dirname, '../commands')): void {
     this.logger.debug('Reloading commands...')
 
     this.commands.clear()
-
-    this.load(commandPath).then(() => {
+    try {
+      this.load(commandPath)
+    } finally {
       this.logger.debug('Succesfully reloaded commands.')
       return '[200] Succesfully reloaded commands.'
-    })
+    }
   }
 
-  /**
-   * Slash Command setup tool
-   * @param {import("discord.js").Snowflake} [guildID]
-   * @returns {Promise<import('@discordjs/builders').SlashCommandBuilder[]>}
-   */
-  async slashCommandSetup(guildID: import("discord.js").Snowflake): Promise<import('@discordjs/builders').SlashCommandBuilder[]> {
+  private isSlash(command: Command|SlashCommand): this is SlashCommand {
+    return (command as Command).slash !== undefined
+  }
+
+  public async slashCommandSetup(guildID: string): Promise<SlashCommandBuilder[]> {
     this.logger.scope = 'CommandManager: SlashSetup'
 
     let slashCommands = []
-    for (let command of this.client.commands) {
-      if(command[1].isSlash || command[1].slash) {
-        slashCommands.push(command[1].isSlash ? command[1].data : command[1].slash?.data)
+    this.client.commands.forEach((command: Command|SlashCommand)=> {
+      if(this.isSlash(command)) {
+        slashCommands.push(command.data)
       }
-    }
+    })
 
     if(!guildID) {
       this.logger.warn('guildID not gived switching global command...')
@@ -130,5 +111,3 @@ class CommandManager extends BaseManager {
     }
   }
 }
-
-module.exports = CommandManager

@@ -18,8 +18,8 @@ module.exports = {
       if(interaction.channel.type === 'DM') return interaction.reply('DM으로는 명령어 사용이 불가능해요')
   
       let command = commandManager.get(interaction.commandName)
-  
       try {
+        await interaction.deferReply().catch(()=> {})
         command.isSlash ? await command.execute(client, interaction) : await command.slash.execute(client, interaction)
       } catch (error) {
         errorManager.report(error, interaction)

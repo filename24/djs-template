@@ -1,8 +1,9 @@
+import BotClient from '../structures/BotClient'
 
 export default class BaseManager {
-  public client: typeof import('../structures/BotClient')
+  public client: BotClient
 
-  constructor(client: typeof import('../structures/BotClient')) {
+  constructor(client: BotClient) {
     this.client = client
   }
 }

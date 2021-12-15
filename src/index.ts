@@ -1,8 +1,8 @@
 require('module-alias')()
 
-const Logger = require('./utils/Logger')
+import Logger from './utils/Logger'
 const logger = new Logger('main')
-const path = require('path')
+import path = require('path')
 
 let config = require('../config')
 
@@ -22,12 +22,12 @@ console.log(require('chalk').cyanBright(`
 logger.log('Starting up...')
 
 process.on('uncaughtException', (e) => logger.error(e.stack))
-process.on('unhandledRejection', (e) => logger.error(e.stack))
+process.on('unhandledRejection', (e: Error) => logger.error(e.stack))
 
-const BotClient = require('./structures/BotClient')
-const CommandManager = require('./managers/CommandManager')
-const EventManager = require('./managers/EventManager')
-const DatabaseManager = require('./managers/DatabaseManager')
+import BotClient from './structures/BotClient'
+import CommandManager from './managers/CommandManager'
+import EventManager = require('./managers/EventManager')
+import DatabaseManager = require('./managers/DatabaseManager')
 
 let client = new BotClient(config.bot.options, BUILD_VERSION)
 let command = new CommandManager(client)

@@ -1,12 +1,10 @@
-import { Client, Collection } from 'discord.js'
-import fs from 'fs'
-import path from 'path'
+import { Client, ClientOptions, Collection } from 'discord.js'
 import Dokdo from 'dokdo'
 import Logger from '../utils/Logger'
 
-import config from '../../config'
-import { Command, Config, Event } from '../../typings'
+import { Command, Config, Event, SlashCommand } from '../../typings'
 
+const config = require('../../config.js')
 const logger = new Logger('bot')
 
 export default class BotClient extends Client {
@@ -24,7 +22,7 @@ export default class BotClient extends Client {
   public db: typeof import('mongoose')| typeof import('quick.db')
   public schemas: Collection<string, import('mongoose').Schema> = new Collection()
 
-  constructor(options: import('discord.js').ClientOptions, BUILD_VERSION: string) {
+  public constructor(options: ClientOptions, BUILD_VERSION: string) {
     super(options)
 
     logger.info('Loading config data...')
@@ -40,7 +38,6 @@ export default class BotClient extends Client {
   public async setStatus(status: 'dev'|'online' = 'online', name: string = '점검중...') {
     if(status.includes('dev')) {
       logger.warn('Changed status to Developent mode')
-
       this.user?.setPresence({
         activities: [
           { name: `${this.config.bot.prefix}help | ${this.VERSION} : ${name}` }
