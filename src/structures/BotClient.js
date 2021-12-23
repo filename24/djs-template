@@ -1,5 +1,5 @@
 const { Client, Collection } = require('discord.js')
-const fs = require('fs')
+const fs = require('node:fs')
 const path = require('path')
 const Dokdo = new require('dokdo')
 const Logger = require('../utils/Logger')
@@ -34,6 +34,12 @@ const logger = new Logger('bot')
 /**
  * @typedef {string} Error
  */
+
+/**
+ * @typedef {Object} BuildOptions
+ * @property {string} VERSION
+ * @property {string} NUMBER
+ */
 /**
  * Discord Bot Client
  * @extends {Client}
@@ -42,13 +48,15 @@ class BotClient extends Client {
   /**
    * BotClient constructor
    * @param {import('discord.js').ClientOptions} options Discord client options
+   * @param {BuildOptions} BUILD
    */
-  constructor(options = { parse: ['users', 'roles'], repliedUser: false }, BUILD_VERSION) {
+  constructor(options = { parse: ['users', 'roles'], repliedUser: false }, BUILD) {
     super(options)
 
     logger.info('Loading config data...')
 
-    this.VERSION = BUILD_VERSION
+    this.VERSION = BUILD.VERSION
+    this.BUILD_NUMBER = BUILD.NUMBER
 
     if (fs.existsSync(path.join(path.resolve(), 'config.js'))) {
       this.config = require('../../config')
@@ -85,6 +93,8 @@ class BotClient extends Client {
      * @type {Collection<string, import('mongoose').Model>}
      */
     this.schemas = new Collection()
+
+    this._maxListeners = Infinity
   }
 
   /**
@@ -115,7 +125,7 @@ class BotClient extends Client {
       
       this.user?.setPresence({
         activities: [
-          { name: `${this.config.prefix}help | ${this.VERSION}` }
+          { name: `${this.config?.prefix}help | ${this.VERSION}` }
         ],
         status: 'online'
       })
