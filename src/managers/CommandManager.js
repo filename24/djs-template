@@ -29,7 +29,6 @@ class CommandManager extends BaseManager {
   /**
    * Load commmands from a directory
    * @param {string} commandPath commandPath is the path to the folder containing the commands
-   * @returns {import("discord.js").Collection<string, import('../structures/BotClient').Command>}
    */
   async load(commandPath = path.join(__dirname, '../commands')) {
     this.logger.debug('Loading commands...')
@@ -58,8 +57,6 @@ class CommandManager extends BaseManager {
               this.logger.error(`Error loading command '${commandFile}'.\n` + error.stack)
             } finally {
               this.logger.debug(`Succesfully loaded commands. count: ${this.commands.size}`)
-              // eslint-disable-next-line no-unsafe-finally
-              return this.commands
             }
           })
         } catch (error) {
