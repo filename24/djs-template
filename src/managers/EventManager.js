@@ -46,8 +46,8 @@ class EventManager extends BaseManager {
   async start() {
     this.logger.debug('Starting event files...')
 
-    this.events.forEach((event, eventName) => {
-      
+    //this.client.removeAllListeners()
+    this.events.forEach((event, eventName) => {     
       if (event.once) {
         this.client.once(eventName, (...args) => {
           event.execute(this.client, ...args)
@@ -65,13 +65,42 @@ class EventManager extends BaseManager {
   }
 
   /**
+   * @param {import('discord.js').ClientEvents} eventName
+   */
+  reload(eventName) {
+    if(!this.events.has(eventName)) {
+      return this.logger.warn(`Event '${eventName}' not found.`)
+    } else {
+      this.logger.debug(`Reloading ${eventName}...`)
+      this.events.delete(eventName)
+
+      const eventFiles = fs.readdirSync(path.join(__dirname, '../events'))
+
+      eventFiles.forEach(async (eventFile) => {
+        try {
+          let event = require(`../events/${eventFile}`)
+
+          if(event.name === eventName) {
+            this.client.removeListener(eventName, async (...args) => {
+              event.execute(this.client, ...args)
+            })
+            this.events.set(event.name, event)
+            this.logger.debug(`Loaded event ${eventName}`)
+          }
+
+        } catch (error) {
+          console.log(error)
+        } 
+      })
+    }
+  }
+  /**
    * @param {string} eventPath 
    */
-  reload(eventPath = path.join(__dirname, '../events')) {
+  reloadAll(eventPath = path.join(__dirname, '../events')) {
     this.logger.debug('Reloading events...')
 
     this.events.clear()
-
     this.load(eventPath)
   }
 
@@ -85,7 +114,9 @@ class EventManager extends BaseManager {
   register(eventName, fn) {
     this.events.set(eventName, fn)
 
-    this.client.on(eventName, fn)
+    this.client.addListener(eventName, (...args) => {
+      fn(this.client, ...args)
+    })
 
     this.logger.debug(`Registered event '${eventName}'`)
   }
