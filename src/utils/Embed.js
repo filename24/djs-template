@@ -21,6 +21,7 @@ class Embed extends Discord.MessageEmbed {
         icon_url: client.user.avatarURL()
       }
     }
+  
     if(type === 'success') {
       EmbedJSON = {
         ...EmbedJSON,
@@ -47,8 +48,11 @@ class Embed extends Discord.MessageEmbed {
         color: '5865F2',
       }
     }
+    
 
     super(EmbedJSON)
+    this.client = client
+    
   }
 }
 
