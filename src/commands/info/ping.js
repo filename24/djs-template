@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const Embed = require('../../utils/Embed')
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const wait = require('node:util').promisify(setTimeout)
 
 module.exports = {
   name: 'ping',
@@ -14,9 +15,16 @@ module.exports = {
   async execute(client, message, args) {
 
     let embed = new Embed(client, 'warn').setTitle('핑 측정중...')
+    let buttonData = new Discord.MessageButton()
+      .setStyle('PRIMARY')
+      .setLabel('재측정하기')
+      .setCustomId('ping.retry')
 
+    let components = new Discord.MessageActionRow()
+      .addComponents(buttonData)
     let m = await message.reply({
       embeds: [embed],
+      
     })
     embed = new Embed(client, 'success')
       .setTitle('PONG!')
@@ -26,6 +34,36 @@ module.exports = {
 
     m.edit({
       embeds: [embed],
+      components: [components]
+    })
+
+    let collector = m.channel.createMessageComponentCollector({time: 5 * 1000})
+
+    collector.on('collect', async (interaction) => {
+      if(interaction.customId === 'ping.retry') {
+        collector.stop()
+        await interaction.deferUpdate()
+        this.execute(client, m, args)
+        await wait(1000)
+        await m.delete()
+      } else if (interaction.user.id !== message.author.id) {
+        interaction.reply(`메세지를 작성한 **${interaction.user.username}**만 재측정할 수 있습니다.`)
+      }
+    })
+
+    collector.on('end', async (collect) => {
+      if(collect.size !== 0) return;
+      buttonData
+        .setDisabled()
+        .setStyle('SECONDARY')
+        .setLabel('시간 초과')
+        
+      components = new Discord.MessageActionRow()
+        .addComponents(buttonData)
+      m.edit({
+        embeds: [embed],
+        components: [components]
+      })
     })
   },
   slash: {
