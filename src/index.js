@@ -3,18 +3,28 @@ require('module-alias')()
 const Logger = require('./utils/Logger')
 const logger = new Logger('main')
 const path = require('path')
+const fs = require('fs')
 
 let config = require('../config')
 
 let BUILD_VERSION = '0.0.1-dev'
-let BUILD_NUMBER = '2021-12-01'
+let BUILD_NUMBER = fs.readFileSync('.git/HEAD').toString().trim()
+
+if (BUILD_NUMBER?.indexOf(':') === -1) {
+  BUILD_NUMBER
+} else {
+  try {
+    BUILD_NUMBER = fs.readFileSync('.git/' + BUILD_NUMBER?.substring(5)).toString().trim().substring(0, 6)
+  } catch (e) {
+    BUILD_NUMBER = undefined
+  }
+}
 
 console.log(require('chalk').cyanBright(`
 =========================================================
 
-             ${require('../package.json').name}
-        Version : ${BUILD_VERSION}
-        Build: ${BUILD_NUMBER}
+            ${require('../package.json').name}@${BUILD_NUMBER}
+          Version : ${BUILD_VERSION}
 
 =========================================================
 `))
@@ -29,7 +39,10 @@ const CommandManager = require('./managers/CommandManager')
 const EventManager = require('./managers/EventManager')
 const DatabaseManager = require('./managers/DatabaseManager')
 
-let client = new BotClient(config.bot.options, BUILD_VERSION)
+let client = new BotClient(config.bot.options, {
+  BUILD_VERSION: BUILD_VERSION,
+  BUILD_NUMBER: BUILD_NUMBER,
+})
 let command = new CommandManager(client)
 let event = new EventManager(client)
 let database = new DatabaseManager(client)
