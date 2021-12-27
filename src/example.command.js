@@ -14,7 +14,7 @@ module.exports = {
    * @param {Discord.Message} message 
    * @param {string[]} args 
    */
-  execute(client, message, args) {
+  async execute(client, message, args) {
     
   },
   slash: {
@@ -28,7 +28,7 @@ module.exports = {
      * @param {import('../../structures/BotClient')} client 
      * @param {Discord.CommandInteraction} interaction 
      */
-    execute(client, interaction) {
+    async execute(client, interaction) {
 
     }
   }
@@ -48,7 +48,7 @@ module.exports = {
    * @param {Discord.Message} message 
    * @param {string[]} args 
    */
-  execute(client, message, args) {
+  async execute(client, message, args) {
   },
 }
 
@@ -68,7 +68,7 @@ module.exports = {
    * @param {import('../../structures/BotClient')} client 
    * @param {Discord.CommandInteraction} interaction 
    */
-  execute(client, interaction) {
+  async execute(client, interaction) {
 
   }
 }
