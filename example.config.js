@@ -1,4 +1,5 @@
 module.exports = {
+  githubToken: '',
   bot: {
     sharding: false, 
     options: {

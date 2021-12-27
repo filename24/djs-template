@@ -40,8 +40,8 @@ const EventManager = require('./managers/EventManager')
 const DatabaseManager = require('./managers/DatabaseManager')
 
 let client = new BotClient(config.bot.options, {
-  BUILD_VERSION: BUILD_VERSION,
-  BUILD_NUMBER: BUILD_NUMBER,
+  VERSION: BUILD_VERSION,
+  NUMBER: BUILD_NUMBER,
 })
 let command = new CommandManager(client)
 let event = new EventManager(client)
