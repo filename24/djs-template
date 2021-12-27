@@ -54,6 +54,24 @@ class Embed extends Discord.MessageEmbed {
     this.client = client
     
   }
+
+  /**
+   * Change the embed color
+   * @param {EmbedType} type 
+   */
+  setType(type) {
+    if(type === 'success') {
+      this.color = '57F287'
+    } else if(type === 'error') {
+      this.color = 'ED4245'
+    } else if(type === 'warn') {
+      this.color = 'FEE75C'
+    } else if(type === 'info') {
+      this.color = '5865F2'
+    } else if(type === 'default') {
+      this.color = '5865F2'
+    }
+  }
 }
 
 module.exports = Embed
