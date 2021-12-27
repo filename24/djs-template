@@ -21,7 +21,7 @@ module.exports = {
       let command = commandManager.get(interaction.commandName)
   
       try {
-        command?.isSlash ? await command.execute(client, interaction) : await command.slash.execute(client, interaction)
+        command?.isSlash ? await command.execute(client, interaction) : await command?.slash.execute(client, interaction)
       } catch (error) {
         errorManager.report(error, interaction)
       }
