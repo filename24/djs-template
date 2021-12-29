@@ -14,7 +14,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.8.2",
     "chalk": "^3.0.0",
-    "discord.js": "^13.2.0",
+    "discord.js": "^13.4.0",
     "dokdo": "^0.5.1",
     "fs": "^0.0.1-security",
     "module-alias": "^2.2.2",
