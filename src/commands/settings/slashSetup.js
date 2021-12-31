@@ -5,7 +5,7 @@ const ErrorManager = require('../../managers/ErrorManager')
 
 module.exports = {
   name: 'slashSetup',
-  aliases: ['slash', 'setup', 'tpxld', '세팅'],
+  aliases: ['세팅', 'slash', 'setup', 'tpxld'],
   description: 'Slash Command 세팅합니다.',
   /**
 	 * 
@@ -37,10 +37,7 @@ module.exports = {
       if (i.user.id === message.author.id) {
         let loading = new Embed(client, 'info')
           .setDescription('Slash Command 로딩중...')
-          .setAuthor(
-            '잠시만 기다려주십시요...',
-            'https://cdn.discordapp.com/emojis/667750713698549781.gif?v=1'
-          )
+          .setTitle('잠시만 기다려 주세요...')
         await i.update({ embeds: [loading], components: [] })
 
         commandManager.slashCommandSetup(message.guild.id).then((data) => {
