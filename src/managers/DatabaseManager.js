@@ -35,7 +35,7 @@ class DatabaseManager extends BaseManager {
       break
     }
   
-    case 'quick.db' || 'sqlite': {
+    case 'sqlite': {
       this.logger.debug('Using SQLite(quick.db)...')
       this.client.db = new quick
   
