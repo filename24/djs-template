@@ -1,12 +1,12 @@
 const { Client, Collection } = require('discord.js')
-const fs = require('node:fs')
-const path = require('path')
 const Dokdo = new require('dokdo')
 const Logger = require('../utils/Logger')
 
-const config = require('../../config')
-const logger = new Logger('bot')
+const CommandManager = require('../managers/CommandManager')
+const EventManager = require('../managers/EventManager')
+const DatabaseManager = require('../managers/DatabaseManager')
 
+const logger = new Logger('bot')
 
 /**
  * @typedef {Object} Command
@@ -36,11 +36,6 @@ const logger = new Logger('bot')
  */
 
 /**
- * @typedef {Object} BuildOptions
- * @property {string} VERSION
- * @property {string} NUMBER
- */
-/**
  * Discord Bot Client
  * @extends {Client}
  */
@@ -48,27 +43,24 @@ class BotClient extends Client {
   /**
    * BotClient constructor
    * @param {import('discord.js').ClientOptions} options Discord client options
-   * @param {BuildOptions} BUILD
    */
-  constructor(options = { parse: ['users', 'roles'], repliedUser: false }, BUILD) {
+  constructor(options = { parse: ['users', 'roles'], repliedUser: false }) {
     super(options)
 
-    logger.info('Loading config data...')
-
-    this.VERSION = BUILD.VERSION
-    this.BUILD_NUMBER = BUILD.NUMBER
-
-    if (fs.existsSync(path.join(path.resolve(), 'config.js'))) {
-      this.config = require('../../config')
-      logger.info('Config data loaded.')
-    } else {
-      logger.fatal('Config file not found!')
-    }
-
+    this.config = require('../../config')
+    
+    this.VERSION = this.config.BUILD_VERSION
+    this.BUILD_NUMBER = this.config.BUILD_NUMBER
+    
     /**
      * @type {Collection<string, Command>}
      */
     this.commands = new Collection()
+
+    /**
+     * @type {Collection<string, string[]>}
+     */
+    this.categorys = new Collection()
 
     /**
      * @type {Collection<string, Event>}
@@ -79,12 +71,12 @@ class BotClient extends Client {
      * @type {Collection<string, Error>}
      */
     this.errors = new Collection()
-
+    
     /**
      * @type {Dokdo}
      */
     this.dokdo = new Dokdo(this, { prefix: this.config.bot.prefix })
-
+    
     /**
      * @type {import('mongoose')|import('quick.db')}
      */
@@ -93,22 +85,41 @@ class BotClient extends Client {
      * @type {Collection<string, import('mongoose').Model>}
      */
     this.schemas = new Collection()
-
+    
     this._maxListeners = Infinity
-  }
 
+    /**
+     * @type {CommandManager}
+     */
+    this.command = new CommandManager(this)
+  
+    /**
+     * @type {EventManager}
+     */
+    this.event = new EventManager(this)
+  
+    /**
+     * @type {DatabaseManager}
+     */
+    this.database = new DatabaseManager(this)
+  }
+  
   /**
    * Loggin in the bot
    * @param {string} token Discord bot token
    */
-  async start(token = config.bot.token) {
+  async start(token = this.config.bot.token) {
     logger.info('Logging in bot...')
+
+    this.command.load()
+    this.event.load()
+    this.database.load()
     await this.login(token)
   }
 
   /**
    * Setting status
-   * @param {string} status 
+   * @param {'dev'|'online'} status 
    */
   async setStatus(status = 'online', name = '점검중...') {
     if(status.includes('dev')) {
@@ -116,7 +127,7 @@ class BotClient extends Client {
 
       this.user?.setPresence({
         activities: [
-          { name: `${this.config.bot.prefix}help | ${this.VERSION} : ${name}` }
+          { name: `${this.config.bot.prefix}help | ${this.VERSION}@${this.BUILD_NUMBER} : ${name}` }
         ], 
         status: 'dnd'
       })
@@ -125,7 +136,7 @@ class BotClient extends Client {
       
       this.user?.setPresence({
         activities: [
-          { name: `${this.config?.prefix}help | ${this.VERSION}` }
+          { name: `${this.config.bot.prefix}help | ${this.VERSION}@${this.BUILD_NUMBER}` }
         ],
         status: 'online'
       })

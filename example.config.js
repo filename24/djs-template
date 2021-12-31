@@ -1,7 +1,14 @@
 module.exports = {
   githubToken: '',
   bot: {
-    sharding: false, 
+    sharding: false,
+    /**
+     * @type {import('discord.js').ShardingManagerOptions}
+     */
+    shardingOptions: {
+      totalShards: 3,
+      respawn: true,
+    },
     options: {
       intents: [32767],
       allowedMentions: { parse: ['users', 'roles'], repliedUser: false },
@@ -26,7 +33,7 @@ module.exports = {
   },
   database: {
     /**
-     * @type {'mongodb'|'sqlite'|'quick.db'}
+     * @type {'mongodb'|'sqlite'}
      */
     type: 'mongodb',
     url: 'mongodb://localhost:27017/',
