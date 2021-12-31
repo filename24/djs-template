@@ -24,6 +24,7 @@ class CommandManager extends BaseManager {
     
     this.logger = new Logger('CommandManager')
     this.commands = client.commands
+    this.categorys = client.categorys
   }
 
   /**
@@ -38,6 +39,7 @@ class CommandManager extends BaseManager {
     try {
       commandFolder.forEach(folder => {
         if (!fs.lstatSync(path.join(commandPath, folder)).isDirectory()) return
+        this.categorys.set(folder, new Array())
 
         try {
           const commandFiles = fs.readdirSync(path.join(commandPath, folder))
@@ -49,9 +51,11 @@ class CommandManager extends BaseManager {
               let command = require(`../commands/${folder}/${commandFile}`)
 
               if(!command.name) return this.logger.debug(`Command ${commandFile} has no name. Skipping.`)
-
+              
               this.commands.set(command.name, command)
 
+              this.categorys.get(folder).push(command.name)
+              
               this.logger.debug(`Loaded command ${command.name}`)
             } catch (error) {
               this.logger.error(`Error loading command '${commandFile}'.\n` + error.stack)
@@ -116,6 +120,7 @@ class CommandManager extends BaseManager {
       this.logger.warn('guildID not gived switching global command...')
       this.logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`)
       
+      // Todo command set to create and delete
       this.client.application.commands.set(slashCommands).then((x) => {
         this.logger.info(`Succesfully set ${x.size} guilds`)
       })
