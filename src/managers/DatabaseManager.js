@@ -37,8 +37,8 @@ class DatabaseManager extends BaseManager {
   
     case 'sqlite': {
       this.logger.debug('Using SQLite(quick.db)...')
-      this.client.db = new quick
-  
+      this.client.db = quick
+      
       this.logger.info('Connected to SQLite!')
       break
     }
