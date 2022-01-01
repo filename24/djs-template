@@ -19,12 +19,11 @@ let myFormat = printf(({
   level,
   message,
   label,
-  timestamp,
   ms
 }) => {
   const _level = stripColor(level)
   const colorizer = colors[_level]
-  return `${chalk.grey(`[${timestamp}]`)} ${_level === 'chat' ? '' : `[${label}] `}${level} ${colorizer(message)} ${chalk.magentaBright(ms)}`
+  return `${chalk.grey(`[${new Date().getFullYear() + '-' + new Date().getMonth() + '-' + new Date().getDate() + ' ' + new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()}]`)} ${_level === 'chat' ? '' : `[ ${label} ] `}${level} ${colorizer(message)} ${chalk.magentaBright(ms)}`
 })
 
 let myCustomLevels = {
