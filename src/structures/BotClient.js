@@ -1,6 +1,7 @@
 const { Client, Collection } = require('discord.js')
 const Dokdo = new require('dokdo')
 const Logger = require('../utils/Logger')
+const { config } = require('dotenv')
 
 const CommandManager = require('../managers/CommandManager')
 const EventManager = require('../managers/EventManager')
@@ -47,6 +48,7 @@ class BotClient extends Client {
   constructor(options = { parse: ['users', 'roles'], repliedUser: false }) {
     super(options)
 
+    config()
     this.config = require('../../config')
     
     this.VERSION = this.config.BUILD_VERSION
@@ -108,7 +110,7 @@ class BotClient extends Client {
    * Loggin in the bot
    * @param {string} token Discord bot token
    */
-  async start(token = this.config.bot.token) {
+  async start(token = process.env.TOKEN) {
     logger.info('Logging in bot...')
 
     this.command.load()

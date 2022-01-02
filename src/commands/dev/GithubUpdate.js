@@ -32,7 +32,7 @@ module.exports = {
     }
 
     let repo = repository.replaceAll('https://github.com/', '')
-    if(client.config.githubToken || !client.config.githubToken === '') {
+    if(process.env.GITHUB_TOKEN ?? client.config?.githubToken !== '') {
       fetch(`https://api.github.com/repos/${repo}/commits`, {
         headers: {
           'Authorization': `token ${client.config.githubToken}`
