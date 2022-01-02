@@ -13,4 +13,4 @@ process.on('unhandledRejection', (e) => logger.error(e.stack))
 let client = new BotClient(config.bot.options)
 
 
-client.start(config.bot.token)
+client.start(config.bot?.token)
