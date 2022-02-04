@@ -1,68 +1,163 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { ClientEvents, ClientOptions, CommandInteraction, Message, SnowflakeUtil } from "discord.js";
+import { ApplicationCommandDataResolvable, Awaitable, ClientEvents, ClientOptions, CommandInteraction, Message, ShardingManagerOptions, SnowflakeUtil } from "discord.js";
 import { MongooseOptions } from "mongoose";
 import BotClient from "../src/structures/BotClient";
 
-interface BotConfig {
-    sharding: boolean;
-    options: ClientOptions;
-    token: string;
-    owners: string[];
-    prefix: string;
-    cooldown: number;
+
+export interface Event {
+    name: keyof ClientEvents;
+    options?: EventOptions;
+    execute: (client: BotClient, ...args: ClientEvents[keyof ClientEvents]) => Awaitable<void>;
 }
 
-interface ReportConfig {
-    type: 'webhook' | 'chat';
-    webhook?: {
-        url: string;
-    };
-    text?: {
-        guildID: string;
-        channelID: string;
-    };
-}
+export type LevelType =
+    | "fatal"
+    | "error"
+    | "warn"
+    | "info"
+    | "verbose"
+    | "debug"
+    | "chat"
 
-interface DatabaseConfig {
-    type: 'mongodb' | 'sqlite';
-    url?: string;
-    options?: MongooseOptions
-}
+export type EmbedType = 'default' | 'error' | 'success' | 'warn' | 'info'
 
-interface LoggerConfig {
-    level: string;
-    dev: boolean;
+export interface MessageCommnad {
+    data: MessageCommandOptions
+    execute: MessageCommandFuntion
 }
-
-export interface Config {
-    bot: BotConfig;
-    report: ReportConfig;
-    database: DatabaseConfig;
-    logger: LoggerConfig
-}
-
-export interface MessageCommand {
-    name: string;
-    description: string;
-    aliases: string[];
-    execute: (client: BotClient, message: Message, args: string[]) => Promise<void>;
+export interface Command extends MessageCommnad {
+    isSlash?: boolean
+    slash?: SlashCommand
 }
 
 export interface SlashCommand {
+    data: SlashCommandBuilder
+    execute: SlashCommandFunction
+    options?: SlashCommandOptions
+    slash?: SlashCommand
+}
+
+
+export type BaseCommand = MessageCommnad | SlashCommand | Command
+
+export type EventFunction<E extends keyof ClientEvents> = (
+    client: BotClient,
+    ...args: ClientEvents[E]
+) => Awaitable<void>;
+
+
+export interface EventOptions {
+    once: boolean;
+}
+
+export interface ErrorReportOptions {
+    executer: Message | CommandInteraction | undefined
+    isSend?: boolean
+}
+
+export type SlashCommandFunction = (
+    client: BotClient,
+    interaction: CommandInteraction
+) => Awaitable<void>;
+
+export interface SlashCommandOptions {
     name: string;
-    description?: string;
-    isSlash: true;
-    data: SlashCommandBuilder;
-    execute: (client: BotClient, interaction: CommandInteraction) => Promise<void>;
-}
-
-export interface Command extends MessageCommand {
     isSlash?: boolean;
-    slash: SlashCommand;
 }
 
-export interface Event {
-    name: ClientEvents;
-    execute: (client: BotClient, ...args: any) => Promise<void>;
+export interface MessageCommandOptions {
+    name: string
+    description?: string
+    aliases: string[]
 }
 
+export type MessageCommandFuntion = (
+    client: BotClient,
+    message: Message,
+    args: string[]
+) => Awaitable<void>
+export interface IConfig {
+    BUILD_VERSION: string
+    BUILD_NUMBER: string | null
+    githubToken?: string
+    bot: {
+        sharding: boolean
+        shardingOptions?: ShardingManagerOptions
+        options: ClientOptions
+        token: string
+        owners: string[]
+        prefix: string
+        cooldown?: number
+    }
+    report: {
+        type: "webhook" | "text"
+        webhook: {
+            url: string
+        },
+        text: {
+            guildID: string
+            channelID: string
+        },
+    },
+    database: {
+        type: "mongodb" | "sqlite"
+        url: string
+        options: any
+    },
+    logger: {
+        level: LevelType
+        dev: boolean
+    },
+}
+
+export interface GithubCommitAPI {
+    sha: string
+    commit: {
+        author: {
+            name: string
+            email: string
+            date: string
+        }
+        committer: {
+            name: string
+            email: string
+            date: string
+        }
+        message: string
+        tree: {
+            sha: string
+            url: string
+        }
+        url: string
+        comment_count: number
+        verification: {
+            verified: boolean
+            reason: string
+            signature: null
+            payload: null
+        }
+    }
+    url: string
+    html_url: string
+    comments_url: string
+    author: {
+        login: string
+        id: number
+        node_id: string
+        avatar_url: string
+        gravatar_id: string
+        url: string
+        html_url: string
+        followers_url: string
+        following_url: string
+        gists_url: string
+        starred_url: string
+        subscriptions_url: string
+        organizations_url: string
+        repos_url: string
+        events_url: string
+        received_events_url: string
+        type: string
+        site_admin: boolean
+    }
+}

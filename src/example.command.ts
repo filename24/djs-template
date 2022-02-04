@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+// @ts-ignore
+// @ts-nocheck
 
 // Slash command and Message Command
 import { SlashCommandBuilder } from '@discordjs/builders'
@@ -6,14 +8,14 @@ import { CommandInteraction, Message } from 'discord.js'
 import BotClient from './structures/BotClient'
 
 
-module.exports = {
+export default {
   name: '',
-  description : '',
+  description: '',
   aliases: [],
   isSlash: false,
 
   async execute(client: BotClient, message: Message, args: string[]): Promise<any> {
-    
+
   },
   slash: {
     name: '',
@@ -29,11 +31,11 @@ module.exports = {
 
 // Message command
 
-const Discord = require('discord.js')
+import Discord from 'discord.js'
 
-module.exports = {
+export default {
   name: '',
-  description : '',
+  description: '',
   aliases: [],
   isSlash: false,
   async execute(client: BotClient, message: Discord.Message, args: string[]): Promise<any> {
@@ -41,11 +43,11 @@ module.exports = {
 }
 
 // Slash command
-const Discord = require('discord.js')
+import Discord from 'discord.js'
 
-module.exports = {
+export default {
   name: '',
-  description : '',
+  description: '',
   isSlash: true,
   data: new SlashCommandBuilder()
     .setName('')
