@@ -1,8 +1,8 @@
-import chalk from "chalk"
-import stripColor from "strip-ansi"
-import winston, { createLogger, format, transports, addColors } from "winston"
-import config from "../../config"
-import { LevelType } from "../../typings"
+import chalk from 'chalk'
+import stripColor from 'strip-ansi'
+import winston, { createLogger, format, transports, addColors } from 'winston'
+import config from '../../config'
+import { LevelType } from '../../typings'
 
 const { printf, splat, colorize, timestamp, ms, combine } = format
 
@@ -13,26 +13,27 @@ const colors = {
   info: chalk.cyanBright,
   chat: (text: string) => text,
   verbose: chalk.blueBright,
-  debug: chalk.blue,
+  debug: chalk.blue
 }
 
 const myFormat = printf(({ level, message, label, ms }) => {
   const _level = stripColor(level) as LevelType
   const colorizer = colors[_level]
   return `${chalk.grey(
-    `[${new Date().getFullYear() +
-    "-" +
-    new Date().getMonth() +
-    "-" +
-    new Date().getDate() +
-    " " +
-    new Date().getHours() +
-    ":" +
-    new Date().getMinutes() +
-    ":" +
-    new Date().getSeconds()
+    `[${
+      new Date().getFullYear() +
+      '-' +
+      new Date().getMonth() +
+      '-' +
+      new Date().getDate() +
+      ' ' +
+      new Date().getHours() +
+      ':' +
+      new Date().getMinutes() +
+      ':' +
+      new Date().getSeconds()
     }]`
-  )} ${_level === "chat" ? "" : `[ ${label} ] `}${level} ${colorizer(
+  )} ${_level === 'chat' ? '' : `[ ${label} ] `}${level} ${colorizer(
     message
   )} ${chalk.magentaBright(ms)}`
 })
@@ -45,17 +46,17 @@ const myCustomLevels = {
     info: 3,
     chat: 4,
     verbose: 5,
-    debug: 6,
+    debug: 6
   },
   colors: {
-    fatal: "whiteBG red bold",
-    error: "red",
-    warn: "yellow",
-    info: "white",
-    chat: "grey",
-    verbose: "cyan",
-    debug: "blue",
-  },
+    fatal: 'whiteBG red bold',
+    error: 'red',
+    warn: 'yellow',
+    info: 'white',
+    chat: 'grey',
+    verbose: 'cyan',
+    debug: 'blue'
+  }
 }
 
 addColors(myCustomLevels.colors)
@@ -70,10 +71,10 @@ export default class Logger {
       levels: myCustomLevels.levels,
       transports: [
         new transports.Console({
-          level: config.logger.dev ? "debug" : config.logger.level,
-          format: combine(splat(), colorize(), timestamp(), ms(), myFormat),
-        }),
-      ],
+          level: config.logger.dev ? 'debug' : config.logger.level,
+          format: combine(splat(), colorize(), timestamp(), ms(), myFormat)
+        })
+      ]
     })
   }
 

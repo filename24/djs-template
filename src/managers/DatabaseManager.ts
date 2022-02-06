@@ -20,12 +20,14 @@ export default class DatabaseManager extends BaseManager {
     this.type = client.config.database.type
   }
 
-
   async load(schemaPath = path.join(__dirname, '../schemas')) {
     switch (this.type) {
       case 'mongodb': {
         this.logger.debug('Using MongoDB...')
-        await mongoose.connect(this.client.config.database.url, this.client.config.database.options)
+        mongoose.connect(
+          this.client.config.database.url,
+          this.client.config.database.options
+        )
 
         this.client.db = mongoose.connection
 
@@ -49,21 +51,31 @@ export default class DatabaseManager extends BaseManager {
   private loadSchemas(schemaPath: string) {
     this.logger.debug('Loading schemas...')
 
-    let schemaFolder = fs.readdirSync(schemaPath)
+    const schemaFolder = fs.readdirSync(schemaPath)
 
     try {
-      schemaFolder.forEach(schemaFile => {
+      schemaFolder.forEach((schemaFile) => {
         try {
           if (schemaFile.startsWith('example')) return
-          if (!schemaFile.endsWith('.ts')) return this.logger.warn(`Not a TypeScript file ${schemaFile}. Skipping.`)
+          if (!schemaFile.endsWith('.ts'))
+            return this.logger.warn(
+              `Not a TypeScript file ${schemaFile}. Skipping.`
+            )
 
-          let { default: schema } = require(`../schemas/${schemaFile}`)
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          const { default: schema } = require(`../schemas/${schemaFile}`) as {
+            default: mongoose.Model<any>
+          }
 
           this.client.schemas.set(schema.modelName, schema)
         } catch (error: any) {
-          this.logger.error(`Error loading schema ${schemaFile}.\n` + error.stack)
+          this.logger.error(
+            `Error loading schema ${schemaFile}.\n` + error.stack
+          )
         } finally {
-          this.logger.debug(`Succesfully loaded schemas. count: ${this.client.schemas.size}`)
+          this.logger.debug(
+            `Succesfully loaded schemas. count: ${this.client.schemas.size}`
+          )
         }
       })
     } catch (error: any) {

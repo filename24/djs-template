@@ -18,8 +18,10 @@ config.*
 # Miscellaneous
 .tmp/
 .idea/
-.vscode
 .DS_Store
 
 # Database
 *.sqlite
+
+# Build data
+build/

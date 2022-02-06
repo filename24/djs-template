@@ -3,18 +3,20 @@ import ErrorManager from '../managers/ErrorManager'
 import { Event } from '../structures/Event'
 
 export default new Event('interactionCreate', async (client, interaction) => {
-  let commandManager = new CommandManager(client)
-  let errorManager = new ErrorManager(client)
+  const commandManager = new CommandManager(client)
+  const errorManager = new ErrorManager(client)
 
   if (interaction.isCommand()) {
-
     if (interaction.user.bot) return
-    if (interaction.channel?.type === 'DM') return interaction.reply('DM으로는 명령어 사용이 불가능해요')
+    if (interaction.channel?.type === 'DM')
+      return interaction.reply('DM으로는 명령어 사용이 불가능해요')
 
-    let command = commandManager.get(interaction.commandName)
+    const command = commandManager.get(interaction.commandName)
     try {
       if (commandManager.isSlash(command)) {
-        command.slash ? await command.slash.execute(client, interaction) : await command.execute(client, interaction)
+        command.slash
+          ? await command.slash.execute(client, interaction)
+          : await command.execute(client, interaction)
       }
       //await interaction.deferReply().catch(() => { })
     } catch (error: any) {

@@ -1,25 +1,27 @@
-import { Event } from "../structures/Event"
+import { Event } from '../structures/Event'
 import CommandManager from '../managers/CommandManager'
 import ErrorManager from '../managers/ErrorManager'
+import { MessageCommand } from 'src/structures/Command'
 
 export default new Event('messageCreate', async (client, message) => {
-  let commandManager = new CommandManager(client)
-  let errorManager = new ErrorManager(client)
+  const commandManager = new CommandManager(client)
+  const errorManager = new ErrorManager(client)
 
   if (message.author.bot) return
   if (message.channel.type === 'DM') return
   if (!message.content.startsWith(client.config.bot.prefix)) return
 
-  let args = message.content.slice(client.config.bot.prefix.length).trim().split(/ +/g)
-  let commandName = args.shift()?.toLowerCase()
-  let command = commandManager.get(commandName as string)
+  const args = message.content
+    .slice(client.config.bot.prefix.length)
+    .trim()
+    .split(/ +/g)
+  const commandName = args.shift()?.toLowerCase()
+  const command = commandManager.get(commandName as string) as MessageCommand
 
   await client.dokdo.run(message)
   try {
-    // @ts-ignore
     await command?.execute(client, message, args)
-
   } catch (error: any) {
-    errorManager.report(error, { executer: message })
+    errorManager.report(error, { executer: message, isSend: true })
   }
 })

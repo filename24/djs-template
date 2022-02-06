@@ -28,16 +28,23 @@ export default class EventManager extends BaseManager {
 
     eventFiles.forEach(async (eventFile) => {
       try {
-        if (!eventFile.endsWith('.ts')) return this.logger.debug(`Not a TypeScript file ${eventFile}. Skipping.`)
+        if (!eventFile.endsWith('.ts'))
+          return this.logger.debug(
+            `Not a TypeScript file ${eventFile}. Skipping.`
+          )
 
-        let { default: event } = require(`../events/${eventFile}`)
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { default: event } = require(`../events/${eventFile}`)
 
-        if (!event.name) return this.logger.debug(`Event ${eventFile} has no name. Skipping.`)
+        if (!event.name)
+          return this.logger.debug(`Event ${eventFile} has no name. Skipping.`)
 
         this.events.set(event.name, event)
         this.logger.debug(`Loaded event ${eventFile}`)
       } catch (error: any) {
-        this.logger.error(`Error loading events '${eventFile}'.\n` + error.stack)
+        this.logger.error(
+          `Error loading events '${eventFile}'.\n` + error.stack
+        )
       }
     })
     this.logger.debug(`Succesfully loaded events. count: ${this.events.size}`)
@@ -49,7 +56,7 @@ export default class EventManager extends BaseManager {
     this.logger.debug('Starting event files...')
 
     this.events.forEach((event, eventName) => {
-      if (!Event.isEvent(event)) return;
+      if (!Event.isEvent(event)) return
 
       if (event.options?.once) {
         this.client.once(eventName, (...args) => {
@@ -82,8 +89,14 @@ export default class EventManager extends BaseManager {
    *  console.log(`${client.user.tag} is ready!`)
    * })
    */
-  public register(eventName: keyof ClientEvents, fn: (client: BotClient, ...args: ClientEvents[keyof ClientEvents]) => Awaitable<void>) {
-    let eventFuntion = {
+  public register(
+    eventName: keyof ClientEvents,
+    fn: (
+      client: BotClient,
+      ...args: ClientEvents[keyof ClientEvents]
+    ) => Awaitable<void>
+  ) {
+    const eventFuntion = {
       name: eventName,
       execute: fn,
       options: {
@@ -97,5 +110,4 @@ export default class EventManager extends BaseManager {
 
     this.logger.debug(`Registered event '${eventName}'`)
   }
-
 }

@@ -13,4 +13,4 @@ let schema = new Schema({
   }
 })
 
-export default model('user', schema)
+export default model('user', schema, 'user')
