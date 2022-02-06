@@ -1,12 +1,12 @@
 {
   "name": "bot-name",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "repository": "https://github.com/MadeGOD/djs-template",
   "author": "Your name",
   "license": "MIT",
   "types": "./typings/index.d.ts",
   "scripts": {
-    "start": "node .",
+    "start": "ts-node ./src/index.ts",
     "test": "eslint ./ --fix",
     "dev": "ts-node-dev --transpile-only --respawn -r tsconfig-paths/register --trace-warnings --trace-uncaught -- ./src/index.ts",
     "lint": "eslint ./",
