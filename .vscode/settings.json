@@ -1,0 +1,9 @@
+{
+  "editor.tabSize": 2,
+  "[typescript]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false
+  },
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true
+}
