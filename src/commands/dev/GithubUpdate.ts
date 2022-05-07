@@ -1,7 +1,7 @@
 import Discord from 'discord.js'
 import Embed from '../../utils/Embed'
 import fetch from 'node-fetch'
-import child from 'child_process'
+import { execSync } from 'child_process'
 import { repository } from '../../../package.json'
 import { MessageCommand } from '../../structures/Command'
 import { GithubCommitAPI } from '../../../typings/command'
@@ -54,7 +54,6 @@ export default new MessageCommand(
       return msg.edit({ embeds: [LoadingEmbed] })
     }
 
-    let count = 0
     let json: GithubCommitAPI[] = await res.json()
 
     if (json[0].sha.trim().substring(0, 7) === client.BUILD_NUMBER) {
@@ -76,8 +75,9 @@ export default new MessageCommand(
 
       return msg.edit({ embeds: [SuccessEmbed] })
     }
-    json.forEach((commit) => {
-      count++
+
+    for (let count = 0; count < json.length; count++) {
+      const commit = json[count]
       if (commit.sha.trim().substring(0, 7) === client.BUILD_NUMBER) {
         let NewUpdateEmbed = new Embed(client, 'success')
           .setTitle('최신 업데이트가 있습니다!')
@@ -119,10 +119,16 @@ export default new MessageCommand(
         collector.on('collect', async (interaction) => {
           if (interaction.customId === 'update.run') {
             collector.stop()
+            try {
+              execSync(
+                `git pull https://username:${client.config.githubToken}@github.com/${repo}`
+              )
+            } catch (e) {
+              execSync('git fetch --all')
+              execSync('git reset --hard HEAD')
+              execSync('git merge @{u}')
+            }
 
-            child.execSync(
-              `git pull https://username:${client.config.githubToken}@github.com/${repo}`
-            )
             await interaction.reply('업데이트가 완료되었습니다!')
           } else if (interaction.user.id !== message.author.id) {
             interaction.reply(
@@ -130,11 +136,12 @@ export default new MessageCommand(
             )
           }
         })
-        return msg.edit({
+        msg.edit({
           embeds: [NewUpdateEmbed],
           components: [components]
         })
-      } else {
+        break
+      } else if (count > 0) {
         let BranchErrorEmbed = new Embed(client, 'error')
           .setTitle('뭔가 잘못된거 같아요...')
           .setDescription(
@@ -142,6 +149,6 @@ export default new MessageCommand(
           )
         msg.edit({ embeds: [BranchErrorEmbed], components: [] })
       }
-    })
+    }
   }
 )
