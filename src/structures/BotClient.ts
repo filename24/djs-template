@@ -1,4 +1,4 @@
-import { Client, ClientOptions, Collection } from 'discord.js'
+import { Client, ClientOptions, ClientEvents, Collection } from 'discord.js'
 import Dokdo from 'dokdo'
 import Logger from '../utils/Logger'
 
@@ -19,7 +19,7 @@ export default class BotClient extends Client {
   public readonly config = config
 
   public commands: Collection<string, BaseCommand> = new Collection()
-  public events: Collection<string, Event> = new Collection()
+  public events: Collection<keyof ClientEvents, Event> = new Collection()
   public errors: Collection<string, string> = new Collection()
   public dokdo: Dokdo = new Dokdo(this, {
     prefix: this.config.bot.prefix,
@@ -45,7 +45,7 @@ export default class BotClient extends Client {
 
   public async start(token: string = config.bot.token): Promise<void> {
     logger.info('Logging in bot...')
-    await this.login(token)
+    await this.login(token).then(() => this.setStatus())
   }
 
   public async setStatus(

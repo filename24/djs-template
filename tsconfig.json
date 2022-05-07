@@ -8,7 +8,6 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./build",
-    "baseUrl": ".",
     "resolveJsonModule": true,
   },
   "include": ["./typings/**/*.d.ts", "./src/**/*.ts", "./config.ts", ".git/*"],

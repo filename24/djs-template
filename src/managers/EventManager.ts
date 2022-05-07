@@ -1,7 +1,7 @@
-import { Awaitable, ClientEvents } from 'discord.js'
+import type { ClientEvents } from 'discord.js'
+import type BotClient from '../structures/BotClient'
 import { readdirSync } from 'fs'
 import { join } from 'path'
-import BotClient from '../structures/BotClient'
 import { Event } from '../structures/Event'
 import Logger from '../utils/Logger'
 import BaseManager from './BaseManager'
@@ -28,11 +28,6 @@ export default class EventManager extends BaseManager {
 
     eventFiles.forEach(async (eventFile) => {
       try {
-        if (!eventFile.endsWith('.ts'))
-          return this.logger.debug(
-            `Not a TypeScript file ${eventFile}. Skipping.`
-          )
-
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const { default: event } = require(`../events/${eventFile}`)
 
@@ -60,14 +55,12 @@ export default class EventManager extends BaseManager {
 
       if (event.options?.once) {
         this.client.once(eventName, (...args) => {
-          // @ts-ignore
           event.execute(this.client, ...args)
         })
 
         this.logger.debug(`Started event '${eventName}' once.`)
       } else {
         this.client.on(eventName, (...args) => {
-          // @ts-ignore
           event.execute(this.client, ...args)
         })
 
@@ -94,7 +87,7 @@ export default class EventManager extends BaseManager {
     fn: (
       client: BotClient,
       ...args: ClientEvents[keyof ClientEvents]
-    ) => Awaitable<void>
+    ) => Promise<any>
   ) {
     const eventFuntion = {
       name: eventName,

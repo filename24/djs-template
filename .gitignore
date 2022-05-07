@@ -1,5 +1,6 @@
 # Packages
 node_modules/
+package-lock.json
 
 # Log files
 logs/*
@@ -25,3 +26,12 @@ config.*
 
 # Build data
 build/
+
+# yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

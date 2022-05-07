@@ -1,7 +1,6 @@
 import Logger from '../utils/Logger'
 import BaseManager from './BaseManager'
 import mongoose from 'mongoose'
-import quick from 'quick.db'
 import path from 'path'
 import fs from 'fs'
 import BotClient from '../structures/BotClient'
@@ -21,29 +20,13 @@ export default class DatabaseManager extends BaseManager {
   }
 
   async load(schemaPath = path.join(__dirname, '../schemas')) {
-    switch (this.type) {
-      case 'mongodb': {
-        this.logger.debug('Using MongoDB...')
-        mongoose.connect(
-          this.client.config.database.url,
-          this.client.config.database.options
-        )
+    this.logger.debug('Using MongoDB...')
+    mongoose.connect(
+      this.client.config.database.url,
+      this.client.config.database.options
+    )
 
-        this.client.db = mongoose.connection
-
-        break
-      }
-
-      case 'quick.db' || 'sqlite': {
-        this.logger.debug('Using SQLite(quick.db)...')
-        this.client.db = quick
-
-        this.logger.info('Connected to SQLite!')
-        break
-      }
-      default:
-        return this.logger.error('Invalid database type:' + this.type)
-    }
+    this.client.db = mongoose.connection
 
     this.loadSchemas(schemaPath)
   }

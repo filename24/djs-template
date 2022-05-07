@@ -31,11 +31,6 @@ export default class CommandManager extends BaseManager {
 
           commandFiles.forEach((commandFile) => {
             try {
-              if (!commandFile.endsWith('.ts'))
-                return this.logger.warn(
-                  `Not a TypeScript file ${commandFile}. Skipping.`
-                )
-
               const {
                 default: command
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -80,7 +75,7 @@ export default class CommandManager extends BaseManager {
     this.client.commands.forEach((cmd) => {
       if (this.isSlash(cmd) && cmd.data.name === commandName)
         return (command = cmd)
-
+      // @ts-ignore
       if (cmd.data.aliases.includes(commandName)) return (command = cmd)
     })
 

@@ -1,11 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import {
-  Message,
-  ClientEvents,
-  Awaitable,
-  CommandInteraction
-} from 'discord.js'
-import BotClient from 'src/structures/BotClient'
+import type { Message, ClientEvents, CommandInteraction } from 'discord.js'
+import BotClient from '../src/structures/BotClient'
 
 export interface MessageCommnad {
   data: MessageCommandOptions
@@ -33,12 +28,12 @@ export type MessageCommandFuntion = (
   client: BotClient,
   message: Message,
   args: string[]
-) => Awaitable<void> | Promise<any>
+) => Promise<any> | Promise<any>
 
 export type SlashCommandFunction = (
   client: BotClient,
   interaction: CommandInteraction
-) => Awaitable<void>
+) => Promise<any>
 
 export interface SlashCommandOptions {
   name: string
@@ -51,13 +46,13 @@ export interface Event {
   execute: (
     client: BotClient,
     ...args: ClientEvents[keyof ClientEvents]
-  ) => Awaitable<void>
+  ) => Promise<any>
 }
 
 export type EventFunction<E extends keyof ClientEvents> = (
   client: BotClient,
   ...args: ClientEvents[E]
-) => Awaitable<void>
+) => Promise<any>
 
 export interface EventOptions {
   once: boolean

@@ -11,13 +11,13 @@ if (BUILD_NUMBER?.indexOf(":") === -1) {
       .readFileSync(".git/" + BUILD_NUMBER?.substring(5))
       .toString()
       .trim()
-      .substring(0, 6)
+      .substring(0, 7)
   } catch (e) {
     BUILD_NUMBER = null
   }
 }
 
-let config: IConfig = {
+const config: IConfig = {
   BUILD_NUMBER,
   BUILD_VERSION: "0.0.1-dev",
   githubToken: "",
