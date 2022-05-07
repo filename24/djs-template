@@ -234,13 +234,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json5@npm:^0.0.29":
-  version: 0.0.29
-  resolution: "@types/json5@npm:0.0.29"
-  checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
-  languageName: node
-  linkType: hard
-
 "@types/keyv@npm:^3.1.1":
   version: 3.1.3
   resolution: "@types/keyv@npm:3.1.3"
@@ -727,7 +720,6 @@ __metadata:
     strip-ansi: ^5.2.0
     ts-node: ^10.4.0
     ts-node-dev: ^1.1.8
-    tsconfig-paths: ^3.12.0
     typescript: ^4.5.4
     uuid: ^8.3.2
     winston: ^3.3.3
@@ -2258,17 +2250,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "json5@npm:1.0.1"
-  dependencies:
-    minimist: ^1.2.0
-  bin:
-    json5: lib/cli.js
-  checksum: e76ea23dbb8fc1348c143da628134a98adf4c5a4e8ea2adaa74a80c455fc2cdf0e2e13e6398ef819bfe92306b610ebb2002668ed9fc1af386d593691ef346fc3
-  languageName: node
-  linkType: hard
-
 "kareem@npm:2.3.2":
   version: 2.3.2
   resolution: "kareem@npm:2.3.2"
@@ -3749,18 +3730,6 @@ __metadata:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: 356e2647b8b1e6ab00380c0537fa569b63bd9b6f006cc40fd650f81fae1817bd8fecc075300036950d8f45c1d85b95be33cd1e48a1a424a7d86c3dbb42bf60e5
-  languageName: node
-  linkType: hard
-
-"tsconfig-paths@npm:^3.12.0":
-  version: 3.12.0
-  resolution: "tsconfig-paths@npm:3.12.0"
-  dependencies:
-    "@types/json5": ^0.0.29
-    json5: ^1.0.1
-    minimist: ^1.2.0
-    strip-bom: ^3.0.0
-  checksum: 4999ec6cd1c7cc06750a460dbc0d39fe3595a4308cb5f1d0d0a8283009cf9c0a30d5a156508c28fe3a47760508af5263ab288fc23d71e9762779674257a95d3b
   languageName: node
   linkType: hard
 
