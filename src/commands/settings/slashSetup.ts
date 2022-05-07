@@ -1,4 +1,10 @@
-import { MessageActionRow, MessageButton, Constants } from 'discord.js'
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  EnumResolvers,
+  MessageActionRowComponentBuilder,
+  RESTJSONErrorCodes
+} from 'discord.js'
 import CommandManager from '../../managers/CommandManager'
 import Embed from '../../utils/Embed'
 import ErrorManager from '../../managers/ErrorManager'
@@ -13,13 +19,14 @@ export default new BaseCommand(
     let commandManager = new CommandManager(client)
     let errorManager = new ErrorManager(client)
 
-    let row = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setCustomId('accept')
-        .setLabel('동의합니다.')
-        .setStyle('SUCCESS')
-        .setEmoji('✅')
-    )
+    let row =
+      new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents([
+        new ButtonBuilder()
+          .setCustomId('accept')
+          .setLabel('동의합니다.')
+          .setStyle(EnumResolvers.resolveButtonStyle('SUCCESS'))
+          .setEmoji('✅')
+      ])
     let embed = new Embed(client, 'warn')
       .setTitle('잠시만요!')
       .setDescription(
@@ -34,10 +41,11 @@ export default new BaseCommand(
       if (i.user.id === message.author.id) {
         let loading = new Embed(client, 'info')
           .setDescription('Slash Command 로딩중...')
-          .setAuthor(
-            '잠시만 기다려주십시요...',
-            'https://cdn.discordapp.com/emojis/667750713698549781.gif?v=1'
-          )
+          .setAuthor({
+            name: '잠시만 기다려주십시요...',
+            iconURL:
+              'https://cdn.discordapp.com/emojis/667750713698549781.gif?v=1'
+          })
         await i.update({ embeds: [loading], components: [] })
 
         commandManager
@@ -56,7 +64,7 @@ export default new BaseCommand(
           })
           .catch((error) => {
             m.delete()
-            if (error.code === Constants.APIErrors.MISSING_ACCESS) {
+            if (error.code === RESTJSONErrorCodes.MissingAccess) {
               message.channel.send({
                 embeds: [
                   new Embed(client, 'error')
@@ -82,13 +90,15 @@ export default new BaseCommand(
       m.edit({
         embeds: [embed],
         components: [
-          new MessageActionRow().addComponents(
-            new MessageButton()
-              .setCustomId('accept')
-              .setLabel('시간 초과. 다시 시도해주세요...')
-              .setStyle('SECONDARY')
-              .setEmoji('⛔')
-              .setDisabled(true)
+          new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+            [
+              new ButtonBuilder()
+                .setCustomId('accept')
+                .setLabel('시간 초과. 다시 시도해주세요...')
+                .setStyle(EnumResolvers.resolveButtonStyle('SECONDARY'))
+                .setEmoji('⛔')
+                .setDisabled(true)
+            ]
           )
         ]
       })

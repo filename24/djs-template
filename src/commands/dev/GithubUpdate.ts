@@ -1,4 +1,9 @@
-import Discord from 'discord.js'
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  EnumResolvers,
+  MessageActionRowComponentBuilder
+} from 'discord.js'
 import Embed from '../../utils/Embed'
 import fetch from 'node-fetch'
 import { execSync } from 'child_process'
@@ -23,7 +28,8 @@ export default new MessageCommand(
       .setTitle('잠시만 기다려주십시요')
       .setDescription('최신 업데이트 내용을 불러오는 중입니다...')
 
-    let msg = await message.reply({ embeds: [LoadingEmbed] })
+    const msg = await message.reply({ embeds: [LoadingEmbed] })
+
     if (repository?.includes('Your github url') || !repository) {
       LoadingEmbed.setTitle('이런...')
         .setDescription(
@@ -60,7 +66,7 @@ export default new MessageCommand(
       let SuccessEmbed = new Embed(client, 'success')
         .setTitle('확인 완료!')
         .setDescription('현재 최신 버전을 이용중입니다!')
-        .addFields(
+        .addFields([
           {
             name: '현재 버전',
             value: `v${client.VERSION}`,
@@ -71,7 +77,7 @@ export default new MessageCommand(
             value: `${client.BUILD_NUMBER}`,
             inline: true
           }
-        )
+        ])
 
       return msg.edit({ embeds: [SuccessEmbed] })
     }
@@ -84,7 +90,7 @@ export default new MessageCommand(
           .setDescription(
             `최신 업데이트된 ${count}개의 내용이 있습니다. 지금 업데이트 하시겠습니까?`
           )
-          .addFields(
+          .addFields([
             {
               name: '현재 버전',
               value: `v${client.VERSION}`,
@@ -100,17 +106,18 @@ export default new MessageCommand(
               value: `${json[0].sha.trim().substring(0, 6)}`,
               inline: true
             }
-          )
+          ])
 
-        let buttonData = new Discord.MessageButton()
-          .setStyle('SUCCESS')
+        let buttonData = new ButtonBuilder()
+          .setStyle(EnumResolvers.resolveButtonStyle('SUCCESS'))
           .setLabel('업데이트 하기')
           .setEmoji('✅')
           .setCustomId('update.run')
 
-        let components = new Discord.MessageActionRow().addComponents(
-          buttonData
-        )
+        let components =
+          new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+            [buttonData]
+          )
 
         let collector = msg.channel.createMessageComponentCollector({
           time: 10 * 1000
