@@ -27,6 +27,9 @@ jobs:
       - name: Remove fake config.js
         run: rm build/config.js
 
+      - name: Copy .gitignore file
+        run: cp .gitignore build/
+        
       - name: Deploy with gh-pages
         if: ${{ github.ref_name == 'stable' }}
         run: |
