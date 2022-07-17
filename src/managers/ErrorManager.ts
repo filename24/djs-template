@@ -51,7 +51,7 @@ export default class ErrorManager extends BaseManager {
       ) as Guild
       const channel = guild.channels.cache.get(config.report.text.channelID)
 
-      if (!channel?.isText())
+      if (!channel?.isTextBased())
         return new TypeError('Channel is not text channel')
 
       channel?.send(errorText)

@@ -1,7 +1,7 @@
 import {
   ActionRowBuilder,
   ButtonBuilder,
-  EnumResolvers,
+  ButtonStyle,
   MessageActionRowComponentBuilder,
   RESTJSONErrorCodes
 } from 'discord.js'
@@ -24,7 +24,7 @@ export default new BaseCommand(
         new ButtonBuilder()
           .setCustomId('accept')
           .setLabel('동의합니다.')
-          .setStyle(EnumResolvers.resolveButtonStyle('SUCCESS'))
+          .setStyle(ButtonStyle.Primary)
           .setEmoji('✅')
       ])
     let embed = new Embed(client, 'warn')
@@ -95,7 +95,7 @@ export default new BaseCommand(
               new ButtonBuilder()
                 .setCustomId('accept')
                 .setLabel('시간 초과. 다시 시도해주세요...')
-                .setStyle(EnumResolvers.resolveButtonStyle('SECONDARY'))
+                .setStyle(ButtonStyle.Secondary)
                 .setEmoji('⛔')
                 .setDisabled(true)
             ]

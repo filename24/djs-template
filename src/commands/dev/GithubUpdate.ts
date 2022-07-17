@@ -1,7 +1,7 @@
 import {
   ActionRowBuilder,
   ButtonBuilder,
-  EnumResolvers,
+  ButtonStyle,
   MessageActionRowComponentBuilder
 } from 'discord.js'
 import Embed from '../../utils/Embed'
@@ -109,7 +109,7 @@ export default new MessageCommand(
           ])
 
         let buttonData = new ButtonBuilder()
-          .setStyle(EnumResolvers.resolveButtonStyle('SUCCESS'))
+          .setStyle(ButtonStyle.Success)
           .setLabel('업데이트 하기')
           .setEmoji('✅')
           .setCustomId('update.run')
