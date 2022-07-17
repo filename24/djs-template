@@ -1,24 +1,25 @@
-import { Client, MessageEmbedOptions, MessageEmbed } from 'discord.js'
+import { type Client, EmbedBuilder, type EmbedData } from 'discord.js'
 import { EmbedType } from '../../typings'
 
-export default class Embed extends MessageEmbed {
+export default class Embed extends EmbedBuilder {
   constructor(client: Client, type: EmbedType) {
     if (!client.isReady()) return
 
-    const EmbedJSON: MessageEmbedOptions = {
-      timestamp: new Date(),
+    const EmbedJSON: EmbedData = {
+      timestamp: new Date().toISOString(),
       footer: {
-        text: client.user.username,
-        icon_url: client.user.avatarURL() ?? undefined
+        iconURL: client.user.avatarURL() ?? undefined,
+        text: client.user.username
       }
     }
-    if (type === 'success') EmbedJSON.color = '#57F287'
-    else if (type === 'error') EmbedJSON.color = '#ED4245'
-    else if (type === 'warn') EmbedJSON.color = '#FEE75C'
-    else if (type === 'info') EmbedJSON.color = '#5865F2'
-    else if (type === 'default') EmbedJSON.color = '#5865F2'
 
     super(EmbedJSON)
+
+    if (type === 'success') this.setColor('#57F287')
+    else if (type === 'error') this.setColor('#ED4245')
+    else if (type === 'warn') this.setColor('#FEE75C')
+    else if (type === 'info') this.setColor('#5865F2')
+    else if (type === 'default') this.setColor('#5865F2')
   }
 
   setType(type: EmbedType) {

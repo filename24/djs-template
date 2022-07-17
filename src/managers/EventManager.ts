@@ -29,7 +29,7 @@ export default class EventManager extends BaseManager {
     eventFiles.forEach(async (eventFile) => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const { default: event } = require(`../events/${eventFile}`)
+        const event = require(`../events/${eventFile}`).default
 
         if (!event.name)
           return this.logger.debug(`Event ${eventFile} has no name. Skipping.`)

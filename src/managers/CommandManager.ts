@@ -31,10 +31,8 @@ export default class CommandManager extends BaseManager {
 
           commandFiles.forEach((commandFile) => {
             try {
-              const {
-                default: command
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-              } = require(`../commands/${folder}/${commandFile}`)
+              // eslint-disable-next-line @typescript-eslint/no-var-requires
+              const command = require(`../commands/${folder}/${commandFile}`).default
 
               if (!command.data.name ?? !command.name)
                 return this.logger.debug(

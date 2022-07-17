@@ -15,7 +15,7 @@ export default new BaseCommand(
     let m = await message.reply({
       embeds: [embed]
     })
-    embed = new Embed(client, 'success').setTitle('PONG!').addFields(
+    embed = new Embed(client, 'success').setTitle('PONG!').addFields([
       {
         name: '메세지 응답속도',
         value: `${Number(m.createdAt) - Number(message.createdAt)}ms`,
@@ -31,7 +31,7 @@ export default new BaseCommand(
         value: `<t:${(Number(client.readyAt) / 1000) | 0}:R>`,
         inline: true
       }
-    )
+    ])
 
     m.edit({
       embeds: [embed]
@@ -48,7 +48,12 @@ export default new BaseCommand(
     async execute(client, interaction) {
       let PingEmbed = new Embed(client, 'success')
         .setTitle('핑 측정')
-        .addFields(
+        .addFields([
+          {
+        name: '메세지 응답속도',
+        value: `${Number(Date.now()) - Number(interaction.createdAt)}ms`,
+        inline: true
+      },
           {
             name: 'API 반응속도',
             value: `${client.ws.ping}ms`,
@@ -59,7 +64,7 @@ export default new BaseCommand(
             value: `<t:${(Number(client.readyAt) / 1000) | 0}:R>`,
             inline: true
           }
-        )
+        ])
       interaction.reply({ embeds: [PingEmbed] })
     }
   }
