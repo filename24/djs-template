@@ -2,7 +2,7 @@ import { Guild, WebhookClient } from 'discord.js'
 import BaseManager from './BaseManager'
 import Embed from '../utils/Embed'
 import Logger from '../utils/Logger'
-import uuid from 'uuid'
+import {v4} from 'uuid'
 import { ErrorReportOptions } from '../../typings'
 import BotClient from '../structures/BotClient'
 
@@ -26,7 +26,7 @@ export default class ErrorManager extends BaseManager {
     const { isSend, executer } = options
     const date = (Number(new Date()) / 1000) | 0
     const errorText = `**[<t:${date}:T> ERROR]** ${error.stack}`
-    const errorCode = uuid.v4()
+    const errorCode = v4()
 
     this.client.errors.set(errorCode, error.stack as string)
 

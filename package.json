@@ -1,10 +1,9 @@
 {
   "name": "bot-name",
-  "main": "src/index.js",
   "repository": "https://github.com/MadeGOD/djs-template",
   "author": "Your name",
   "license": "MIT",
-  "types": "./typings/index.d.ts",
+  "main": "src/index.js",
   "scripts": {
     "start": "yarn build && cd build && node .",
     "dev": "ts-node-dev --transpile-only --respawn --trace-warnings --trace-uncaught -- ./src/index.ts",
@@ -13,15 +12,13 @@
     "lint:fix": "eslint . --ext .ts --fix"
   },
   "dependencies": {
-    "@discordjs/builders": "^0.15.0",
-    "chalk": "^5.0.1",
+    "chalk": "4",
     "discord-api-types": "^0.36.2",
     "discord.js": "dev",
     "dokdo": "^0.5.1",
     "dotenv": "^16.0.1",
     "fs": "^0.0.1-security",
     "mongoose": "^6.4.4",
-    "strip-ansi": "^7.0.1",
     "uuid": "^8.3.2",
     "winston": "^3.8.1"
   },
@@ -46,5 +43,8 @@
     "example.*",
     "eslintrc.*"
   ],
+  "engines": {
+    "node": ">=16.9"
+  },
   "packageManager": "yarn@3.1.1"
 }
