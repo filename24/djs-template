@@ -31,7 +31,7 @@ jobs:
         run: cp .gitignore build/
         
       - name: Deploy with gh-pages
-        if: ${{ github.ref_name == 'stable' }}
+        if: ${{ github.ref_name == 'master' }}
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           npx gh-pages -d build -b "build" -m "build: Hosting build for branch ${GITHUB_REF##*/} - ${GITHUB_SHA::7}" -u "github-actions-bot <support+actions@github.com>"

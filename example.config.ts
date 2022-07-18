@@ -19,7 +19,7 @@ if (BUILD_NUMBER?.indexOf(':') === -1) {
 
 const config: IConfig = {
   BUILD_NUMBER,
-  BUILD_VERSION: '0.0.2',
+  BUILD_VERSION: '0.0.3',
   githubToken: '',
   bot: {
     sharding: false,
