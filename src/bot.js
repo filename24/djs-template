@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const path_1 = __importDefault(require("path"));
+const Logger_1 = __importDefault(require("./utils/Logger"));
+const config_1 = __importDefault(require("../config"));
+const BotClient_1 = __importDefault(require("./structures/BotClient"));
+const CommandManager_1 = __importDefault(require("./managers/CommandManager"));
+const EventManager_1 = __importDefault(require("./managers/EventManager"));
+const DatabaseManager_1 = __importDefault(require("./managers/DatabaseManager"));
+const logger = new Logger_1.default('main');
+logger.log('Starting up...');
+process.on('uncaughtException', (e) => logger.error(e.stack));
+process.on('unhandledRejection', (e) => logger.error(e.stack));
+const client = new BotClient_1.default(config_1.default.bot.options);
+const command = new CommandManager_1.default(client);
+const event = new EventManager_1.default(client);
+const database = new DatabaseManager_1.default(client);
+command.load(path_1.default.join(__dirname, 'commands'));
+event.load(path_1.default.join(__dirname, 'events'));
+database.load();
+client.start(config_1.default.bot.token);
