@@ -83,3 +83,9 @@ jobs:
           npx gh-pages -d build -b "build" -m "build: Hosting build for branch ${GITHUB_REF##*/} - ${GITHUB_SHA::7}" -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: buildData
+          path: build
