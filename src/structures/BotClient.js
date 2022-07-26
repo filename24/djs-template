@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const dokdo_1 = __importDefault(require("dokdo"));
 const Logger_1 = __importDefault(require("../utils/Logger"));
 const config_1 = __importDefault(require("../../config"));
 const CommandManager_1 = __importDefault(require("../managers/CommandManager"));
@@ -20,11 +19,6 @@ class BotClient extends discord_js_1.Client {
     commands = new discord_js_1.Collection();
     events = new discord_js_1.Collection();
     errors = new discord_js_1.Collection();
-    dokdo = new dokdo_1.default(this, {
-        prefix: this.config.bot.prefix,
-        owners: config_1.default.bot.owners,
-        noPerm: (message) => message.reply('당신은 Dokdo 를 이용할수 없습니다.')
-    });
     db;
     schemas = new discord_js_1.Collection();
     command = new CommandManager_1.default(this);
