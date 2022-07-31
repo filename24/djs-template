@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import path from 'path'
 import Logger from './utils/Logger'
 import config from '../config'

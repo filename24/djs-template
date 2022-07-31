@@ -1,20 +1,10 @@
+import { PrismaClientOptions } from '@prisma/client/runtime'
 import {
   ClientOptions,
   CommandInteraction,
   Message,
   ShardingManagerOptions
 } from 'discord.js'
-
-export type LevelType =
-  | 'fatal'
-  | 'error'
-  | 'warn'
-  | 'info'
-  | 'verbose'
-  | 'debug'
-  | 'chat'
-
-export type EmbedType = 'default' | 'error' | 'success' | 'warn' | 'info'
 
 export interface ErrorReportOptions {
   executer: Message | CommandInteraction | undefined
@@ -35,7 +25,7 @@ export interface IConfig {
     cooldown?: number
   }
   report: {
-    type: 'webhook' | 'text'
+    type: ReportType
     webhook: {
       url: string
     }
@@ -44,13 +34,31 @@ export interface IConfig {
       channelID: string
     }
   }
-  database: {
-    type: 'mongodb' | 'sqlite'
+  database?: {
+    /**
+     * @deprecated Type is now 'prisma' not change use 'prisma/schema.prisma'
+     */
+    type: DatabaseType
+    /**
+     * @deprecated This option not used anymore use 'prisma/schema.prisma'
+     */
     url: string
-    options: any
+    options?: PrismaClientOptions
   }
   logger: {
     level: LevelType
     dev: boolean
   }
 }
+
+export type DatabaseType = 'mongodb' | 'prisma'
+export type ReportType = 'webhook' | 'text'
+export type LevelType =
+  | 'fatal'
+  | 'error'
+  | 'warn'
+  | 'info'
+  | 'verbose'
+  | 'debug'
+  | 'chat'
+export type EmbedType = 'default' | 'error' | 'success' | 'warn' | 'info'

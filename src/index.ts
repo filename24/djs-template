@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { ShardingManager } from 'discord.js'
 import config from '../config'
 import chalk from 'chalk'
