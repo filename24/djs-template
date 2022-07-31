@@ -1,8 +1,8 @@
-import { Guild, WebhookClient } from 'discord.js'
+import { AutocompleteInteraction, Guild, WebhookClient } from 'discord.js'
 import BaseManager from './BaseManager'
 import Embed from '../utils/Embed'
 import Logger from '../utils/Logger'
-import {v4} from 'uuid'
+import { v4 } from 'uuid'
 import { ErrorReportOptions } from '../../typings'
 import BotClient from '../structures/BotClient'
 
@@ -27,6 +27,7 @@ export default class ErrorManager extends BaseManager {
     const date = (Number(new Date()) / 1000) | 0
     const errorText = `**[<t:${date}:T> ERROR]** ${error.stack}`
     const errorCode = v4()
+    if (executer instanceof AutocompleteInteraction) return
 
     this.client.errors.set(errorCode, error.stack as string)
 
@@ -37,6 +38,7 @@ export default class ErrorManager extends BaseManager {
       )
       .addFields([{ name: '오류 코드', value: errorCode, inline: true }])
 
+    // @ts-ignore
     isSend ? executer?.reply({ embeds: [errorEmbed] }) : null
 
     if (config.report.type == 'webhook') {

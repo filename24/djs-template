@@ -9,6 +9,7 @@ import ErrorManager from '../managers/ErrorManager'
 import DatabaseManager from '../managers/DatabaseManager'
 import { Model } from 'mongoose'
 import { config as dotenvConfig } from 'dotenv'
+import { BaseInteraction } from './Interaction'
 
 const logger = new Logger('bot')
 
@@ -20,6 +21,8 @@ export default class BotClient extends Client {
   public commands: Collection<string, BaseCommand> = new Collection()
   public events: Collection<keyof ClientEvents, Event> = new Collection()
   public errors: Collection<string, string> = new Collection()
+  public interactions: Collection<string, BaseInteraction> = new Collection()
+
   public db: any
   public schemas: Collection<string, Model<any>> = new Collection()
   public command: CommandManager = new CommandManager(this)
