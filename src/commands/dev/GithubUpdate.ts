@@ -18,7 +18,8 @@ export default new MessageCommand(
     aliases: ['업데이트', 'djqepdlxm', '촏차', 'check']
   },
   async (client, message, args) => {
-    if (!client.config.bot.owners.includes(message.author.id))
+    // @ts-ignore
+    if (!client.dokdo.owners.includes(message.author.id))
       return message.reply(
         `해당 명령어는 ${client.user?.username}의 주인이 사용할 수 있는 명령어입니다.`
       )

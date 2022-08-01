@@ -631,6 +631,7 @@ __metadata:
     chalk: 4
     discord-api-types: ^0.36.3
     discord.js: ^14.0.3
+    dokdo: "pikokr/dokdo#v14"
     dotenv: ^16.0.1
     eslint: ^8.20.0
     eslint-config-prettier: ^8.5.0
@@ -974,6 +975,17 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
+  languageName: node
+  linkType: hard
+
+"dokdo@pikokr/dokdo#v14":
+  version: 0.5.1
+  resolution: "dokdo@https://github.com/pikokr/dokdo.git#commit=e30fc228fdccf7b1ae5ba83ec77f2ae8d4f609d5"
+  dependencies:
+    node-fetch: ^2.6.1
+  peerDependencies:
+    discord.js: ^14.0.2
+  checksum: e1c0fb765f574572dea95d1ee39b1108cd608a28578d46c37afe2b8631ed9a5601e79e327c38e0c88b5b5c79373bc9cee142588618ea90be776223d1e3a7b633
   languageName: node
   linkType: hard
 
@@ -2672,6 +2684,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tr46@npm:~0.0.3":
+  version: 0.0.3
+  resolution: "tr46@npm:0.0.3"
+  checksum: 726321c5eaf41b5002e17ffbd1fb7245999a073e8979085dacd47c4b4e8068ff5777142fc6726d6ca1fd2ff16921b48788b87225cbc57c72636f6efa8efbffe3
+  languageName: node
+  linkType: hard
+
 "tree-kill@npm:^1.2.2":
   version: 1.2.2
   resolution: "tree-kill@npm:1.2.2"
@@ -2908,6 +2927,23 @@ __metadata:
   version: 3.0.1
   resolution: "webidl-conversions@npm:3.0.1"
   checksum: c92a0a6ab95314bde9c32e1d0a6dfac83b578f8fa5f21e675bc2706ed6981bc26b7eb7e6a1fab158e5ce4adf9caa4a0aee49a52505d4d13c7be545f15021b17c
+  languageName: node
+  linkType: hard
+
+"webidl-conversions@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "webidl-conversions@npm:7.0.0"
+  checksum: f05588567a2a76428515333eff87200fae6c83c3948a7482ebb109562971e77ef6dc49749afa58abb993391227c5697b3ecca52018793e0cb4620a48f10bd21b
+  languageName: node
+  linkType: hard
+
+"whatwg-url@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "whatwg-url@npm:5.0.0"
+  dependencies:
+    tr46: ~0.0.3
+    webidl-conversions: ^3.0.0
+  checksum: b8daed4ad3356cc4899048a15b2c143a9aed0dfae1f611ebd55073310c7b910f522ad75d727346ad64203d7e6c79ef25eafd465f4d12775ca44b90fa82ed9e2c
   languageName: node
   linkType: hard
 
