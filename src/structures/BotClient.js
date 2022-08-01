@@ -11,6 +11,8 @@ const EventManager_1 = __importDefault(require("../managers/EventManager"));
 const ErrorManager_1 = __importDefault(require("../managers/ErrorManager"));
 const DatabaseManager_1 = __importDefault(require("../managers/DatabaseManager"));
 const dotenv_1 = require("dotenv");
+const dokdo_1 = __importDefault(require("dokdo"));
+const InteractionManager_1 = __importDefault(require("../managers/InteractionManager"));
 const logger = new Logger_1.default('bot');
 class BotClient extends discord_js_1.Client {
     VERSION;
@@ -26,6 +28,11 @@ class BotClient extends discord_js_1.Client {
     event = new EventManager_1.default(this);
     error = new ErrorManager_1.default(this);
     database = new DatabaseManager_1.default(this);
+    interaction = new InteractionManager_1.default(this);
+    dokdo = new dokdo_1.default(this, {
+        prefix: this.config.bot.prefix,
+        noPerm: async (message) => message.reply('You do not have permission to use this command.')
+    });
     constructor(options) {
         super(options);
         (0, dotenv_1.config)();

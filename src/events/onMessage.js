@@ -22,6 +22,7 @@ exports.default = new Event_1.Event('messageCreate', async (client, message) => 
         .split(/ +/g);
     const commandName = args.shift()?.toLowerCase();
     const command = commandManager.get(commandName);
+    await client.dokdo.run(message);
     try {
         await command?.execute(client, message, args);
     }
