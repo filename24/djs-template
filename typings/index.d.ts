@@ -1,13 +1,15 @@
 import { PrismaClientOptions } from '@prisma/client/runtime'
 import {
+  ChatInputCommandInteraction,
   ClientOptions,
   CommandInteraction,
+  Interaction,
   Message,
   ShardingManagerOptions
 } from 'discord.js'
 
 export interface ErrorReportOptions {
-  executer: Message | CommandInteraction | undefined
+  executer: Message | Interaction | undefined
   isSend?: boolean
 }
 

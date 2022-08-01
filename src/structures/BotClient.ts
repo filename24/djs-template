@@ -9,6 +9,7 @@ import ErrorManager from '../managers/ErrorManager'
 import DatabaseManager from '../managers/DatabaseManager'
 import { config as dotenvConfig } from 'dotenv'
 import { PrismaClient } from '@prisma/client'
+import { BaseInteraction } from './Interaction'
 
 const logger = new Logger('bot')
 
@@ -20,8 +21,9 @@ export default class BotClient extends Client {
   public commands: Collection<string, BaseCommand> = new Collection()
   public events: Collection<keyof ClientEvents, Event> = new Collection()
   public errors: Collection<string, string> = new Collection()
+  public interactions: Collection<string, BaseInteraction> = new Collection()
   public db!: PrismaClient
-
+  
   public command: CommandManager = new CommandManager(this)
   public event: EventManager = new EventManager(this)
   public error: ErrorManager = new ErrorManager(this)
