@@ -19,6 +19,7 @@ class BotClient extends discord_js_1.Client {
     commands = new discord_js_1.Collection();
     events = new discord_js_1.Collection();
     errors = new discord_js_1.Collection();
+    interactions = new discord_js_1.Collection();
     db;
     schemas = new discord_js_1.Collection();
     command = new CommandManager_1.default(this);
