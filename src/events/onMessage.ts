@@ -19,6 +19,8 @@ export default new Event('messageCreate', async (client, message) => {
   const commandName = args.shift()?.toLowerCase()
   const command = commandManager.get(commandName as string) as MessageCommand
 
+  await client.dokdo.run(message)
+
   try {
     await command?.execute(client, message, args)
   } catch (error: any) {

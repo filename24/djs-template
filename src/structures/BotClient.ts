@@ -10,6 +10,8 @@ import DatabaseManager from '../managers/DatabaseManager'
 import { Model } from 'mongoose'
 import { config as dotenvConfig } from 'dotenv'
 import { BaseInteraction } from './Interaction'
+import Dokdo from 'dokdo'
+import InteractionManager from '../managers/InteractionManager'
 
 const logger = new Logger('bot')
 
@@ -29,7 +31,12 @@ export default class BotClient extends Client {
   public event: EventManager = new EventManager(this)
   public error: ErrorManager = new ErrorManager(this)
   public database: DatabaseManager = new DatabaseManager(this)
-
+  public interaction: InteractionManager = new InteractionManager(this)
+  public dokdo: Dokdo = new Dokdo(this, {
+    prefix: this.config.bot.prefix,
+    noPerm: async (message) =>
+      message.reply('You do not have permission to use this command.')
+  })
   public constructor(options: ClientOptions) {
     super(options)
     dotenvConfig()
