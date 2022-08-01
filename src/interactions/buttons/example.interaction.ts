@@ -1,4 +1,5 @@
 import { Button } from '../../structures/Interaction'
 
-// @ts-ignore
-export default new Button('button')
+export default new Button('button', async (client, interaction) => {
+  interaction.reply('You clicked the button!')
+})

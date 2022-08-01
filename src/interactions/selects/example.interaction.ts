@@ -1,4 +1,3 @@
 import { SelectMenu } from '../../structures/Interaction'
 
-// @ts-ignore
-export default new SelectMenu('selectMenu')
+export default new SelectMenu('selectMenu', async (client, interaction) => {})

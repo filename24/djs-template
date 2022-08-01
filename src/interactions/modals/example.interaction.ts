@@ -1,4 +1,3 @@
 import { Modal } from '../../structures/Interaction'
 
-// @ts-ignore
-export default Modal('modal')
+export default new Modal('modal', async (client, interaction) => {})

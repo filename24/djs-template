@@ -15,7 +15,6 @@ export class Button {
   public type: InteractionType.Button = InteractionType.Button
   constructor(
     public name: string,
-    public data: InteractionData,
     public execute: BaseInteractionFunction<ButtonInteraction<'cached'>>
   ) {}
 }
@@ -24,7 +23,6 @@ export class SelectMenu {
   public type: InteractionType.Select = InteractionType.Select
   constructor(
     public name: string,
-    public data: InteractionData,
     public execute: BaseInteractionFunction<SelectMenuInteraction<'cached'>>
   ) {}
 }
@@ -44,7 +42,6 @@ export class Modal {
   public type: InteractionType.Modal = InteractionType.Modal
   constructor(
     public name: string,
-    public data: InteractionData,
     public execute: BaseInteractionFunction<ModalSubmitInteraction<'cached'>>
   ) {}
 }
