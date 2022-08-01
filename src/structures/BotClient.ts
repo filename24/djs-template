@@ -7,8 +7,8 @@ import CommandManager from '../managers/CommandManager'
 import EventManager from '../managers/EventManager'
 import ErrorManager from '../managers/ErrorManager'
 import DatabaseManager from '../managers/DatabaseManager'
-import { Model } from 'mongoose'
 import { config as dotenvConfig } from 'dotenv'
+import { PrismaClient } from '@prisma/client'
 import { BaseInteraction } from './Interaction'
 import Dokdo from 'dokdo'
 import InteractionManager from '../managers/InteractionManager'
@@ -24,9 +24,8 @@ export default class BotClient extends Client {
   public events: Collection<keyof ClientEvents, Event> = new Collection()
   public errors: Collection<string, string> = new Collection()
   public interactions: Collection<string, BaseInteraction> = new Collection()
-
-  public db: any
-  public schemas: Collection<string, Model<any>> = new Collection()
+  public db!: PrismaClient
+  
   public command: CommandManager = new CommandManager(this)
   public event: EventManager = new EventManager(this)
   public error: ErrorManager = new ErrorManager(this)

@@ -33,9 +33,6 @@ const config: IConfig = {
     cooldown: 2000
   },
   report: {
-    /**
-     * @type {'webhook', 'text'}
-     */
     type: 'webhook',
     webhook: {
       url: ''
@@ -43,17 +40,6 @@ const config: IConfig = {
     text: {
       guildID: '',
       channelID: ''
-    }
-  },
-  database: {
-    /**
-     * @type {'mongodb'|'sqlite'|'quick.db'}
-     */
-    type: 'mongodb',
-    url: 'mongodb://localhost:27017/',
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
     }
   },
   logger: {
