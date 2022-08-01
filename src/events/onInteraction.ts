@@ -84,7 +84,7 @@ export default new Event('interactionCreate', async (client, interaction) => {
     try {
       interactionData.execute(client, interaction)
     } catch (error: any) {
-      errorManager.report(error, { executer: interaction, isSend: true })
+      errorManager.report(error)
     }
   }
 })
