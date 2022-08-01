@@ -50,10 +50,10 @@ export default new BaseCommand(
         .setTitle('핑 측정')
         .addFields([
           {
-        name: '메세지 응답속도',
-        value: `${Number(Date.now()) - Number(interaction.createdAt)}ms`,
-        inline: true
-      },
+            name: '메세지 응답속도',
+            value: `${Number(Date.now()) - Number(interaction.createdAt)}ms`,
+            inline: true
+          },
           {
             name: 'API 반응속도',
             value: `${client.ws.ping}ms`,

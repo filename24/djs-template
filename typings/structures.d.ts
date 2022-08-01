@@ -1,5 +1,11 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import type { Message, ClientEvents, ChatInputCommandInteraction } from 'discord.js'
+import type {
+  Message,
+  ClientEvents,
+  ChatInputCommandInteraction,
+  Interaction,
+  RESTPostAPIApplicationCommandsJSONBody
+} from 'discord.js'
 import BotClient from '../src/structures/BotClient'
 
 export interface MessageCommnad {
@@ -58,4 +64,10 @@ export interface EventOptions {
   once: boolean
 }
 
+export type BaseInteractionFunction<T = Interaction> = (
+  client: BotClient,
+  interaction: T
+) => Promise<any>
+
 export type BaseCommand = MessageCommnad | SlashCommand | Command
+export type InteractionData = RESTPostAPIApplicationCommandsJSONBody

@@ -1,6 +1,8 @@
 import {
+  ChatInputCommandInteraction,
   ClientOptions,
   CommandInteraction,
+  Interaction,
   Message,
   ShardingManagerOptions
 } from 'discord.js'
@@ -17,7 +19,7 @@ export type LevelType =
 export type EmbedType = 'default' | 'error' | 'success' | 'warn' | 'info'
 
 export interface ErrorReportOptions {
-  executer: Message | CommandInteraction | undefined
+  executer: Message | Interaction | undefined
   isSend?: boolean
 }
 
