@@ -1,6 +1,6 @@
 {
     "name": "bot-name",
-    "repository": "https://github.com/MadeGOD/djs-template",
+    "repository": "https://github.com/ankhgerel/djs-template",
     "author": "Your name",
     "license": "MIT",
     "main": "src/index.js",
