@@ -3,10 +3,10 @@ import BaseManager from './BaseManager'
 import Embed from '../utils/Embed'
 import Logger from '../utils/Logger'
 import { v4 } from 'uuid'
-import { ErrorReportOptions } from '../../typings'
+import { ErrorReportOptions } from '../../types'
 import BotClient from '../structures/BotClient'
 
-import config from '../../config'
+import config from '../config'
 
 /**
  * @extends BaseManager

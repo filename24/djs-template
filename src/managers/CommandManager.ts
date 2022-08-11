@@ -1,5 +1,5 @@
 import { ApplicationCommandDataResolvable } from 'discord.js'
-import { BaseCommand, Command, SlashCommand } from '../../typings/structures'
+import { BaseCommand, Command, SlashCommand } from '../../types/structures'
 
 import Logger from '../utils/Logger'
 import BaseManager from './BaseManager'
@@ -31,8 +31,9 @@ export default class CommandManager extends BaseManager {
 
           commandFiles.forEach((commandFile) => {
             try {
-              // eslint-disable-next-line @typescript-eslint/no-var-requires
-              const command = require(`../commands/${folder}/${commandFile}`).default
+              const command =
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                require(`../commands/${folder}/${commandFile}`).default
 
               if (!command.data.name ?? !command.name)
                 return this.logger.debug(

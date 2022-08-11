@@ -7,9 +7,8 @@ import {
 import Embed from '../../utils/Embed'
 import fetch from 'node-fetch'
 import { execSync } from 'child_process'
-import { repository } from '../../../package.json'
 import { MessageCommand } from '../../structures/Command'
-import { GithubCommitAPI } from '../../../typings/command'
+import { GithubCommitAPI } from '../../../types/command'
 
 export default new MessageCommand(
   {
@@ -30,17 +29,20 @@ export default new MessageCommand(
 
     const msg = await message.reply({ embeds: [LoadingEmbed] })
 
-    if (repository?.includes('Your github url') || !repository) {
+    if (
+      client.config.repository?.includes('Your github url') ||
+      !client.config.repository
+    ) {
       LoadingEmbed.setTitle('이런...')
         .setDescription(
-          '업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: package.json에 `repository` 값이 없습니다.'
+          '업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: config 파일에 `repository` 값이 없습니다.'
         )
         .setType('error')
 
       await msg.edit({ embeds: [LoadingEmbed] })
     }
 
-    let repo = repository.replaceAll('https://github.com/', '')
+    let repo = client.config.repository?.replaceAll('https://github.com/', '')
     const res = await fetch(`https://api.github.com/repos/${repo}/commits`, {
       headers: {
         Authorization: client.config.githubToken
@@ -52,7 +54,7 @@ export default new MessageCommand(
     if (!res.ok && res.status === 400) {
       LoadingEmbed.setTitle('이런...')
         .setDescription(
-          '업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: `package.json`에 있는 `repository` 에 있는 주소를 찾을수 없습니다.'
+          '업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: `config`파일에 있는 `repository` 에 있는 주소를 찾을수 없습니다.'
         )
         .setType('error')
 

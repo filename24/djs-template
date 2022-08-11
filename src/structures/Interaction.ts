@@ -8,7 +8,7 @@ import {
 import {
   BaseInteractionFunction,
   InteractionData
-} from '../../typings/structures'
+} from '../../types/structures'
 import { InteractionType } from '../utils/Constants'
 
 export class Button {

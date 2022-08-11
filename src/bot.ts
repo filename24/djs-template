@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import path from 'path'
 import Logger from './utils/Logger'
-import config from '../config'
+import config from './config'
 
 import BotClient from './structures/BotClient'
 import CommandManager from './managers/CommandManager'

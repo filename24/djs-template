@@ -1,5 +1,5 @@
 import { ClientEvents } from 'discord.js'
-import { EventFunction, EventOptions } from '../../typings/structures'
+import { EventFunction, EventOptions } from '../../types/structures'
 import BotClient from './BotClient'
 
 export class Event<E extends keyof ClientEvents> {

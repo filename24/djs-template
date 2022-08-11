@@ -1,8 +1,6 @@
 import { PrismaClientOptions } from '@prisma/client/runtime'
 import {
-  ChatInputCommandInteraction,
   ClientOptions,
-  CommandInteraction,
   Interaction,
   Message,
   ShardingManagerOptions
@@ -17,6 +15,8 @@ export interface IConfig {
   BUILD_VERSION: string
   BUILD_NUMBER: string | null
   githubToken?: string
+  name: string
+  repository?: string
   bot: {
     sharding: boolean
     shardingOptions?: ShardingManagerOptions

@@ -1,8 +1,8 @@
 import { Client, ClientOptions, ClientEvents, Collection } from 'discord.js'
 import Logger from '../utils/Logger'
 
-import { BaseCommand, Event } from '../../typings/structures'
-import config from '../../config'
+import { BaseCommand, Event } from '../../types/structures'
+import config from '../config'
 import CommandManager from '../managers/CommandManager'
 import EventManager from '../managers/EventManager'
 import ErrorManager from '../managers/ErrorManager'
@@ -25,7 +25,7 @@ export default class BotClient extends Client {
   public errors: Collection<string, string> = new Collection()
   public interactions: Collection<string, BaseInteraction> = new Collection()
   public db!: PrismaClient
-  
+
   public command: CommandManager = new CommandManager(this)
   public event: EventManager = new EventManager(this)
   public error: ErrorManager = new ErrorManager(this)

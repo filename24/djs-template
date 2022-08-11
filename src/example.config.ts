@@ -1,4 +1,4 @@
-import { IConfig } from './typings'
+import { IConfig } from '../types'
 import fs from 'fs'
 
 let BUILD_NUMBER: string | null = fs.readFileSync('.git/HEAD').toString().trim()
@@ -21,6 +21,7 @@ const config: IConfig = {
   BUILD_NUMBER,
   BUILD_VERSION: '0.1.0',
   githubToken: '',
+  name: 'DJS Template',
   bot: {
     sharding: false,
     options: {
