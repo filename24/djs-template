@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: bot
+    environment:
+      - SHELL=bash
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: yarn start:node
