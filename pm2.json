@@ -1,0 +1,9 @@
+{
+  "$schema": "https://github.com/edosssa/pm2-config/raw/master/pm2config.json",
+  "apps": [
+    {
+      "name": "bot",
+      "script": "yarn start"
+    }
+  ]
+}
