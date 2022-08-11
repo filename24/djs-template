@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "outDir": "./build",
     "resolveJsonModule": true,
+    "types": ["bun-types"]
   },
   "include": ["./src/**/*.ts", "./config.ts"],
   "exclude": ["./node_modules/*", "./build/*"]
