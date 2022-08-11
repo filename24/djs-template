@@ -19,7 +19,7 @@ if (BUILD_NUMBER?.indexOf(':') === -1) {
 
 const config: IConfig = {
   BUILD_NUMBER,
-  BUILD_VERSION: '0.1.0',
+  BUILD_VERSION: '0.1.2',
   githubToken: '',
   name: 'DJS Template',
   bot: {
