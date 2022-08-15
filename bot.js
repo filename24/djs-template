@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const path_1 = __importDefault(require("path"));
 const Logger_1 = __importDefault(require("./utils/Logger"));
-const config_1 = __importDefault(require("../config"));
+const config_1 = __importDefault(require("./config"));
 const BotClient_1 = __importDefault(require("./structures/BotClient"));
 const CommandManager_1 = __importDefault(require("./managers/CommandManager"));
 const EventManager_1 = __importDefault(require("./managers/EventManager"));

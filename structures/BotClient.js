@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const Logger_1 = __importDefault(require("../utils/Logger"));
-const config_1 = __importDefault(require("../../config"));
+const config_1 = __importDefault(require("../config"));
 const CommandManager_1 = __importDefault(require("../managers/CommandManager"));
 const EventManager_1 = __importDefault(require("../managers/EventManager"));
 const ErrorManager_1 = __importDefault(require("../managers/ErrorManager"));

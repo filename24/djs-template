@@ -25,8 +25,9 @@ class CommandManager extends BaseManager_1.default {
                     const commandFiles = fs_1.default.readdirSync(path_1.default.join(commandPath, folder));
                     commandFiles.forEach((commandFile) => {
                         try {
+                            const command = 
                             // eslint-disable-next-line @typescript-eslint/no-var-requires
-                            const command = require(`../commands/${folder}/${commandFile}`).default;
+                            require(`../commands/${folder}/${commandFile}`).default;
                             if (!command.data.name ?? !command.name)
                                 return this.logger.debug(`Command ${commandFile} has no name. Skipping.`);
                             this.commands.set(command.data.name ?? command.name, command);

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
 const strip_ansi_1 = __importDefault(require("strip-ansi"));
 const winston_1 = require("winston");
-const config_1 = __importDefault(require("../../config"));
+const config_1 = __importDefault(require("../config"));
 const { printf, splat, colorize, timestamp, ms, combine } = winston_1.format;
 const colors = {
     fatal: chalk_1.default.bgWhite.red.bold,

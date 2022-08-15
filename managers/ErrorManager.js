@@ -8,7 +8,7 @@ const BaseManager_1 = __importDefault(require("./BaseManager"));
 const Embed_1 = __importDefault(require("../utils/Embed"));
 const Logger_1 = __importDefault(require("../utils/Logger"));
 const uuid_1 = require("uuid");
-const config_1 = __importDefault(require("../../config"));
+const config_1 = __importDefault(require("../config"));
 /**
  * @extends BaseManager
  */

@@ -7,7 +7,6 @@ const discord_js_1 = require("discord.js");
 const Embed_1 = __importDefault(require("../../utils/Embed"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const child_process_1 = require("child_process");
-const package_json_1 = require("../../../package.json");
 const Command_1 = require("../../structures/Command");
 exports.default = new Command_1.MessageCommand({
     name: 'update',
@@ -21,13 +20,14 @@ exports.default = new Command_1.MessageCommand({
         .setTitle('잠시만 기다려주십시요')
         .setDescription('최신 업데이트 내용을 불러오는 중입니다...');
     const msg = await message.reply({ embeds: [LoadingEmbed] });
-    if (package_json_1.repository?.includes('Your github url') || !package_json_1.repository) {
+    if (client.config.repository?.includes('Your github url') ||
+        !client.config.repository) {
         LoadingEmbed.setTitle('이런...')
-            .setDescription('업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: package.json에 `repository` 값이 없습니다.')
+            .setDescription('업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: config 파일에 `repository` 값이 없습니다.')
             .setType('error');
         await msg.edit({ embeds: [LoadingEmbed] });
     }
-    let repo = package_json_1.repository.replaceAll('https://github.com/', '');
+    let repo = client.config.repository?.replaceAll('https://github.com/', '');
     const res = await (0, node_fetch_1.default)(`https://api.github.com/repos/${repo}/commits`, {
         headers: {
             Authorization: client.config.githubToken
@@ -37,7 +37,7 @@ exports.default = new Command_1.MessageCommand({
     });
     if (!res.ok && res.status === 400) {
         LoadingEmbed.setTitle('이런...')
-            .setDescription('업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: `package.json`에 있는 `repository` 에 있는 주소를 찾을수 없습니다.')
+            .setDescription('업데이트 내용을 불러오는 중에 오류가 발생했습니다.\n오류 내용: `config`파일에 있는 `repository` 에 있는 주소를 찾을수 없습니다.')
             .setType('error');
         return msg.edit({ embeds: [LoadingEmbed] });
     }
