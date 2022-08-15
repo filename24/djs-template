@@ -17,7 +17,7 @@ jobs:
           cache: yarn
 
       - name: Copy config file
-        run: cp example.config.ts config.ts
+        run: cp src/example.config.ts src/config.ts
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -63,7 +63,7 @@ jobs:
           cache: yarn
 
       - name: Copy config file
-        run: cp example.config.ts config.ts
+        run: cp src/example.config.ts src/config.ts
         
       - name: Install dependencies
         run: yarn install --immutable
