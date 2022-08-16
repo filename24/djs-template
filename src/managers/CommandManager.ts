@@ -1,11 +1,23 @@
-import { ApplicationCommandDataResolvable } from 'discord.js'
-import { BaseCommand, Command, SlashCommand } from '../../types/structures'
+import {
+  ApplicationCommandDataResolvable,
+  Collection,
+  REST,
+  RESTPostAPIApplicationCommandsJSONBody,
+  Routes
+} from 'discord.js'
+import { BaseCommand as Command } from '../../types/structures'
 
 import Logger from '../utils/Logger'
 import BaseManager from './BaseManager'
 import fs from 'fs'
 import path from 'path'
 import BotClient from '../structures/BotClient'
+import {
+  BaseCommand,
+  MessageCommand,
+  SlashCommand
+} from '../structures/Command'
+import { InteractionType } from '../utils/Constants'
 
 export default class CommandManager extends BaseManager {
   private logger = new Logger('CommandManager')
@@ -66,17 +78,18 @@ export default class CommandManager extends BaseManager {
     }
   }
 
-  public get(commandName: string): BaseCommand | undefined {
-    let command
-    if (this.client.commands.has(commandName))
-      return (command = this.client.commands.get(commandName))
+  public get(commandName: string): Command | undefined {
+    let command = this.commands.get(commandName)
 
-    this.client.commands.forEach((cmd) => {
-      if (this.isSlash(cmd) && cmd.data.name === commandName)
-        return (command = cmd)
-      // @ts-ignore
-      if (cmd.data.aliases.includes(commandName)) return (command = cmd)
-    })
+    command =
+      command ??
+      this.commands
+        .filter(
+          (c) =>
+            CommandManager.isMessageCommand(c) &&
+            c.data.aliases?.includes(commandName)
+        )
+        .first()
 
     return command
   }
@@ -94,11 +107,18 @@ export default class CommandManager extends BaseManager {
     }
   }
 
-  public isSlash(command: BaseCommand | undefined): command is SlashCommand {
-    //return command?.options.slash ?? false
-    return (command as Command)?.slash
+  public static isSlash(command: Command | undefined): command is SlashCommand {
+    return command instanceof BaseCommand && command.slash
       ? true
-      : (command as SlashCommand)?.options?.isSlash
+      : command instanceof SlashCommand
+      ? true
+      : false
+  }
+
+  public static isMessageCommand(command?: Command): command is MessageCommand {
+    return command instanceof MessageCommand
+      ? true
+      : command instanceof BaseCommand
       ? true
       : false
   }
@@ -107,13 +127,16 @@ export default class CommandManager extends BaseManager {
     guildID: string
   ): Promise<ApplicationCommandDataResolvable[] | undefined> {
     this.logger.scope = 'CommandManager: SlashSetup'
+    const rest = new REST().setToken(this.client.token!)
 
-    const slashCommands: any[] = []
-    this.client.commands.forEach((command: BaseCommand) => {
-      if (this.isSlash(command)) {
-        slashCommands.push(
-          command.slash ? command.slash?.data.toJSON() : command.data.toJSON()
-        )
+    const interactions: Collection<
+      string,
+      RESTPostAPIApplicationCommandsJSONBody
+    > = new Collection()
+
+    this.client.interactions.forEach((command) => {
+      if (command.type === InteractionType.ContextMenu) {
+        interactions.set(command.data.name, command.data)
       }
     })
 
@@ -121,39 +144,46 @@ export default class CommandManager extends BaseManager {
       this.logger.warn('guildID not gived switching global command...')
       this.logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`)
 
-      for (const command of slashCommands) {
-        const commands = await this.client.application?.commands.fetch()
-        const cmd = commands?.find((cmd) => cmd.name === command.name)
-        if (!cmd) {
-          await this.client.application?.commands
-            .create(command)
-            .then((guilds) =>
-              this.logger.info(
-                `Succesfully created command ${command.name} at ${guilds.name}(${guilds.id}) guild`
-              )
-            )
-        }
-      }
+      await rest
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        .put(Routes.applicationCommands(this.client.application?.id!), {
+          body: interactions.toJSON()
+        })
+        .then(() =>
+          this.logger.info(
+            `Successfully registered application global commands.`
+          )
+        )
+
+      return interactions.toJSON()
     } else {
       this.logger.info(`Slash Command requesting ${guildID}`)
+      const commands = await this.client.application?.commands
+        .fetch()
+        .then((cmd) => cmd.map((cmd) => cmd.name))
 
-      const guild = this.client.guilds.cache.get(guildID)
+      const resolvedData = interactions.filter((cmd) =>
+        commands ? !commands.includes(cmd.name) : true
+      )
 
-      for (const command of slashCommands) {
-        const commands = await guild?.commands.fetch()
-        const cmd = commands?.find((cmd) => cmd.name === command.name)
-        if (!cmd) {
-          await guild?.commands
-            .create(command)
-            .then((guild) =>
-              this.logger.info(
-                `Succesfully created command ${command.name} at ${guild.name} guild`
-              )
-            )
-        }
-      }
+      await rest
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        .put(
+          Routes.applicationGuildCommands(
+            this.client.application?.id!,
+            guildID
+          ),
+          {
+            body: resolvedData.toJSON()
+          }
+        )
+        .then(() =>
+          this.logger.info(
+            `Successfully registered server ${guildID} server commands.`
+          )
+        )
 
-      return slashCommands
+      return resolvedData.toJSON()
     }
   }
 }

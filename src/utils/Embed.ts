@@ -20,6 +20,7 @@ export default class Embed extends EmbedBuilder {
     else if (type === 'warn') this.setColor('#FEE75C')
     else if (type === 'info') this.setColor('#5865F2')
     else if (type === 'default') this.setColor('#5865F2')
+    else this.setColor(type)
   }
 
   setType(type: EmbedType) {
@@ -28,5 +29,6 @@ export default class Embed extends EmbedBuilder {
     else if (type === 'warn') this.setColor('#FEE75C')
     else if (type === 'info') this.setColor('#5865F2')
     else if (type === 'default') this.setColor('#5865F2')
+    else this.setColor(type)
   }
 }

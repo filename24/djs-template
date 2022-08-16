@@ -16,7 +16,7 @@ export default new Event('interactionCreate', async (client, interaction) => {
 
     const command = commandManager.get(interaction.commandName)
     try {
-      if (commandManager.isSlash(command)) {
+      if (CommandManager.isSlash(command)) {
         command.slash
           ? await command.slash.execute(client, interaction)
           : await command.execute(client, interaction)

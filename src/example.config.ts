@@ -1,25 +1,11 @@
+import { execSync } from 'child_process'
 import { IConfig } from '../types'
-import fs from 'fs'
-
-let BUILD_NUMBER: string | null = fs.readFileSync('.git/HEAD').toString().trim()
-
-if (BUILD_NUMBER?.indexOf(':') === -1) {
-  BUILD_NUMBER
-} else {
-  try {
-    BUILD_NUMBER = fs
-      .readFileSync('.git/' + BUILD_NUMBER?.substring(5))
-      .toString()
-      .trim()
-      .substring(0, 7)
-  } catch (e) {
-    BUILD_NUMBER = null
-  }
-}
+import { ReportType } from './utils/Constants'
 
 const config: IConfig = {
-  BUILD_NUMBER,
+  BUILD_NUMBER: execSync('git rev-parse --short HEAD').toString().trim(),
   BUILD_VERSION: '0.1.2',
+  devGuildID: '',
   githubToken: '',
   name: 'DJS Template',
   bot: {
@@ -34,7 +20,7 @@ const config: IConfig = {
     cooldown: 2000
   },
   report: {
-    type: 'webhook',
+    type: ReportType.Webhook,
     webhook: {
       url: ''
     },

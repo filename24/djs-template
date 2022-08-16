@@ -7,6 +7,7 @@ import { ErrorReportOptions } from '../../types'
 import BotClient from '../structures/BotClient'
 
 import config from '../config'
+import { ReportType } from '../utils/Constants'
 
 /**
  * @extends BaseManager
@@ -26,7 +27,6 @@ export default class ErrorManager extends BaseManager {
     const date = (Number(new Date()) / 1000) | 0
     const errorText = `**[<t:${date}:T> ERROR]** ${error.stack}`
     const errorCode = v4()
-    if (options?.executer instanceof AutocompleteInteraction) return
 
     this.client.errors.set(errorCode, error.stack as string)
 
@@ -42,13 +42,13 @@ export default class ErrorManager extends BaseManager {
         options.executer?.reply({ embeds: [errorEmbed] })
       : null
 
-    if (config.report.type == 'webhook') {
+    if (config.report.type === ReportType.Webhook) {
       const webhook = new WebhookClient({
         url: config.report.webhook.url
       })
 
       webhook.send(errorText)
-    } else if (config.report.type == 'text') {
+    } else if (config.report.type === ReportType.Text) {
       const guild = this.client.guilds.cache.get(
         config.report.text.guildID
       ) as Guild

@@ -2,6 +2,12 @@ import { ClientEvents } from 'discord.js'
 import { EventFunction, EventOptions } from '../../types/structures'
 import BotClient from './BotClient'
 
+/**
+ * @example
+ * export default new Event('ready', (client) => {
+ *    console.log('ready')
+ * })
+ */
 export class Event<E extends keyof ClientEvents> {
   constructor(
     public name: E,

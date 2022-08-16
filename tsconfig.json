@@ -9,7 +9,7 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./build",
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["./src/**/example.*"]

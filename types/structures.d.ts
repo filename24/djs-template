@@ -32,7 +32,7 @@ export interface MessageCommandOptions {
 
 export type MessageCommandFuntion = (
   client: BotClient,
-  message: Message,
+  message: Message<true>,
   args: string[]
 ) => Promise<any> | Promise<any>
 

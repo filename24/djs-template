@@ -6,3 +6,8 @@ export const enum InteractionType {
   Modal,
   AutoComplete
 }
+
+export const enum ReportType {
+  Webhook,
+  Text
+}
