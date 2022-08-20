@@ -1,5 +1,5 @@
 import { execSync } from 'child_process'
-import { IConfig } from '../types'
+import { IConfig } from '@types'
 import { ReportType } from './utils/Constants'
 
 const config: IConfig = {
