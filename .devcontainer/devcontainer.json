@@ -29,6 +29,6 @@
     "docker-in-docker": "20.10",
     "docker-from-docker": "20.10",
     "github-cli": "latest",
-    "node": "18"
+    "node": "16"
   }
 }
