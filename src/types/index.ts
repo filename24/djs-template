@@ -1,4 +1,3 @@
-import { PrismaClientOptions } from '@prisma/client/runtime'
 import {
   ButtonInteraction,
   ChatInputCommandInteraction,
