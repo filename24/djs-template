@@ -13,7 +13,7 @@ import {
 import { ReportType } from '@utils/Constants'
 
 export interface ErrorReportOptions {
-  executer:
+  executer?:
     | Message<true>
     | ChatInputCommandInteraction<'cached'>
     | ContextMenuCommandInteraction<'cached'>
@@ -28,12 +28,12 @@ export type IConfig = {
   BUILD_VERSION: string
   BUILD_NUMBER: string
   devGuildID: string
-  githubToken?: string
   name: string
+  githubToken?: string
   repository?: string
 } & { logger: LoggerConfig } & { bot: BotConfig } & {
-  database?: Partial<DatabaseConfig>
-} & { report: ErrorReportConfig }
+  report: ErrorReportConfig
+}
 
 export interface LoggerConfig {
   level: LevelType
@@ -50,25 +50,16 @@ export interface ErrorReportConfig {
     channelID: string
   }
 }
-/**
- * @deprecated Database config is not supported use 'prisma/schema.prisma'
- */
-export interface DatabaseConfig {
-  type: DatabaseType
-  url: string
-  options: PrismaClientOptions
-}
+
 export interface BotConfig {
   sharding: boolean
   shardingOptions?: ShardingManagerOptions
   options: ClientOptions
   token: string
-  owners: string[]
+  owners?: string[]
   prefix: string
   cooldown?: number
 }
-
-export type DatabaseType = 'mongodb' | 'prisma'
 
 export type LevelType =
   | 'fatal'
