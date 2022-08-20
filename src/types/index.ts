@@ -3,12 +3,9 @@ import {
   ButtonInteraction,
   ChatInputCommandInteraction,
   ClientOptions,
-  ColorResolvable,
   ContextMenuCommandInteraction,
   HexColorString,
-  Interaction,
   Message,
-  MessageContextMenuCommandInteraction,
   ModalSubmitInteraction,
   SelectMenuInteraction,
   ShardingManagerOptions

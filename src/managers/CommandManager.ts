@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ApplicationCommandDataResolvable,
   Collection,
@@ -141,8 +142,7 @@ export default class CommandManager extends BaseManager {
       this.logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`)
 
       await rest
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        .put(Routes.applicationCommands(this.client.application?.id!), {
+        .put(Routes.applicationCommands(this.client.application!.id), {
           body: interactions.toJSON()
         })
         .then(() =>
@@ -163,12 +163,8 @@ export default class CommandManager extends BaseManager {
       )
 
       await rest
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         .put(
-          Routes.applicationGuildCommands(
-            this.client.application?.id ?? '',
-            guildID
-          ),
+          Routes.applicationGuildCommands(this.client.application!.id, guildID),
           {
             body: resolvedData.toJSON()
           }
