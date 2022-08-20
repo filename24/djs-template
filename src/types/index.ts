@@ -13,7 +13,7 @@ import {
   SelectMenuInteraction,
   ShardingManagerOptions
 } from 'discord.js'
-import { ReportType } from '../src/utils/Constants'
+import { ReportType } from '@utils/Constants'
 
 export interface ErrorReportOptions {
   executer:

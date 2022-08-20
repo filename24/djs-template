@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import stripColor from 'strip-ansi'
 import winston, { createLogger, format, transports, addColors } from 'winston'
-import config from '@config'
+import config from 'config'
 import { LevelType } from '@types'
 
 const { printf, splat, colorize, timestamp, ms, combine } = format
