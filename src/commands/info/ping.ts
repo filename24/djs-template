@@ -40,7 +40,8 @@ export default new BaseCommand(
   {
     data: new SlashCommandBuilder()
       .setName('ping')
-      .setDescription('핑을 측정합니다.'),
+      .setDescription('핑을 측정합니다.')
+      .toJSON(),
     options: {
       name: 'ping',
       isSlash: true
