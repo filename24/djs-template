@@ -1,4 +1,3 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
 import {
   InteractionData,
   MessageCommandFuntion,
