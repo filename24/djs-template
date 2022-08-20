@@ -46,11 +46,12 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          commit_options: '--no-verify'
           commit_message: 'style(eslint): Fixed eslint style format'
   build:
     name: Build and publish project
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [test, lint]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
