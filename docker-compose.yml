@@ -5,7 +5,9 @@ services:
     container_name: bot
     environment:
       - SHELL=bash
+      - NODE_ENV=production
+    env_file:
+      - .env
     build:
       context: .
       dockerfile: Dockerfile
-    command: yarn start:node

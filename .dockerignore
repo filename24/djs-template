@@ -1,0 +1,9 @@
+.vscode
+.github
+.devcontainer
+
+.eslintrc.json
+.prettierrc
+
+README.md
+README-KO.md
