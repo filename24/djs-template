@@ -1,6 +1,6 @@
-import Logger from '../utils/Logger'
+import Logger from '@utils/Logger'
 import BaseManager from './BaseManager'
-import BotClient from '../structures/BotClient'
+import BotClient from '@structures/BotClient'
 import { PrismaClient } from '@prisma/client'
 
 /**

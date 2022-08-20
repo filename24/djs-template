@@ -4,11 +4,11 @@ import {
   ButtonStyle,
   MessageActionRowComponentBuilder
 } from 'discord.js'
-import Embed from '../../utils/Embed'
+import Embed from '@utils/Embed'
 import fetch from 'node-fetch'
 import { execSync } from 'child_process'
-import { MessageCommand } from '../../structures/Command'
-import { GithubCommitAPI } from '../../../types/command'
+import { MessageCommand } from '@structures/Command'
+import { GithubCommitAPI } from '@types'
 
 export default new MessageCommand(
   {

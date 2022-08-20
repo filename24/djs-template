@@ -1,4 +1,4 @@
-import BotClient from '../structures/BotClient'
+import BotClient from '@structures/BotClient'
 
 export default class BaseManager {
   public client: BotClient

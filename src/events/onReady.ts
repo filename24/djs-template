@@ -1,5 +1,5 @@
-import { Event } from '../structures/Event'
-import Logger from '../utils/Logger'
+import { Event } from '@structures/Event'
+import Logger from '@utils/Logger'
 const logger = new Logger('bot')
 
 export default new Event(

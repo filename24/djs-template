@@ -1,5 +1,5 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder } from 'discord.js'
-import { ContextMenu } from '../../structures/Interaction'
+import { ContextMenu } from '@structures/Interaction'
 
 export default new ContextMenu(
   'contextMenu',

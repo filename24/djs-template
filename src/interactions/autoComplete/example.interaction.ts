@@ -1,4 +1,4 @@
-import { AutoComplete } from '../../structures/Interaction'
+import { AutoComplete } from '@structures/Interaction'
 
 export default new AutoComplete('autoComplete', async (client, interaction) => {
   interaction.respond([

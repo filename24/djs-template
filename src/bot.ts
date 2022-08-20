@@ -4,9 +4,9 @@ import Logger from './utils/Logger'
 import config from './config'
 
 import BotClient from './structures/BotClient'
-import CommandManager from './managers/CommandManager'
-import EventManager from './managers/EventManager'
-import DatabaseManager from './managers/DatabaseManager'
+import CommandManager from '@managers/CommandManager'
+import EventManager from '@managers/EventManager'
+import DatabaseManager from '@managers/DatabaseManager'
 
 const logger = new Logger('main')
 

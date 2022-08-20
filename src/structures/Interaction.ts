@@ -5,11 +5,8 @@ import {
   ModalSubmitInteraction,
   SelectMenuInteraction
 } from 'discord.js'
-import {
-  BaseInteractionFunction,
-  InteractionData
-} from '../../types/structures'
-import { InteractionType } from '../utils/Constants'
+import { BaseInteractionFunction, InteractionData } from '@types'
+import { InteractionType } from '@utils/Constants'
 
 export class Button {
   public type: InteractionType.Button = InteractionType.Button

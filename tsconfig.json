@@ -9,8 +9,30 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./build",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "src",
+    "paths": {
+      "@types": [
+        "types/index"
+      ],
+      "@config": [
+        "config"
+      ],
+      "@structures/*": [
+        "structures/*"
+      ],
+      "@managers/*": [
+        "managers/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ]
+    },
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["./src/**/example.*"]
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "./src/**/example.*"
+  ]
 }

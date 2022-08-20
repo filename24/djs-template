@@ -1,9 +1,9 @@
 import type { ClientEvents } from 'discord.js'
-import type BotClient from '../structures/BotClient'
+import type BotClient from '@structures/BotClient'
 import { readdirSync } from 'fs'
 import { join } from 'path'
-import { Event } from '../structures/Event'
-import Logger from '../utils/Logger'
+import { Event } from '@structures/Event'
+import Logger from '@utils/Logger'
 import BaseManager from './BaseManager'
 
 /**
