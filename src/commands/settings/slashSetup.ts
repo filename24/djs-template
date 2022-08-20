@@ -5,10 +5,10 @@ import {
   MessageActionRowComponentBuilder,
   RESTJSONErrorCodes
 } from 'discord.js'
-import CommandManager from '../../managers/CommandManager'
-import Embed from '../../utils/Embed'
-import ErrorManager from '../../managers/ErrorManager'
-import { BaseCommand } from '../../structures/Command'
+import CommandManager from '@managers/CommandManager'
+import Embed from '@utils/Embed'
+import ErrorManager from '@managers/ErrorManager'
+import { BaseCommand } from '@structures/Command'
 
 export default new BaseCommand(
   {

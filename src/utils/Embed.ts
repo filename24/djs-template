@@ -1,5 +1,5 @@
 import { type Client, EmbedBuilder, type EmbedData } from 'discord.js'
-import { EmbedType } from '../../types'
+import { EmbedType } from '@types'
 
 export default class Embed extends EmbedBuilder {
   constructor(client: Client, type: EmbedType) {

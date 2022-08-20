@@ -6,7 +6,7 @@ import type {
   Interaction,
   RESTPostAPIApplicationCommandsJSONBody
 } from 'discord.js'
-import BotClient from '../src/structures/BotClient'
+import BotClient from '@structures/BotClient'
 
 export interface MessageCommnad {
   data: MessageCommandOptions

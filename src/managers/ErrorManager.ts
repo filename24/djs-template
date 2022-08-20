@@ -1,13 +1,13 @@
-import { AutocompleteInteraction, Guild, WebhookClient } from 'discord.js'
+import { Guild, WebhookClient } from 'discord.js'
 import BaseManager from './BaseManager'
-import Embed from '../utils/Embed'
-import Logger from '../utils/Logger'
+import Embed from '@utils/Embed'
+import Logger from '@utils/Logger'
 import { v4 } from 'uuid'
-import { ErrorReportOptions } from '../../types'
-import BotClient from '../structures/BotClient'
+import { ErrorReportOptions } from '@types'
+import BotClient from '@structures/BotClient'
 
 import config from '../config'
-import { ReportType } from '../utils/Constants'
+import { ReportType } from '@utils/Constants'
 
 /**
  * @extends BaseManager

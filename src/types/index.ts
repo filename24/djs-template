@@ -3,17 +3,14 @@ import {
   ButtonInteraction,
   ChatInputCommandInteraction,
   ClientOptions,
-  ColorResolvable,
   ContextMenuCommandInteraction,
   HexColorString,
-  Interaction,
   Message,
-  MessageContextMenuCommandInteraction,
   ModalSubmitInteraction,
   SelectMenuInteraction,
   ShardingManagerOptions
 } from 'discord.js'
-import { ReportType } from '../src/utils/Constants'
+import { ReportType } from '@utils/Constants'
 
 export interface ErrorReportOptions {
   executer:

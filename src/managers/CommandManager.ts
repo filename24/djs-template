@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ApplicationCommandDataResolvable,
   Collection,
@@ -5,19 +6,15 @@ import {
   RESTPostAPIApplicationCommandsJSONBody,
   Routes
 } from 'discord.js'
-import { BaseCommand as Command } from '../../types/structures'
+import { BaseCommand as Command } from '@types'
 
-import Logger from '../utils/Logger'
+import Logger from '@utils/Logger'
 import BaseManager from './BaseManager'
 import fs from 'fs'
 import path from 'path'
-import BotClient from '../structures/BotClient'
-import {
-  BaseCommand,
-  MessageCommand,
-  SlashCommand
-} from '../structures/Command'
-import { InteractionType } from '../utils/Constants'
+import BotClient from '@structures/BotClient'
+import { BaseCommand, MessageCommand, SlashCommand } from '@structures/Command'
+import { InteractionType } from '@utils/Constants'
 
 export default class CommandManager extends BaseManager {
   private logger = new Logger('CommandManager')
@@ -145,8 +142,7 @@ export default class CommandManager extends BaseManager {
       this.logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`)
 
       await rest
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        .put(Routes.applicationCommands(this.client.application?.id!), {
+        .put(Routes.applicationCommands(this.client.application!.id), {
           body: interactions.toJSON()
         })
         .then(() =>
@@ -167,12 +163,8 @@ export default class CommandManager extends BaseManager {
       )
 
       await rest
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         .put(
-          Routes.applicationGuildCommands(
-            this.client.application?.id!,
-            guildID
-          ),
+          Routes.applicationGuildCommands(this.client.application!.id, guildID),
           {
             body: resolvedData.toJSON()
           }

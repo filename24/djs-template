@@ -1,7 +1,7 @@
-import { Event } from '../structures/Event'
-import CommandManager from '../managers/CommandManager'
-import ErrorManager from '../managers/ErrorManager'
-import type { MessageCommand } from '../structures/Command'
+import { Event } from '@structures/Event'
+import CommandManager from '@managers/CommandManager'
+import ErrorManager from '@managers/ErrorManager'
+import type { MessageCommand } from '@structures/Command'
 
 export default new Event('messageCreate', async (client, message) => {
   const commandManager = new CommandManager(client)

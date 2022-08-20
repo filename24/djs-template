@@ -4,7 +4,7 @@ import {
   MessageCommandOptions,
   SlashCommandFunction,
   SlashCommandOptions
-} from '../../types/structures'
+} from '@types'
 
 export class SlashCommand {
   constructor(

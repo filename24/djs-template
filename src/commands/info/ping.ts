@@ -1,6 +1,6 @@
-import { BaseCommand } from '../../structures/Command'
+import { BaseCommand } from '@structures/Command'
 import Discord from 'discord.js'
-import Embed from '../../utils/Embed'
+import Embed from '@utils/Embed'
 import { SlashCommandBuilder } from '@discordjs/builders'
 
 export default new BaseCommand(
