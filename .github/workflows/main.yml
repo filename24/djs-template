@@ -47,6 +47,8 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_options: '--no-verify'
+          skip_dirty_check: false
+          skip_fetch: false
           commit_message: 'style(eslint): Fixed eslint style format'
   build:
     name: Build and publish project
