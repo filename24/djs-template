@@ -1,27 +1,32 @@
+import { PrismaClient } from '@prisma/client'
 import { Client, ClientOptions, ClientEvents, Collection } from 'discord.js'
+import { config as dotenvConfig } from 'dotenv'
+import Dokdo from 'dokdo'
+
 import Logger from '@utils/Logger'
 
-import { BaseCommand, Event } from '@types'
+import { BaseCommand } from '@types'
+import { BaseInteraction } from './Interaction'
+import { Event } from './Event'
+
 import config from '../config'
+
 import CommandManager from '@managers/CommandManager'
 import EventManager from '@managers/EventManager'
 import ErrorManager from '@managers/ErrorManager'
 import DatabaseManager from '@managers/DatabaseManager'
-import { config as dotenvConfig } from 'dotenv'
-import { PrismaClient } from '@prisma/client'
-import { BaseInteraction } from './Interaction'
-import Dokdo from 'dokdo'
 import InteractionManager from '@managers/InteractionManager'
 
 const logger = new Logger('bot')
 
 export default class BotClient extends Client {
   public readonly VERSION: string
-  public readonly BUILD_NUMBER: string | null
+  public readonly BUILD_NUMBER: string
   public readonly config = config
 
   public commands: Collection<string, BaseCommand> = new Collection()
-  public events: Collection<keyof ClientEvents, Event> = new Collection()
+  public events: Collection<keyof ClientEvents, Event<keyof ClientEvents>> =
+    new Collection()
   public errors: Collection<string, string> = new Collection()
   public interactions: Collection<string, BaseInteraction> = new Collection()
   public db!: PrismaClient
@@ -36,12 +41,20 @@ export default class BotClient extends Client {
     noPerm: async (message) =>
       message.reply('You do not have permission to use this command.')
   })
+
   public constructor(options: ClientOptions) {
     super(options)
-    dotenvConfig()
 
     logger.info('Loading config data...')
+    dotenvConfig()
 
+    logger.info('Loading managers...')
+    this.command.load()
+    this.event.load()
+    this.interaction.load()
+    this.database.load()
+
+    logger.info('Loading version data...')
     this.VERSION = config.BUILD_VERSION
     this.BUILD_NUMBER = config.BUILD_NUMBER
   }
