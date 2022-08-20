@@ -23,6 +23,8 @@ class Embed extends discord_js_1.EmbedBuilder {
             this.setColor('#5865F2');
         else if (type === 'default')
             this.setColor('#5865F2');
+        else
+            this.setColor(type);
     }
     setType(type) {
         if (type === 'success')
@@ -35,6 +37,8 @@ class Embed extends discord_js_1.EmbedBuilder {
             this.setColor('#5865F2');
         else if (type === 'default')
             this.setColor('#5865F2');
+        else
+            this.setColor(type);
     }
 }
 exports.default = Embed;

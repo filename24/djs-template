@@ -28,9 +28,9 @@ class InteractionManager extends BaseManager_1.default {
                             const interaction = 
                             // eslint-disable-next-line @typescript-eslint/no-var-requires
                             require(`../interactions/${folder}/${interactionFile}`).default;
-                            if (!interaction.data.name ?? !interaction.name)
+                            if (!interaction.name)
                                 return this.logger.debug(`interaction ${interactionFile} has no name. Skipping.`);
-                            this.interactions.set(interaction.data.name ?? interaction.name, interaction);
+                            this.interactions.set(interaction.name, interaction);
                             this.logger.debug(`Loaded interaction ${interaction.name}`);
                         }
                         catch (error) {

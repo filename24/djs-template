@@ -3,10 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
 const Logger_1 = __importDefault(require("../utils/Logger"));
 const BaseManager_1 = __importDefault(require("./BaseManager"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const Command_1 = require("../structures/Command");
 class CommandManager extends BaseManager_1.default {
     logger = new Logger_1.default('CommandManager');
     commands;
@@ -53,16 +55,13 @@ class CommandManager extends BaseManager_1.default {
         }
     }
     get(commandName) {
-        let command;
-        if (this.client.commands.has(commandName))
-            return (command = this.client.commands.get(commandName));
-        this.client.commands.forEach((cmd) => {
-            if (this.isSlash(cmd) && cmd.data.name === commandName)
-                return (command = cmd);
-            // @ts-ignore
-            if (cmd.data.aliases.includes(commandName))
-                return (command = cmd);
-        });
+        let command = this.commands.get(commandName);
+        command =
+            command ??
+                this.commands
+                    .filter((c) => CommandManager.isMessageCommand(c) &&
+                    c.data.aliases?.includes(commandName))
+                    .first();
         return command;
     }
     reload(commandPath = path_1.default.join(__dirname, '../commands')) {
@@ -77,48 +76,56 @@ class CommandManager extends BaseManager_1.default {
             return { message: '[200] Succesfully reloaded commands.' };
         }
     }
-    isSlash(command) {
-        //return command?.options.slash ?? false
-        return command?.slash
+    static isSlash(command) {
+        return command instanceof Command_1.BaseCommand && command.slash
             ? true
-            : command?.options?.isSlash
+            : command instanceof Command_1.SlashCommand
+                ? true
+                : false;
+    }
+    static isMessageCommand(command) {
+        return command instanceof Command_1.MessageCommand
+            ? true
+            : command instanceof Command_1.BaseCommand
                 ? true
                 : false;
     }
     async slashCommandSetup(guildID) {
         this.logger.scope = 'CommandManager: SlashSetup';
-        const slashCommands = [];
+        const rest = new discord_js_1.REST().setToken(this.client.token);
+        const interactions = new discord_js_1.Collection();
+        this.client.interactions.forEach((command) => {
+            if (command.type === 3 /* InteractionType.ContextMenu */) {
+                interactions.set(command.data.name, command.data);
+            }
+        });
         this.client.commands.forEach((command) => {
-            if (this.isSlash(command)) {
-                slashCommands.push(command.slash ? command.slash?.data.toJSON() : command.data.toJSON());
+            if (CommandManager.isSlash(command)) {
+                interactions.set(command.data.name ?? command.slash?.data.name, command.slash ? command.slash?.data : command.data);
             }
         });
         if (!guildID) {
             this.logger.warn('guildID not gived switching global command...');
             this.logger.debug(`Trying ${this.client.guilds.cache.size} guild(s)`);
-            for (const command of slashCommands) {
-                const commands = await this.client.application?.commands.fetch();
-                const cmd = commands?.find((cmd) => cmd.name === command.name);
-                if (!cmd) {
-                    await this.client.application?.commands
-                        .create(command)
-                        .then((guilds) => this.logger.info(`Succesfully created command ${command.name} at ${guilds.name}(${guilds.id}) guild`));
-                }
-            }
+            await rest
+                .put(discord_js_1.Routes.applicationCommands(this.client.application.id), {
+                body: interactions.toJSON()
+            })
+                .then(() => this.logger.info(`Successfully registered application global commands.`));
+            return interactions.toJSON();
         }
         else {
             this.logger.info(`Slash Command requesting ${guildID}`);
-            const guild = this.client.guilds.cache.get(guildID);
-            for (const command of slashCommands) {
-                const commands = await guild?.commands.fetch();
-                const cmd = commands?.find((cmd) => cmd.name === command.name);
-                if (!cmd) {
-                    await guild?.commands
-                        .create(command)
-                        .then((guild) => this.logger.info(`Succesfully created command ${command.name} at ${guild.name} guild`));
-                }
-            }
-            return slashCommands;
+            const commands = await this.client.application?.commands
+                .fetch()
+                .then((cmd) => cmd.map((cmd) => cmd.name));
+            const resolvedData = interactions.filter((cmd) => commands ? !commands.includes(cmd.name) : true);
+            await rest
+                .put(discord_js_1.Routes.applicationGuildCommands(this.client.application.id, guildID), {
+                body: resolvedData.toJSON()
+            })
+                .then(() => this.logger.info(`Successfully registered server ${guildID} server commands.`));
+            return resolvedData.toJSON();
         }
     }
 }

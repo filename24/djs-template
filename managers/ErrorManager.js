@@ -23,8 +23,6 @@ class ErrorManager extends BaseManager_1.default {
         const date = (Number(new Date()) / 1000) | 0;
         const errorText = `**[<t:${date}:T> ERROR]** ${error.stack}`;
         const errorCode = (0, uuid_1.v4)();
-        if (options?.executer instanceof discord_js_1.AutocompleteInteraction)
-            return;
         this.client.errors.set(errorCode, error.stack);
         const errorEmbed = new Embed_1.default(this.client, 'error')
             .setTitle('오류가 발생했습니다.')
@@ -34,13 +32,13 @@ class ErrorManager extends BaseManager_1.default {
             ? // @ts-ignore
                 options.executer?.reply({ embeds: [errorEmbed] })
             : null;
-        if (config_1.default.report.type == 'webhook') {
+        if (config_1.default.report.type === 0 /* ReportType.Webhook */) {
             const webhook = new discord_js_1.WebhookClient({
                 url: config_1.default.report.webhook.url
             });
             webhook.send(errorText);
         }
-        else if (config_1.default.report.type == 'text') {
+        else if (config_1.default.report.type === 1 /* ReportType.Text */) {
             const guild = this.client.guilds.cache.get(config_1.default.report.text.guildID);
             const channel = guild.channels.cache.get(config_1.default.report.text.channelID);
             if (!channel?.isTextBased())

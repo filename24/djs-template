@@ -5,6 +5,7 @@ class SlashCommand {
     data;
     execute;
     options;
+    slash;
     constructor(data, execute, options) {
         this.data = data;
         this.execute = execute;

@@ -38,7 +38,8 @@ exports.default = new Command_1.BaseCommand({
 }, {
     data: new builders_1.SlashCommandBuilder()
         .setName('ping')
-        .setDescription('핑을 측정합니다.'),
+        .setDescription('핑을 측정합니다.')
+        .toJSON(),
     options: {
         name: 'ping',
         isSlash: true

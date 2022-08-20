@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const dotenv_1 = require("dotenv");
+const dokdo_1 = __importDefault(require("dokdo"));
 const Logger_1 = __importDefault(require("../utils/Logger"));
 const config_1 = __importDefault(require("../config"));
 const CommandManager_1 = __importDefault(require("../managers/CommandManager"));
 const EventManager_1 = __importDefault(require("../managers/EventManager"));
 const ErrorManager_1 = __importDefault(require("../managers/ErrorManager"));
 const DatabaseManager_1 = __importDefault(require("../managers/DatabaseManager"));
-const dotenv_1 = require("dotenv");
-const dokdo_1 = __importDefault(require("dokdo"));
 const InteractionManager_1 = __importDefault(require("../managers/InteractionManager"));
 const logger = new Logger_1.default('bot');
 class BotClient extends discord_js_1.Client {
@@ -34,8 +34,14 @@ class BotClient extends discord_js_1.Client {
     });
     constructor(options) {
         super(options);
-        (0, dotenv_1.config)();
         logger.info('Loading config data...');
+        (0, dotenv_1.config)();
+        logger.info('Loading managers...');
+        this.command.load();
+        this.event.load();
+        this.interaction.load();
+        this.database.load();
+        logger.info('Loading version data...');
         this.VERSION = config_1.default.BUILD_VERSION;
         this.BUILD_NUMBER = config_1.default.BUILD_NUMBER;
     }

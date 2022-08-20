@@ -6,13 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Event_1 = require("../structures/Event");
 const CommandManager_1 = __importDefault(require("../managers/CommandManager"));
 const ErrorManager_1 = __importDefault(require("../managers/ErrorManager"));
-const discord_js_1 = require("discord.js");
 exports.default = new Event_1.Event('messageCreate', async (client, message) => {
     const commandManager = new CommandManager_1.default(client);
     const errorManager = new ErrorManager_1.default(client);
     if (message.author.bot)
         return;
-    if (message.channel.type === discord_js_1.ChannelType.DM)
+    if (!message.inGuild())
         return;
     if (!message.content.startsWith(client.config.bot.prefix))
         return;
