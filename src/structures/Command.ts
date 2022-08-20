@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import {
+  InteractionData,
   MessageCommandFuntion,
   MessageCommandOptions,
   SlashCommandFunction,
@@ -7,8 +8,9 @@ import {
 } from '@types'
 
 export class SlashCommand {
+  slash?: SlashCommand
   constructor(
-    public data: SlashCommandBuilder,
+    public data: InteractionData,
     public execute: SlashCommandFunction,
     public options?: SlashCommandOptions
   ) {}

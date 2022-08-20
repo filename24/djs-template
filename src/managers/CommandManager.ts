@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ApplicationCommandDataResolvable,
   Collection,
   REST,
-  RESTPostAPIApplicationCommandsJSONBody,
   Routes
 } from 'discord.js'
-import { BaseCommand as Command } from '@types'
+import { BaseCommand as Command, InteractionData } from '@types'
 
 import Logger from '@utils/Logger'
 import BaseManager from './BaseManager'
@@ -126,14 +124,20 @@ export default class CommandManager extends BaseManager {
     this.logger.scope = 'CommandManager: SlashSetup'
     const rest = new REST().setToken(this.client.token!)
 
-    const interactions: Collection<
-      string,
-      RESTPostAPIApplicationCommandsJSONBody
-    > = new Collection()
+    const interactions: Collection<string, InteractionData> = new Collection()
 
     this.client.interactions.forEach((command) => {
       if (command.type === InteractionType.ContextMenu) {
         interactions.set(command.data.name, command.data)
+      }
+    })
+
+    this.client.commands.forEach((command) => {
+      if (CommandManager.isSlash(command)) {
+        interactions.set(
+          command.data.name ?? command.slash?.data.name,
+          command.slash ? command.slash?.data : command.data
+        )
       }
     })
 
