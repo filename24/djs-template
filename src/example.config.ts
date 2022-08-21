@@ -4,7 +4,7 @@ import { ReportType } from './utils/Constants'
 
 const config: IConfig = {
   BUILD_NUMBER: execSync('git rev-parse --short HEAD').toString().trim(),
-  BUILD_VERSION: '0.1.2',
+  BUILD_VERSION: '0.1.4',
   devGuildID: '',
   githubToken: '',
   name: 'DJS Template',
