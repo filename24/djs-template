@@ -630,7 +630,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.33.1
     chalk: 4
     discord.js: ^14.2.0
-    dokdo: "https://github.com/skinmaker1345/dokdo.git#commit=2ec08ff4ab4b13bb2153552e6c85df1192ae8bd3"
+    dokdo: ^0.6.1
     dotenv: ^16.0.1
     eslint: ^8.22.0
     eslint-config-prettier: ^8.5.0
@@ -969,14 +969,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dokdo@https://github.com/skinmaker1345/dokdo.git#commit=2ec08ff4ab4b13bb2153552e6c85df1192ae8bd3":
-  version: 0.5.1
-  resolution: "dokdo@https://github.com/skinmaker1345/dokdo.git#commit=2ec08ff4ab4b13bb2153552e6c85df1192ae8bd3"
+"dokdo@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "dokdo@npm:0.6.1"
   dependencies:
     node-fetch: ^2.6.1
   peerDependencies:
     discord.js: ^14.0.0
-  checksum: e54b29c0b21987c3af9add7e79e167eb7659e43db4b4444f81138cbea456ae3fa9c0277e44892d184863370f6bf7318c927d22c24dcfb072e6d8be52c629f73a
+  checksum: 6212ee2c0ef1c3259927211efd0fd7bfa4ddcdd3d17c8104faf2c80fe7039cb8c386b82d5495cb3313ffd60200e7c9611c825294564cc102588ba6a247bacb28
   languageName: node
   linkType: hard
 

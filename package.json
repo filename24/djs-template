@@ -18,7 +18,7 @@
     "@prisma/client": "latest",
     "chalk": "4",
     "discord.js": "^14.2.0",
-    "dokdo": "https://github.com/skinmaker1345/dokdo.git#commit=2ec08ff4ab4b13bb2153552e6c85df1192ae8bd3",
+    "dokdo": "^0.6.1",
     "dotenv": "^16.0.1",
     "node-fetch": "2",
     "uuid": "^8.3.2",
