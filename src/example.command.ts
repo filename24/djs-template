@@ -7,25 +7,24 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { CommandInteraction, Message } from 'discord.js'
 import BotClient from './structures/BotClient'
 
-
 export default {
   name: '',
   description: '',
   aliases: [],
   isSlash: false,
 
-  async execute(client: BotClient, message: Message, args: string[]): Promise<any> {
-
-  },
+  async execute(
+    client: BotClient,
+    message: Message,
+    args: string[]
+  ): Promise<any> {},
   slash: {
     name: '',
-    data: new SlashCommandBuilder()
-      .setName('')
-      .setDescription('')
-      .toJSON(),
-    async execute(client: BotClient, interaction: CommandInteraction): Promise<any> {
-
-    }
+    data: new SlashCommandBuilder().setName('').setDescription('').toJSON(),
+    async execute(
+      client: BotClient,
+      interaction: CommandInteraction
+    ): Promise<any> {}
   }
 }
 
@@ -38,8 +37,11 @@ export default {
   description: '',
   aliases: [],
   isSlash: false,
-  async execute(client: BotClient, message: Discord.Message, args: string[]): Promise<any> {
-  },
+  async execute(
+    client: BotClient,
+    message: Discord.Message,
+    args: string[]
+  ): Promise<any> {}
 }
 
 // Slash command
@@ -49,11 +51,9 @@ export default {
   name: '',
   description: '',
   isSlash: true,
-  data: new SlashCommandBuilder()
-    .setName('')
-    .setDescription('')
-    .toJSON(),
-  async execute(client: BotClient, interaction: CommandInteraction): Promise<any> {
-
-  }
+  data: new SlashCommandBuilder().setName('').setDescription('').toJSON(),
+  async execute(
+    client: BotClient,
+    interaction: CommandInteraction
+  ): Promise<any> {}
 }
