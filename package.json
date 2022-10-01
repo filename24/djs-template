@@ -7,7 +7,7 @@
   "scripts": {
     "start": "yarn build && node .",
     "start:node": "node .",
-    "dev": "yarn generate && ts-node-dev -r tsconfig-paths/register --transpile-only --respawn --trace-warnings --trace-uncaught --exit-child -- ./src/index.ts",
+    "dev": "yarn generate && ts-node-dev -r tsconfig-paths/register --transpile-only --respawn --trace-warnings --trace-uncaught --rs --exit-child -- ./src/index.ts",
     "generate": "prisma generate",
     "build": "tsc && tsc-alias",
     "update": "yarn upgrade-interactive",

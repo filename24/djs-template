@@ -11,7 +11,7 @@ import { InteractionType } from '@utils/Constants'
 export class Button {
   public type: InteractionType.Button = InteractionType.Button
   constructor(
-    public name: string,
+    public customId: string | string[],
     public execute: BaseInteractionFunction<ButtonInteraction<'cached'>>
   ) {}
 }
@@ -19,7 +19,7 @@ export class Button {
 export class SelectMenu {
   public type: InteractionType.Select = InteractionType.Select
   constructor(
-    public name: string,
+    public customId: string | string[],
     public execute: BaseInteractionFunction<SelectMenuInteraction<'cached'>>
   ) {}
 }
@@ -27,7 +27,7 @@ export class SelectMenu {
 export class ContextMenu {
   public type: InteractionType.ContextMenu = InteractionType.ContextMenu
   constructor(
-    public name: string,
+    public customId: string | string[],
     public data: InteractionData,
     public execute: BaseInteractionFunction<
       ContextMenuCommandInteraction<'cached'>
@@ -38,7 +38,7 @@ export class ContextMenu {
 export class Modal {
   public type: InteractionType.Modal = InteractionType.Modal
   constructor(
-    public name: string,
+    public customId: string | string[],
     public execute: BaseInteractionFunction<ModalSubmitInteraction<'cached'>>
   ) {}
 }
@@ -46,7 +46,7 @@ export class Modal {
 export class AutoComplete {
   public type: InteractionType.AutoComplete = InteractionType.AutoComplete
   constructor(
-    public name: string,
+    public customId: string | string[],
     public execute: BaseInteractionFunction<AutocompleteInteraction<'cached'>>
   ) {}
 }

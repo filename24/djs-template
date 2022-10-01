@@ -1,5 +1,5 @@
 import { Button } from '@structures/Interaction'
 
-export default new Button('button', async (client, interaction) => {
+export default new Button(['button', 'fake'], async (client, interaction) => {
   interaction.reply('You clicked the button!')
 })

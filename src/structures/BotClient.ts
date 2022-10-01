@@ -28,7 +28,8 @@ export default class BotClient extends Client {
   public events: Collection<keyof ClientEvents, Event<keyof ClientEvents>> =
     new Collection()
   public errors: Collection<string, string> = new Collection()
-  public interactions: Collection<string, BaseInteraction> = new Collection()
+  public interactions: Collection<string | string[], BaseInteraction> =
+    new Collection()
   public db!: PrismaClient
 
   public command: CommandManager = new CommandManager(this)

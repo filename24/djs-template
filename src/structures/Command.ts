@@ -6,6 +6,16 @@ import {
   SlashCommandOptions
 } from '@types'
 
+/**
+ * @example
+ * export default new SlashCommand(
+ *    new SlashCommandBuilder()
+ *      .setName('ping')
+ *      .setDescription('ping, pong').toJSON(),
+ *    async (client, interaction) => {
+ *      interaction.reply('Pong!')
+ *  })
+ */
 export class SlashCommand {
   slash?: SlashCommand
   constructor(
@@ -15,6 +25,18 @@ export class SlashCommand {
   ) {}
 }
 
+/**
+ * @example
+ * export default new MessageCommand(
+ *  {
+ *     name: 'ping',
+ *     aliases: ['pong']
+ *  },
+ *  async (client, message, args) => {
+ *    message.reply('Pong!')
+ *  }
+ * )
+ */
 export class MessageCommand {
   constructor(
     public data: MessageCommandOptions,
@@ -22,6 +44,22 @@ export class MessageCommand {
   ) {}
 }
 
+/**
+ * @example
+ * export default new BaseCommand({
+ *    name: 'ping',
+ *    aliases: ['pong']
+ * }, async (client, message, args) => {
+ *    message.reply('pong!')
+ * }, {
+ *    new SlashCommandBuilder()
+ *      .setName('ping')
+ *      .setDescription('ping, pong').toJSON(),
+ *    async (client, interaction) => {
+ *      interaction.reply('Pong!')
+ *    }
+ * })
+ */
 export class BaseCommand extends MessageCommand {
   constructor(
     public data: MessageCommandOptions,
