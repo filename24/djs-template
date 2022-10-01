@@ -28,10 +28,10 @@ class InteractionManager extends BaseManager_1.default {
                             const interaction = 
                             // eslint-disable-next-line @typescript-eslint/no-var-requires
                             require(`../interactions/${folder}/${interactionFile}`).default;
-                            if (!interaction.name)
-                                return this.logger.debug(`interaction ${interactionFile} has no name. Skipping.`);
-                            this.interactions.set(interaction.name, interaction);
-                            this.logger.debug(`Loaded interaction ${interaction.name}`);
+                            if (!interaction.customId)
+                                return this.logger.debug(`interaction ${interactionFile} has no customId. Skipping.`);
+                            this.interactions.set(interaction.customId, interaction);
+                            this.logger.debug(`Loaded interaction ${interaction.customId}`);
                         }
                         catch (error) {
                             this.logger.error(`Error loading interaction '${interactionFile}'.\n` +
@@ -39,9 +39,8 @@ class InteractionManager extends BaseManager_1.default {
                         }
                         finally {
                             this.logger.debug(`Succesfully loaded interactions. count: ${this.interactions.size}`);
-                            // eslint-disable-next-line no-unsafe-finally
-                            return this.interactions;
                         }
+                        return this.interactions;
                     });
                 }
                 catch (error) {
@@ -53,8 +52,8 @@ class InteractionManager extends BaseManager_1.default {
             this.logger.error('Error fetching folder list.\n' + error.stack);
         }
     }
-    get(name) {
-        return this.interactions.get(name);
+    get(customId) {
+        return this.interactions.find((_, id) => id.includes(customId));
     }
 }
 exports.default = InteractionManager;

@@ -2,53 +2,53 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AutoComplete = exports.Modal = exports.ContextMenu = exports.SelectMenu = exports.Button = void 0;
 class Button {
-    name;
+    customId;
     execute;
     type = 1 /* InteractionType.Button */;
-    constructor(name, execute) {
-        this.name = name;
+    constructor(customId, execute) {
+        this.customId = customId;
         this.execute = execute;
     }
 }
 exports.Button = Button;
 class SelectMenu {
-    name;
+    customId;
     execute;
     type = 2 /* InteractionType.Select */;
-    constructor(name, execute) {
-        this.name = name;
+    constructor(customId, execute) {
+        this.customId = customId;
         this.execute = execute;
     }
 }
 exports.SelectMenu = SelectMenu;
 class ContextMenu {
-    name;
+    customId;
     data;
     execute;
     type = 3 /* InteractionType.ContextMenu */;
-    constructor(name, data, execute) {
-        this.name = name;
+    constructor(customId, data, execute) {
+        this.customId = customId;
         this.data = data;
         this.execute = execute;
     }
 }
 exports.ContextMenu = ContextMenu;
 class Modal {
-    name;
+    customId;
     execute;
     type = 4 /* InteractionType.Modal */;
-    constructor(name, execute) {
-        this.name = name;
+    constructor(customId, execute) {
+        this.customId = customId;
         this.execute = execute;
     }
 }
 exports.Modal = Modal;
 class AutoComplete {
-    name;
+    customId;
     execute;
     type = 5 /* InteractionType.AutoComplete */;
-    constructor(name, execute) {
-        this.name = name;
+    constructor(customId, execute) {
+        this.customId = customId;
         this.execute = execute;
     }
 }
