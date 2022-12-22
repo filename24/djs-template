@@ -3,7 +3,7 @@ import {
   ButtonInteraction,
   ContextMenuCommandInteraction,
   ModalSubmitInteraction,
-  SelectMenuInteraction
+  AnySelectMenuInteraction
 } from 'discord.js'
 import { BaseInteractionFunction, InteractionData } from '@types'
 import { InteractionType } from '@utils/Constants'
@@ -20,7 +20,7 @@ export class SelectMenu {
   public type: InteractionType.Select = InteractionType.Select
   constructor(
     public customId: string | string[],
-    public execute: BaseInteractionFunction<SelectMenuInteraction<'cached'>>
+    public execute: BaseInteractionFunction<AnySelectMenuInteraction<'cached'>>
   ) {}
 }
 
