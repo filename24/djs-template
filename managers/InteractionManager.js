@@ -7,6 +7,8 @@ const fs_1 = require("fs");
 const path_1 = require("path");
 const Logger_1 = __importDefault(require("../utils/Logger"));
 const BaseManager_1 = __importDefault(require("./BaseManager"));
+const ErrorManager_1 = __importDefault(require("./ErrorManager"));
+const discord_js_1 = require("discord.js");
 class InteractionManager extends BaseManager_1.default {
     logger = new Logger_1.default('InteractionManager');
     interactions;
@@ -53,7 +55,83 @@ class InteractionManager extends BaseManager_1.default {
         }
     }
     get(customId) {
-        return this.interactions.find((_, id) => id.includes(customId));
+        return this.interactions.find((_, id) => {
+            if (typeof id === 'string' && id === customId)
+                return true;
+            id.includes(customId);
+        });
+    }
+    async cacheEvent(interaction) {
+        const errorManager = new ErrorManager_1.default(this.client);
+        if (!interaction.inCachedGuild())
+            return;
+        if (interaction.isButton()) {
+            const interactionData = this.get(interaction.customId);
+            if (!interactionData)
+                return;
+            if (interactionData.type !== 1 /* InteractionType.Button */)
+                return;
+            try {
+                interactionData.execute(this.client, interaction);
+            }
+            catch (error) {
+                errorManager.report(error, { executer: interaction, isSend: true });
+            }
+        }
+        else if (interaction.isAnySelectMenu()) {
+            const interactionData = this.get(interaction.customId);
+            if (!interactionData)
+                return;
+            if (interactionData.type !== 2 /* InteractionType.Select */)
+                return;
+            try {
+                interactionData.execute(this.client, interaction);
+            }
+            catch (error) {
+                errorManager.report(error, { executer: interaction, isSend: true });
+            }
+        }
+        else if (interaction.isContextMenuCommand() ||
+            interaction.isUserContextMenuCommand() ||
+            interaction.isMessageContextMenuCommand()) {
+            const interactionData = this.get(interaction.commandName);
+            if (!interactionData)
+                return;
+            if (interactionData.type !== 3 /* InteractionType.ContextMenu */)
+                return;
+            try {
+                interactionData.execute(this.client, interaction);
+            }
+            catch (error) {
+                errorManager.report(error, { executer: interaction, isSend: true });
+            }
+        }
+        else if (interaction.type === discord_js_1.InteractionType.ModalSubmit) {
+            const interactionData = this.get(interaction.customId);
+            if (!interactionData)
+                return;
+            if (interactionData.type !== 4 /* InteractionType.Modal */)
+                return;
+            try {
+                interactionData.execute(this.client, interaction);
+            }
+            catch (error) {
+                errorManager.report(error, { executer: interaction, isSend: true });
+            }
+        }
+        else if (interaction.type === discord_js_1.InteractionType.ApplicationCommandAutocomplete) {
+            const interactionData = this.get(interaction.commandName);
+            if (!interactionData)
+                return;
+            if (interactionData.type !== 5 /* InteractionType.AutoComplete */)
+                return;
+            try {
+                interactionData.execute(this.client, interaction);
+            }
+            catch (error) {
+                errorManager.report(error);
+            }
+        }
     }
 }
 exports.default = InteractionManager;
