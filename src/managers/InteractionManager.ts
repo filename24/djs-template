@@ -6,7 +6,6 @@ import Logger from '@utils/Logger'
 import BaseManager from './BaseManager'
 import { Interaction } from 'discord.js'
 import ErrorManager from './ErrorManager'
-import CommandManager from './CommandManager'
 import { InteractionType } from '@utils/Constants'
 import { InteractionType as DInteractionType } from 'discord.js'
 export default class InteractionManager extends BaseManager {
