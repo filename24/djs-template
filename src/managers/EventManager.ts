@@ -4,7 +4,7 @@ import { readdirSync } from 'fs'
 import { join } from 'path'
 import { Event } from '@structures/Event'
 import Logger from '@utils/Logger'
-import BaseManager from './BaseManager'
+import BaseManager from './BaseManager.js'
 
 /**
  * @extends {BaseManager}

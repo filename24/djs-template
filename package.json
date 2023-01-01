@@ -1,6 +1,7 @@
 {
   "license": "MIT",
   "main": "build/index.js",
+  "type": "module",
   "scripts": {
     "start": "yarn build && node .",
     "start:node": "node .",
@@ -30,6 +31,7 @@
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-require-extensions": "^0.1.1",
     "eslint-plugin-unused-imports": "^2.0.0",
     "prettier": "^2.8.1",
     "prisma": "^4.8.0",

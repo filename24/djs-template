@@ -1,5 +1,5 @@
 import Logger from '@utils/Logger'
-import BaseManager from './BaseManager'
+import BaseManager from './BaseManager.js'
 import BotClient from '@structures/BotClient'
 import { PrismaClient } from '@prisma/client'
 

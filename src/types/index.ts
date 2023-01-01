@@ -77,5 +77,5 @@ export type EmbedType =
   | 'info'
   | HexColorString
 
-export * from './structures'
-export * from './command'
+export * from './structures.js'
+export * from './command.js'

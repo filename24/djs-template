@@ -1072,6 +1072,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-require-extensions@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "eslint-plugin-require-extensions@npm:0.1.1"
+  peerDependencies:
+    eslint: "*"
+  checksum: 1207d33b0c8c86384737acfdb4675db77a9d5579334b19ce9f404c5913e249c6bebc015fa77942c942b18d40bb7e34baaeaafb62f2c8f80cd2c0044a40e0e546
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-unused-imports@npm:^2.0.0":
   version: 2.0.0
   resolution: "eslint-plugin-unused-imports@npm:2.0.0"
@@ -2444,6 +2453,7 @@ __metadata:
     eslint: ^8.30.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
+    eslint-plugin-require-extensions: ^0.1.1
     eslint-plugin-unused-imports: ^2.0.0
     node-fetch: 2.6.7
     prettier: ^2.8.1

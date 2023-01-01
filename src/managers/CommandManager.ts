@@ -7,11 +7,15 @@ import {
 import { BaseCommand as Command, InteractionData } from '@types'
 
 import Logger from '@utils/Logger'
-import BaseManager from './BaseManager'
+import BaseManager from './BaseManager.js'
 import fs from 'fs'
 import path from 'path'
 import BotClient from '@structures/BotClient'
-import { BaseCommand, MessageCommand, SlashCommand } from '@structures/Command'
+import {
+  BaseCommand,
+  MessageCommand,
+  SlashCommand
+} from '@structures/Command.js'
 import { InteractionType } from '@utils/Constants'
 
 export default class CommandManager extends BaseManager {
@@ -24,7 +28,7 @@ export default class CommandManager extends BaseManager {
     this.commands = client.commands
   }
 
-  public load(commandPath: string = path.join(__dirname, '../commands')): void {
+  public load(commandPath: string = path.join(__dirname, '../commands')) {
     this.logger.debug('Loading commands...')
 
     const commandFolder = fs.readdirSync(commandPath)
@@ -54,12 +58,6 @@ export default class CommandManager extends BaseManager {
               this.logger.error(
                 `Error loading command '${commandFile}'.\n` + error.stack
               )
-            } finally {
-              this.logger.debug(
-                `Succesfully loaded commands. count: ${this.commands.size}`
-              )
-              // eslint-disable-next-line no-unsafe-finally
-              return this.commands
             }
           })
         } catch (error: any) {
@@ -71,6 +69,11 @@ export default class CommandManager extends BaseManager {
     } catch (error: any) {
       this.logger.error('Error fetching folder list.\n' + error.stack)
     }
+
+    this.logger.info(
+      `Succesfully loaded commands. count: ${this.commands.size}`
+    )
+    return this.commands
   }
 
   public get(commandName: string): Command | undefined {
@@ -93,13 +96,10 @@ export default class CommandManager extends BaseManager {
     this.logger.debug('Reloading commands...')
 
     this.commands.clear()
-    try {
-      this.load(commandPath)
-    } finally {
-      this.logger.debug('Succesfully reloaded commands.')
-      // eslint-disable-next-line no-unsafe-finally
-      return { message: '[200] Succesfully reloaded commands.' }
-    }
+    this.load(commandPath)
+
+    this.logger.debug('Succesfully reloaded commands.')
+    return { message: '[200] Succesfully reloaded commands.' }
   }
 
   public static isSlash(command: Command | undefined): command is SlashCommand {

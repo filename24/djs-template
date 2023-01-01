@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import Logger from '@utils/Logger'
-import config from './config'
+import config from './config.js'
 
 import BotClient from '@structures/BotClient'
 

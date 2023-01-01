@@ -3,7 +3,7 @@ import { ShardingManager } from 'discord.js'
 import { setTimeout } from 'timers/promises'
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import config from './config'
+import config from './config.js'
 import chalk from 'chalk'
 import Logger from '@utils/Logger'
 
