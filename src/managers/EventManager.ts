@@ -1,10 +1,11 @@
 import type { ClientEvents } from 'discord.js'
 import type BotClient from '@structures/BotClient'
 import { readdirSync } from 'fs'
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { Event } from '@structures/Event'
 import Logger from '@utils/Logger'
 import BaseManager from './BaseManager.js'
+import { fileURLToPath } from 'url'
 
 /**
  * @extends {BaseManager}
@@ -21,28 +22,32 @@ export default class EventManager extends BaseManager {
     this.events = client.events
   }
 
-  public async load(eventPath = join(__dirname, '../events')) {
+  public async load(
+    eventPath = join(dirname(fileURLToPath(import.meta.url)), '../events')
+  ) {
     this.logger.debug('Loading events...')
 
     const eventFiles = readdirSync(eventPath)
+    await Promise.all(
+      eventFiles.map(async (eventFile) => {
+        try {
+          const { default: event } = await import(`../events/${eventFile}`)
 
-    eventFiles.forEach(async (eventFile) => {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const event = require(`../events/${eventFile}`).default
+          if (!event.name)
+            return this.logger.debug(
+              `Event ${eventFile} has no name. Skipping.`
+            )
 
-        if (!event.name)
-          return this.logger.debug(`Event ${eventFile} has no name. Skipping.`)
-
-        this.events.set(event.name, event)
-        this.logger.debug(`Loaded event ${eventFile}`)
-      } catch (error: any) {
-        this.logger.error(
-          `Error loading events '${eventFile}'.\n` + error.stack
-        )
-      }
-    })
-    this.logger.debug(`Succesfully loaded events. count: ${this.events.size}`)
+          this.events.set(event.name, event)
+          this.logger.debug(`Loaded event ${eventFile}`)
+        } catch (error: any) {
+          this.logger.error(
+            `Error loading events '${eventFile}'.\n` + error.stack
+          )
+        }
+      })
+    )
+    this.logger.info(`Succesfully loaded events. count: ${this.events.size}`)
 
     this.start()
   }

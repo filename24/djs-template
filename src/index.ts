@@ -23,7 +23,7 @@ const main = async () => {
   )
 
   if (!config.bot.sharding) {
-    require('./bot')
+    import('./bot')
   } else {
     try {
       if (!readFileSync(join(__dirname, './bot.ts'))) return
@@ -35,7 +35,7 @@ const main = async () => {
         console.log(' ')
       }
       await setTimeout(1500)
-      require('./bot')
+      import('./bot')
     } catch (e) {
       const manager = new ShardingManager(
         './build/bot.js',

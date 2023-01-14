@@ -18,9 +18,12 @@
       "@utils/*": ["utils/*"]
     }
   },
+  "ts-node": {
+    "esm": true
+  },
   "tsc-alias": {
     "resolveFullPaths": true
   },
   "include": ["./src/**/*.ts"],
-  "exclude": ["./src/**/example.*", "./build/*"]
+  "exclude": ["./src/**/example.config.ts", "./build/*"]
 }

@@ -50,8 +50,8 @@ export default class BotClient extends Client {
     dotenvConfig()
 
     logger.info('Loading managers...')
-    this.command.load()
     this.event.load()
+    this.command.load()
     this.interaction.load()
     this.database.load()
 
