@@ -12,6 +12,7 @@ Discord.js 템플릿 (V14)
 - [Prisma](https://prisma.io/) 데이터베이스 ORM
 - 코드 포멧팅 [Prettier](https://prettier.io/)
 - 코드 린팅 [ESLint](https://eslint.org/)
+- ESM 지원
 
 ## Getting Started
 

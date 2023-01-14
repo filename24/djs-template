@@ -14,6 +14,7 @@ Discord.js Template (V14)
 - Database ORM with [Prisma](https://prisma.io/)
 - Code formatting with [Prettier](https://prettier.io/)
 - Linting with [ESLint](https://eslint.org/)
+- Support ESM
 
 ## Getting Started
 
