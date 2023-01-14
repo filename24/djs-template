@@ -1,51 +1,46 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const discord_js_1 = require("discord.js");
-const dotenv_1 = require("dotenv");
-const dokdo_1 = __importDefault(require("dokdo"));
-const Logger_1 = __importDefault(require("../utils/Logger"));
-const config_1 = __importDefault(require("../config"));
-const CommandManager_1 = __importDefault(require("../managers/CommandManager"));
-const EventManager_1 = __importDefault(require("../managers/EventManager"));
-const ErrorManager_1 = __importDefault(require("../managers/ErrorManager"));
-const DatabaseManager_1 = __importDefault(require("../managers/DatabaseManager"));
-const InteractionManager_1 = __importDefault(require("../managers/InteractionManager"));
-const logger = new Logger_1.default('bot');
-class BotClient extends discord_js_1.Client {
+import { Client, Collection } from 'discord.js';
+import { config as dotenvConfig } from 'dotenv';
+import Dokdo from 'dokdo';
+import Logger from '../utils/Logger.js';
+import config from '../config.js';
+import CommandManager from '../managers/CommandManager.js';
+import EventManager from '../managers/EventManager.js';
+import ErrorManager from '../managers/ErrorManager.js';
+import DatabaseManager from '../managers/DatabaseManager.js';
+import InteractionManager from '../managers/InteractionManager.js';
+const logger = new Logger('bot');
+export default class BotClient extends Client {
     VERSION;
     BUILD_NUMBER;
-    config = config_1.default;
-    commands = new discord_js_1.Collection();
-    events = new discord_js_1.Collection();
-    errors = new discord_js_1.Collection();
-    interactions = new discord_js_1.Collection();
+    config = config;
+    commands = new Collection();
+    events = new Collection();
+    errors = new Collection();
+    interactions = new Collection();
     db;
-    command = new CommandManager_1.default(this);
-    event = new EventManager_1.default(this);
-    error = new ErrorManager_1.default(this);
-    database = new DatabaseManager_1.default(this);
-    interaction = new InteractionManager_1.default(this);
-    dokdo = new dokdo_1.default(this, {
+    command = new CommandManager(this);
+    event = new EventManager(this);
+    error = new ErrorManager(this);
+    database = new DatabaseManager(this);
+    interaction = new InteractionManager(this);
+    dokdo = new Dokdo(this, {
         prefix: this.config.bot.prefix,
         noPerm: async (message) => message.reply('You do not have permission to use this command.')
     });
     constructor(options) {
         super(options);
         logger.info('Loading config data...');
-        (0, dotenv_1.config)();
+        dotenvConfig();
         logger.info('Loading managers...');
-        this.command.load();
         this.event.load();
+        this.command.load();
         this.interaction.load();
         this.database.load();
         logger.info('Loading version data...');
-        this.VERSION = config_1.default.BUILD_VERSION;
-        this.BUILD_NUMBER = config_1.default.BUILD_NUMBER;
+        this.VERSION = config.BUILD_VERSION;
+        this.BUILD_NUMBER = config.BUILD_NUMBER;
     }
-    async start(token = config_1.default.bot.token) {
+    async start(token = config.bot.token) {
         logger.info('Logging in bot...');
         await this.login(token).then(() => this.setStatus());
     }
@@ -70,4 +65,3 @@ class BotClient extends discord_js_1.Client {
         }
     }
 }
-exports.default = BotClient;

@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const discord_js_1 = require("discord.js");
-class Embed extends discord_js_1.EmbedBuilder {
+import { EmbedBuilder } from 'discord.js';
+export default class Embed extends EmbedBuilder {
     constructor(client, type) {
         if (!client.isReady())
             return;
@@ -41,4 +39,3 @@ class Embed extends discord_js_1.EmbedBuilder {
             this.setColor(type);
     }
 }
-exports.default = Embed;

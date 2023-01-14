@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AutoComplete = exports.Modal = exports.ContextMenu = exports.SelectMenu = exports.Button = void 0;
-class Button {
+export class Button {
     customId;
     execute;
     type = 1 /* InteractionType.Button */;
@@ -10,8 +7,7 @@ class Button {
         this.execute = execute;
     }
 }
-exports.Button = Button;
-class SelectMenu {
+export class SelectMenu {
     customId;
     execute;
     type = 2 /* InteractionType.Select */;
@@ -20,8 +16,7 @@ class SelectMenu {
         this.execute = execute;
     }
 }
-exports.SelectMenu = SelectMenu;
-class ContextMenu {
+export class ContextMenu {
     customId;
     data;
     execute;
@@ -32,8 +27,7 @@ class ContextMenu {
         this.execute = execute;
     }
 }
-exports.ContextMenu = ContextMenu;
-class Modal {
+export class Modal {
     customId;
     execute;
     type = 4 /* InteractionType.Modal */;
@@ -42,8 +36,7 @@ class Modal {
         this.execute = execute;
     }
 }
-exports.Modal = Modal;
-class AutoComplete {
+export class AutoComplete {
     customId;
     execute;
     type = 5 /* InteractionType.AutoComplete */;
@@ -52,4 +45,3 @@ class AutoComplete {
         this.execute = execute;
     }
 }
-exports.AutoComplete = AutoComplete;

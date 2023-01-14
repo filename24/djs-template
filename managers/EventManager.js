@@ -1,31 +1,26 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = require("fs");
-const path_1 = require("path");
-const Event_1 = require("../structures/Event");
-const Logger_1 = __importDefault(require("../utils/Logger"));
-const BaseManager_1 = __importDefault(require("./BaseManager"));
+import { readdirSync } from 'fs';
+import { dirname, join } from 'path';
+import { Event } from '../structures/Event.js';
+import Logger from '../utils/Logger.js';
+import BaseManager from './BaseManager.js';
+import { fileURLToPath } from 'url';
 /**
  * @extends {BaseManager}
  */
-class EventManager extends BaseManager_1.default {
+export default class EventManager extends BaseManager {
     logger;
     events;
     constructor(client) {
         super(client);
-        this.logger = new Logger_1.default('EventManager');
+        this.logger = new Logger('EventManager');
         this.events = client.events;
     }
-    async load(eventPath = (0, path_1.join)(__dirname, '../events')) {
+    async load(eventPath = join(dirname(fileURLToPath(import.meta.url)), '../events')) {
         this.logger.debug('Loading events...');
-        const eventFiles = (0, fs_1.readdirSync)(eventPath);
-        eventFiles.forEach(async (eventFile) => {
+        const eventFiles = readdirSync(eventPath);
+        await Promise.all(eventFiles.map(async (eventFile) => {
             try {
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                const event = require(`../events/${eventFile}`).default;
+                const { default: event } = await import(`../events/${eventFile}`);
                 if (!event.name)
                     return this.logger.debug(`Event ${eventFile} has no name. Skipping.`);
                 this.events.set(event.name, event);
@@ -34,14 +29,14 @@ class EventManager extends BaseManager_1.default {
             catch (error) {
                 this.logger.error(`Error loading events '${eventFile}'.\n` + error.stack);
             }
-        });
-        this.logger.debug(`Succesfully loaded events. count: ${this.events.size}`);
+        }));
+        this.logger.info(`Succesfully loaded events. count: ${this.events.size}`);
         this.start();
     }
     async start() {
         this.logger.debug('Starting event files...');
         this.events.forEach((event, eventName) => {
-            if (!Event_1.Event.isEvent(event))
+            if (!Event.isEvent(event))
                 return;
             if (event.options?.once) {
                 this.client.once(eventName, (...args) => {
@@ -57,7 +52,7 @@ class EventManager extends BaseManager_1.default {
             }
         });
     }
-    reload(eventPath = (0, path_1.join)(__dirname, '../events')) {
+    reload(eventPath = join(__dirname, '../events')) {
         this.logger.debug('Reloading events...');
         this.events.clear();
         this.load(eventPath);
@@ -81,4 +76,3 @@ class EventManager extends BaseManager_1.default {
         this.logger.debug(`Registered event '${eventName}'`);
     }
 }
-exports.default = EventManager;

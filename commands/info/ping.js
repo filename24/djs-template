@@ -1,21 +1,16 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const Command_1 = require("../../structures/Command");
-const Embed_1 = __importDefault(require("../../utils/Embed"));
-const builders_1 = require("@discordjs/builders");
-exports.default = new Command_1.BaseCommand({
+import { BaseCommand } from '../../structures/Command.js';
+import Embed from '../../utils/Embed.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+export default new BaseCommand({
     name: 'ping',
     description: '핑을 측정합니다.',
     aliases: ['핑', '측정', 'vld']
 }, async (client, message, args) => {
-    let embed = new Embed_1.default(client, 'warn').setTitle('핑 측정중...');
+    let embed = new Embed(client, 'warn').setTitle('핑 측정중...');
     let m = await message.reply({
         embeds: [embed]
     });
-    embed = new Embed_1.default(client, 'success').setTitle('PONG!').addFields([
+    embed = new Embed(client, 'success').setTitle('PONG!').addFields([
         {
             name: '메세지 응답속도',
             value: `${Number(m.createdAt) - Number(message.createdAt)}ms`,
@@ -36,7 +31,7 @@ exports.default = new Command_1.BaseCommand({
         embeds: [embed]
     });
 }, {
-    data: new builders_1.SlashCommandBuilder()
+    data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('핑을 측정합니다.')
         .toJSON(),
@@ -45,7 +40,7 @@ exports.default = new Command_1.BaseCommand({
         isSlash: true
     },
     async execute(client, interaction) {
-        let PingEmbed = new Embed_1.default(client, 'success')
+        let PingEmbed = new Embed(client, 'success')
             .setTitle('핑 측정')
             .addFields([
             {

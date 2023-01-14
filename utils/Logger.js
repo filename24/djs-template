@@ -1,26 +1,21 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = __importDefault(require("chalk"));
-const strip_ansi_1 = __importDefault(require("strip-ansi"));
-const winston_1 = require("winston");
-const config_1 = __importDefault(require("../config"));
-const { printf, splat, colorize, timestamp, ms, combine } = winston_1.format;
+import chalk from 'chalk';
+import stripColor from 'strip-ansi';
+import { createLogger, format, transports, addColors } from 'winston';
+import config from '../config.js';
+const { printf, splat, colorize, timestamp, ms, combine } = format;
 const colors = {
-    fatal: chalk_1.default.bgWhite.red.bold,
-    error: chalk_1.default.red,
-    warn: chalk_1.default.yellow,
-    info: chalk_1.default.cyanBright,
+    fatal: chalk.bgWhite.red.bold,
+    error: chalk.red,
+    warn: chalk.yellow,
+    info: chalk.cyanBright,
     chat: (text) => text,
-    verbose: chalk_1.default.blueBright,
-    debug: chalk_1.default.blue
+    verbose: chalk.blueBright,
+    debug: chalk.blue
 };
 const myFormat = printf(({ level, message, label, ms }) => {
-    const _level = (0, strip_ansi_1.default)(level);
+    const _level = stripColor(level);
     const colorizer = colors[_level];
-    return `${chalk_1.default.grey(`[${new Date().getFullYear() +
+    return `${chalk.grey(`[${new Date().getFullYear() +
         '-' +
         new Date().getMonth() +
         '-' +
@@ -30,7 +25,7 @@ const myFormat = printf(({ level, message, label, ms }) => {
         ':' +
         new Date().getMinutes() +
         ':' +
-        new Date().getSeconds()}]`)} ${_level === 'chat' ? '' : `[ ${label} ] `}${level} ${colorizer(message)} ${chalk_1.default.magentaBright(ms)}`;
+        new Date().getSeconds()}]`)} ${_level === 'chat' ? '' : `[ ${label} ] `}${level} ${colorizer(message)} ${chalk.magentaBright(ms)}`;
 });
 const myCustomLevels = {
     levels: {
@@ -52,17 +47,17 @@ const myCustomLevels = {
         debug: 'blue'
     }
 };
-(0, winston_1.addColors)(myCustomLevels.colors);
-class Logger {
+addColors(myCustomLevels.colors);
+export default class Logger {
     scope;
     logger;
     constructor(scope) {
         this.scope = scope;
-        this.logger = (0, winston_1.createLogger)({
+        this.logger = createLogger({
             levels: myCustomLevels.levels,
             transports: [
-                new winston_1.transports.Console({
-                    level: config_1.default.logger.dev ? 'debug' : config_1.default.logger.level,
+                new transports.Console({
+                    level: config.logger.dev ? 'debug' : config.logger.level,
                     format: combine(splat(), colorize(), timestamp(), ms(), myFormat)
                 })
             ]
@@ -88,4 +83,3 @@ class Logger {
         return process.exit(1);
     }
 }
-exports.default = Logger;

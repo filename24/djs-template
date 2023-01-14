@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Event = void 0;
 /**
  * @example
  * export default new Event('ready', (client) => {
  *    console.log('ready')
  * })
  */
-class Event {
+export class Event {
     name;
     execute;
     options;
@@ -40,4 +37,3 @@ class Event {
         });
     }
 }
-exports.Event = Event;

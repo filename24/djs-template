@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const Event_1 = require("../structures/Event");
-const CommandManager_1 = __importDefault(require("../managers/CommandManager"));
-const ErrorManager_1 = __importDefault(require("../managers/ErrorManager"));
-exports.default = new Event_1.Event('messageCreate', async (client, message) => {
-    const commandManager = new CommandManager_1.default(client);
-    const errorManager = new ErrorManager_1.default(client);
+import { Event } from '../structures/Event.js';
+import CommandManager from '../managers/CommandManager.js';
+import ErrorManager from '../managers/ErrorManager.js';
+export default new Event('messageCreate', async (client, message) => {
+    const commandManager = new CommandManager(client);
+    const errorManager = new ErrorManager(client);
     if (message.author.bot)
         return;
     if (!message.inGuild())

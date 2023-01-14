@@ -1,34 +1,29 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const discord_js_1 = require("discord.js");
-const CommandManager_1 = __importDefault(require("../../managers/CommandManager"));
-const Embed_1 = __importDefault(require("../../utils/Embed"));
-const ErrorManager_1 = __importDefault(require("../../managers/ErrorManager"));
-const Command_1 = require("../../structures/Command");
-exports.default = new Command_1.BaseCommand({
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, RESTJSONErrorCodes } from 'discord.js';
+import CommandManager from '../../managers/CommandManager.js';
+import Embed from '../../utils/Embed.js';
+import ErrorManager from '../../managers/ErrorManager.js';
+import { BaseCommand } from '../../structures/Command.js';
+export default new BaseCommand({
     name: 'slashSetup',
     aliases: ['slash', 'setup', 'tpxld', '세팅']
 }, async (client, message, args) => {
-    let commandManager = new CommandManager_1.default(client);
-    let errorManager = new ErrorManager_1.default(client);
-    let row = new discord_js_1.ActionRowBuilder().addComponents([
-        new discord_js_1.ButtonBuilder()
+    let commandManager = new CommandManager(client);
+    let errorManager = new ErrorManager(client);
+    let row = new ActionRowBuilder().addComponents([
+        new ButtonBuilder()
             .setCustomId('accept')
             .setLabel('동의합니다.')
-            .setStyle(discord_js_1.ButtonStyle.Primary)
+            .setStyle(ButtonStyle.Primary)
             .setEmoji('✅')
     ]);
-    let embed = new Embed_1.default(client, 'warn')
+    let embed = new Embed(client, 'warn')
         .setTitle('잠시만요!')
         .setDescription(`Slash Command를 사용하려면 봇 초대할 떄 \`applications.commands\` 스코프를 사용하지 않았을 경우 해당기능을 이용할 수 없습니다. 만약 \`applications.commands\` 스코프를 안 할 경우 [여기를](https://discord.com/api/oauth2/authorize?client_id=${client.user?.id}&scope=applications.commands) 클릭하여 허용해 주시기 바랍니다.`);
     let m = await message.channel.send({ embeds: [embed], components: [row] });
     const collector = m.createMessageComponentCollector({ time: 5000 });
     collector.on('collect', async (i) => {
         if (i.user.id === message.author.id) {
-            let loading = new Embed_1.default(client, 'info')
+            let loading = new Embed(client, 'info')
                 .setDescription('Slash Command 로딩중...')
                 .setAuthor({
                 name: '잠시만 기다려주십시요...',
@@ -41,7 +36,7 @@ exports.default = new Command_1.BaseCommand({
                 m.delete();
                 message.channel.send({
                     embeds: [
-                        new Embed_1.default(client, 'success')
+                        new Embed(client, 'success')
                             .setTitle('로딩완료!')
                             .setDescription(`${data?.length}개의 (/) 명령어를 생성했어요!`)
                     ]
@@ -49,10 +44,10 @@ exports.default = new Command_1.BaseCommand({
             })
                 .catch((error) => {
                 m.delete();
-                if (error.code === discord_js_1.RESTJSONErrorCodes.MissingAccess) {
+                if (error.code === RESTJSONErrorCodes.MissingAccess) {
                     message.channel.send({
                         embeds: [
-                            new Embed_1.default(client, 'error')
+                            new Embed(client, 'error')
                                 .setTitle('Error!')
                                 .setDescription('제 봇 권한이 부족합니다...\n> 필요한 권한\n`applications.commands`스코프')
                         ]
@@ -76,11 +71,11 @@ exports.default = new Command_1.BaseCommand({
         m.edit({
             embeds: [embed],
             components: [
-                new discord_js_1.ActionRowBuilder().addComponents([
-                    new discord_js_1.ButtonBuilder()
+                new ActionRowBuilder().addComponents([
+                    new ButtonBuilder()
                         .setCustomId('accept')
                         .setLabel('시간 초과. 다시 시도해주세요...')
-                        .setStyle(discord_js_1.ButtonStyle.Secondary)
+                        .setStyle(ButtonStyle.Secondary)
                         .setEmoji('⛔')
                         .setDisabled(true)
                 ])

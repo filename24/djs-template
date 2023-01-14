@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseCommand = exports.MessageCommand = exports.SlashCommand = void 0;
 /**
  * @example
  * export default new SlashCommand(
@@ -11,7 +8,7 @@ exports.BaseCommand = exports.MessageCommand = exports.SlashCommand = void 0;
  *      interaction.reply('Pong!')
  *  })
  */
-class SlashCommand {
+export class SlashCommand {
     data;
     execute;
     options;
@@ -22,7 +19,6 @@ class SlashCommand {
         this.options = options;
     }
 }
-exports.SlashCommand = SlashCommand;
 /**
  * @example
  * export default new MessageCommand(
@@ -35,7 +31,7 @@ exports.SlashCommand = SlashCommand;
  *  }
  * )
  */
-class MessageCommand {
+export class MessageCommand {
     data;
     execute;
     constructor(data, execute) {
@@ -43,7 +39,6 @@ class MessageCommand {
         this.execute = execute;
     }
 }
-exports.MessageCommand = MessageCommand;
 /**
  * @example
  * export default new BaseCommand({
@@ -60,7 +55,7 @@ exports.MessageCommand = MessageCommand;
  *    }
  * })
  */
-class BaseCommand extends MessageCommand {
+export class BaseCommand extends MessageCommand {
     data;
     execute;
     slash;
@@ -71,4 +66,3 @@ class BaseCommand extends MessageCommand {
         this.slash = slash;
     }
 }
-exports.BaseCommand = BaseCommand;

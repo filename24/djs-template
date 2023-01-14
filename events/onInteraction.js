@@ -1,16 +1,11 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const CommandManager_1 = __importDefault(require("../managers/CommandManager"));
-const ErrorManager_1 = __importDefault(require("../managers/ErrorManager"));
-const InteractionManager_1 = __importDefault(require("../managers/InteractionManager"));
-const Event_1 = require("../structures/Event");
-exports.default = new Event_1.Event('interactionCreate', async (client, interaction) => {
-    const interactionManager = new InteractionManager_1.default(client);
-    const commandManager = new CommandManager_1.default(client);
-    const errorManager = new ErrorManager_1.default(client);
+import CommandManager from '../managers/CommandManager.js';
+import ErrorManager from '../managers/ErrorManager.js';
+import InteractionManager from '../managers/InteractionManager.js';
+import { Event } from '../structures/Event.js';
+export default new Event('interactionCreate', async (client, interaction) => {
+    const interactionManager = new InteractionManager(client);
+    const commandManager = new CommandManager(client);
+    const errorManager = new ErrorManager(client);
     if (!interaction.inCachedGuild())
         return;
     if (interaction.isChatInputCommand()) {
@@ -18,7 +13,7 @@ exports.default = new Event_1.Event('interactionCreate', async (client, interact
             return;
         const command = commandManager.get(interaction.commandName);
         try {
-            if (CommandManager_1.default.isSlash(command)) {
+            if (CommandManager.isSlash(command)) {
                 command.slash
                     ? await command.slash.execute(client, interaction)
                     : await command.execute(client, interaction);

@@ -1,33 +1,28 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const discord_js_1 = require("discord.js");
-const promises_1 = require("timers/promises");
-const fs_1 = require("fs");
-const path_1 = require("path");
-const config_1 = __importDefault(require("./config"));
-const chalk_1 = __importDefault(require("chalk"));
-const Logger_1 = __importDefault(require("./utils/Logger"));
-const logger = new Logger_1.default('ShardManager');
+import 'dotenv/config';
+import { ShardingManager } from 'discord.js';
+import { setTimeout } from 'timers/promises';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import config from './config.js';
+import chalk from 'chalk';
+import Logger from './utils/Logger.js';
+const logger = new Logger('ShardManager');
 const main = async () => {
-    console.log(chalk_1.default.cyanBright(`
+    console.log(chalk.cyanBright(`
                     =========================================================
   
   
-                                ${config_1.default.name}@${config_1.default.BUILD_NUMBER}
-                              Version : ${config_1.default.BUILD_VERSION}
+                                ${config.name}@${config.BUILD_NUMBER}
+                              Version : ${config.BUILD_VERSION}
   
   
                     =========================================================`));
-    if (!config_1.default.bot.sharding) {
-        require('./bot');
+    if (!config.bot.sharding) {
+        import('./bot.js');
     }
     else {
         try {
-            if (!(0, fs_1.readFileSync)((0, path_1.join)(__dirname, './bot.ts')))
+            if (!readFileSync(join(__dirname, './bot.ts')))
                 return;
             for (let index = 0; index < 6; index++) {
                 console.log(' ');
@@ -36,11 +31,11 @@ const main = async () => {
             for (let index = 0; index < 6; index++) {
                 console.log(' ');
             }
-            await (0, promises_1.setTimeout)(1500);
-            require('./bot');
+            await setTimeout(1500);
+            import('./bot.js');
         }
         catch (e) {
-            const manager = new discord_js_1.ShardingManager('./build/bot.js', config_1.default.bot.shardingOptions);
+            const manager = new ShardingManager('./build/bot.js', config.bot.shardingOptions);
             manager.spawn();
             manager.on('shardCreate', async (shard) => {
                 logger.info(`Shard #${shard.id} created.`);

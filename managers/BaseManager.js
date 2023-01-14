@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class BaseManager {
+export default class BaseManager {
     client;
     constructor(client) {
         this.client = client;
     }
 }
-exports.default = BaseManager;
