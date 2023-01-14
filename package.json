@@ -6,8 +6,8 @@
     "start": "yarn build && node .",
     "start:node": "node .",
     "dev": "yarn generate && nodemon --exec yarn start --watch src -e ts,json",
-    "generate": "prisma generate",
-    "build": "tsc && tsc-alias",
+    "generate": "yarn pnpify prisma generate",
+    "build": "yarn pnpify tsc && yarn pnpify tsc-alias",
     "update": "yarn upgrade-interactive",
     "lint": "eslint . --ext .ts",
     "lint:fix": "prettier --write '**/*.ts' && eslint . --ext .ts --fix"
@@ -19,6 +19,7 @@
     "dokdo": "^0.6.2",
     "dotenv": "^16.0.3",
     "node-fetch": "3.3.0",
+    "strip-ansi": "^7.0.1",
     "uuid": "^9.0.0",
     "winston": "^3.8.2"
   },
@@ -28,6 +29,7 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
+    "@yarnpkg/pnpify": "^4.0.0-rc.35",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -50,5 +52,13 @@
     "node": ">=16.9"
   },
   "packageManager": "yarn@3.2.2",
-  "private": true
+  "private": true,
+  "dependenciesMeta": {
+    "@prisma/client@4.8.1": {
+      "unplugged": true
+    },
+    "prisma@4.8.1": {
+      "unplugged": true
+    }
+  }
 }

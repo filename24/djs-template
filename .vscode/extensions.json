@@ -2,6 +2,8 @@
   "recommendations": [
     "esbenp.prettier-vscode",
     "eamodio.gitlens",
-    "prisma.prisma"
+    "prisma.prisma",
+    "arcanis.vscode-zipfs",
+    "dbaeumer.vscode-eslint"
   ]
 }
