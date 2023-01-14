@@ -3,7 +3,7 @@ import { ShardingManager } from 'discord.js'
 import { setTimeout } from 'timers/promises'
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import config from './config'
+import config from './config.js'
 import chalk from 'chalk'
 import Logger from '@utils/Logger'
 
@@ -23,7 +23,7 @@ const main = async () => {
   )
 
   if (!config.bot.sharding) {
-    require('./bot')
+    import('./bot')
   } else {
     try {
       if (!readFileSync(join(__dirname, './bot.ts'))) return
@@ -35,7 +35,7 @@ const main = async () => {
         console.log(' ')
       }
       await setTimeout(1500)
-      require('./bot')
+      import('./bot')
     } catch (e) {
       const manager = new ShardingManager(
         './build/bot.js',

@@ -61,7 +61,7 @@ export default new MessageCommand(
       return msg.edit({ embeds: [LoadingEmbed] })
     }
 
-    let json: GithubCommitAPI[] = await res.json()
+    let json = (await res.json()) as GithubCommitAPI[]
 
     if (json[0].sha.trim().substring(0, 7) === client.BUILD_NUMBER) {
       let SuccessEmbed = new Embed(client, 'success')

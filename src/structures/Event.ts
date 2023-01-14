@@ -1,6 +1,6 @@
 import { ClientEvents } from 'discord.js'
 import { EventFunction, EventOptions } from '@types'
-import BotClient from './BotClient'
+import BotClient from './BotClient.js'
 
 /**
  * @example

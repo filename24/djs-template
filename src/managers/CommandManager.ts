@@ -7,12 +7,17 @@ import {
 import { BaseCommand as Command, InteractionData } from '@types'
 
 import Logger from '@utils/Logger'
-import BaseManager from './BaseManager'
+import BaseManager from './BaseManager.js'
 import fs from 'fs'
-import path from 'path'
+import path, { dirname } from 'path'
 import BotClient from '@structures/BotClient'
-import { BaseCommand, MessageCommand, SlashCommand } from '@structures/Command'
+import {
+  BaseCommand,
+  MessageCommand,
+  SlashCommand
+} from '@structures/Command.js'
 import { InteractionType } from '@utils/Constants'
+import { fileURLToPath } from 'url'
 
 export default class CommandManager extends BaseManager {
   private logger = new Logger('CommandManager')
@@ -24,53 +29,64 @@ export default class CommandManager extends BaseManager {
     this.commands = client.commands
   }
 
-  public load(commandPath: string = path.join(__dirname, '../commands')): void {
+  public async load(
+    commandPath: string = path.join(
+      dirname(fileURLToPath(import.meta.url)),
+      '../commands'
+    )
+  ) {
     this.logger.debug('Loading commands...')
 
     const commandFolder = fs.readdirSync(commandPath)
 
     try {
-      commandFolder.forEach((folder) => {
-        if (!fs.lstatSync(path.join(commandPath, folder)).isDirectory()) return
+      await Promise.all(
+        commandFolder.map(async (folder) => {
+          if (!fs.lstatSync(path.join(commandPath, folder)).isDirectory())
+            return
 
-        try {
-          const commandFiles = fs.readdirSync(path.join(commandPath, folder))
+          try {
+            const commandFiles = fs.readdirSync(path.join(commandPath, folder))
 
-          commandFiles.forEach((commandFile) => {
-            try {
-              const command =
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                require(`../commands/${folder}/${commandFile}`).default
+            await Promise.all(
+              commandFiles.map(async (commandFile) => {
+                try {
+                  const { default: command } = await import(
+                    `../commands/${folder}/${commandFile}`
+                  )
+                  if (!command.data?.name ?? !command.name)
+                    return this.logger.debug(
+                      `Command ${commandFile} has no name. Skipping.`
+                    )
 
-              if (!command.data.name ?? !command.name)
-                return this.logger.debug(
-                  `Command ${commandFile} has no name. Skipping.`
-                )
+                  this.commands.set(command.data.name ?? command.name, command)
 
-              this.commands.set(command.data.name ?? command.name, command)
-
-              this.logger.debug(`Loaded command ${command.name}`)
-            } catch (error: any) {
-              this.logger.error(
-                `Error loading command '${commandFile}'.\n` + error.stack
-              )
-            } finally {
-              this.logger.debug(
-                `Succesfully loaded commands. count: ${this.commands.size}`
-              )
-              // eslint-disable-next-line no-unsafe-finally
-              return this.commands
-            }
-          })
-        } catch (error: any) {
-          this.logger.error(
-            `Error loading command folder '${folder}'.\n` + error.stack
-          )
-        }
-      })
+                  this.logger.debug(
+                    `Loaded command ${command.data.name ?? command.name}`
+                  )
+                } catch (error: any) {
+                  this.logger.error(
+                    `Error loading command '${commandFile}'.\n` + error.stack
+                  )
+                }
+              })
+            )
+          } catch (error: any) {
+            this.logger.error(
+              `Error loading command folder '${folder}'.\n` + error.stack
+            )
+          }
+        })
+      )
     } catch (error: any) {
       this.logger.error('Error fetching folder list.\n' + error.stack)
     }
+
+    this.logger.info(
+      `Succesfully loaded commands. count: ${this.commands.size}`
+    )
+
+    return this.commands
   }
 
   public get(commandName: string): Command | undefined {
@@ -93,13 +109,10 @@ export default class CommandManager extends BaseManager {
     this.logger.debug('Reloading commands...')
 
     this.commands.clear()
-    try {
-      this.load(commandPath)
-    } finally {
-      this.logger.debug('Succesfully reloaded commands.')
-      // eslint-disable-next-line no-unsafe-finally
-      return { message: '[200] Succesfully reloaded commands.' }
-    }
+    this.load(commandPath)
+
+    this.logger.debug('Succesfully reloaded commands.')
+    return { message: '[200] Succesfully reloaded commands.' }
   }
 
   public static isSlash(command: Command | undefined): command is SlashCommand {

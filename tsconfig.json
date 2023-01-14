@@ -1,35 +1,29 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
     "allowJs": true,
     "esModuleInterop": true,
     "preserveConstEnums": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "moduleResolution": "Node",
     "skipLibCheck": true,
     "outDir": "./build",
-    "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
-      "@types": [
-        "types/index"
-      ],
-      "@structures/*": [
-        "structures/*"
-      ],
-      "@managers/*": [
-        "managers/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ]
-    },
+      "@types": ["types/index"],
+      "@structures/*": ["structures/*"],
+      "@managers/*": ["managers/*"],
+      "@utils/*": ["utils/*"]
+    }
   },
-  "include": [
-    "./src/**/*.ts"
-  ],
-  "exclude": [
-    "./src/**/example.*"
-  ]
+  "ts-node": {
+    "esm": true
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["./src/**/example.config.ts", "./build/*"]
 }

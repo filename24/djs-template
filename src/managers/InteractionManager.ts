@@ -1,13 +1,14 @@
-import { lstatSync, readdirSync } from 'fs'
-import { join } from 'path'
+import { dirname, resolve } from 'path'
 import BotClient from '@structures/BotClient'
 import { BaseInteraction } from '@structures/Interaction'
 import Logger from '@utils/Logger'
-import BaseManager from './BaseManager'
+import BaseManager from './BaseManager.js'
 import { Interaction } from 'discord.js'
-import ErrorManager from './ErrorManager'
+import ErrorManager from './ErrorManager.js'
 import { InteractionType } from '@utils/Constants'
 import { InteractionType as DInteractionType } from 'discord.js'
+import { fileURLToPath, pathToFileURL } from 'url'
+import { readAllFiles } from '@utils/Utils.js'
 export default class InteractionManager extends BaseManager {
   private logger = new Logger('InteractionManager')
   public readonly interactions: BotClient['interactions']
@@ -19,54 +20,42 @@ export default class InteractionManager extends BaseManager {
   }
 
   public async load(
-    interactionPath: string = join(__dirname, '../interactions')
+    interactionPath: string = resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../interactions'
+    )
   ) {
     this.logger.debug('Loading interactions...')
 
-    const interactionFolder = readdirSync(interactionPath)
+    const interactionFiles = readAllFiles(interactionPath)
 
-    try {
-      interactionFolder.forEach((folder) => {
-        if (!lstatSync(join(interactionPath, folder)).isDirectory()) return
-
+    await Promise.all(
+      interactionFiles.map(async (interactionFile) => {
         try {
-          const interactionFiles = readdirSync(join(interactionPath, folder))
+          const { default: interaction } = await import(
+            pathToFileURL(interactionFile).toString()
+          )
 
-          interactionFiles.forEach((interactionFile) => {
-            try {
-              const interaction: BaseInteraction =
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                require(`../interactions/${folder}/${interactionFile}`).default
+          if (!interaction.customId)
+            return this.logger.debug(
+              `interaction ${interactionFile} has no customId. Skipping.`
+            )
 
-              if (!interaction.customId)
-                return this.logger.debug(
-                  `interaction ${interactionFile} has no customId. Skipping.`
-                )
+          this.interactions.set(interaction.customId, interaction)
 
-              this.interactions.set(interaction.customId, interaction)
-
-              this.logger.debug(`Loaded interaction ${interaction.customId}`)
-            } catch (error: any) {
-              this.logger.error(
-                `Error loading interaction '${interactionFile}'.\n` +
-                  error.stack
-              )
-            } finally {
-              this.logger.debug(
-                `Succesfully loaded interactions. count: ${this.interactions.size}`
-              )
-            }
-            return this.interactions
-          })
+          this.logger.debug(`Loaded interaction ${interaction.customId}`)
         } catch (error: any) {
           this.logger.error(
-            `Error loading interaction folder '${folder}'.\n` + error.stack
+            `Error loading interaction '${interactionFile}'.\n` + error.stack
           )
         }
       })
-    } catch (error: any) {
-      this.logger.error('Error fetching folder list.\n' + error.stack)
-    }
+    )
+
+    this.logger.info(
+      `Succesfully loaded interactions. count: ${this.interactions.size}`
+    )
+    return this.interactions
   }
 
   public get(customId: string): BaseInteraction | undefined {

@@ -4,12 +4,18 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint", "prettier", "unused-imports"],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier",
+    "unused-imports",
+    "require-extensions"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:require-extensions/recommended"
   ],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",

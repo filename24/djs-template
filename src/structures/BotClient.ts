@@ -6,10 +6,10 @@ import Dokdo from 'dokdo'
 import Logger from '@utils/Logger'
 
 import { BaseCommand } from '@types'
-import { BaseInteraction } from './Interaction'
-import { Event } from './Event'
+import { BaseInteraction } from './Interaction.js'
+import { Event } from './Event.js'
 
-import config from '../config'
+import config from '../config.js'
 
 import CommandManager from '@managers/CommandManager'
 import EventManager from '@managers/EventManager'
@@ -50,8 +50,8 @@ export default class BotClient extends Client {
     dotenvConfig()
 
     logger.info('Loading managers...')
-    this.command.load()
     this.event.load()
+    this.command.load()
     this.interaction.load()
     this.database.load()
 
