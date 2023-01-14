@@ -186,7 +186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^4.8.1":
+"@prisma/client@npm:4.8.1":
   version: 4.8.1
   resolution: "@prisma/client@npm:4.8.1"
   dependencies:
@@ -2680,7 +2680,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:^4.8.1":
+"prisma@npm:4.8.1":
   version: 4.8.1
   resolution: "prisma@npm:4.8.1"
   dependencies:
@@ -2842,7 +2842,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@prisma/client": ^4.8.1
+    "@prisma/client": 4.8.1
     "@types/node": ^18.11.18
     "@types/node-fetch": ^2.6.2
     "@types/uuid": ^9.0.0
@@ -2861,7 +2861,7 @@ __metadata:
     node-fetch: 3.3.0
     nodemon: ^2.0.20
     prettier: ^2.8.3
-    prisma: ^4.8.1
+    prisma: 4.8.1
     strip-ansi: ^7.0.1
     tsc-alias: ^1.8.2
     tsconfig-paths: ^4.1.2
