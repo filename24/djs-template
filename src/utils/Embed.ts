@@ -1,8 +1,9 @@
-import { type Client, EmbedBuilder, type EmbedData } from 'discord.js'
+import { EmbedBuilder, type EmbedData } from 'discord.js'
 import { EmbedType } from '@types'
+import BotClient from '@structures/BotClient'
 
 export default class Embed extends EmbedBuilder {
-  constructor(client: Client, type: EmbedType) {
+  constructor(client: BotClient, type: EmbedType) {
     if (!client.isReady()) return
 
     const EmbedJSON: EmbedData = {
