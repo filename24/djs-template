@@ -1,6 +1,6 @@
 import { Event } from '@structures/Event'
 import Logger from '@utils/Logger'
-const logger = new Logger('bot')
+const logger = new Logger('Bot')
 
 export default new Event(
   'ready',

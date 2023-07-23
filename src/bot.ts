@@ -6,10 +6,10 @@ import BotClient from '@structures/BotClient'
 
 const logger = new Logger('main')
 
-logger.log('Starting up...')
+logger.silly('Starting up...')
 
-process.on('uncaughtException', (e) => logger.error(e.stack as string))
-process.on('unhandledRejection', (e: Error) => logger.error(e.stack as string))
+process.on('uncaughtException', (e) => logger.error(e))
+process.on('unhandledRejection', (e: Error) => logger.error(e))
 
 const client = new BotClient(config.bot.options)
 
