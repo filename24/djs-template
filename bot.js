@@ -3,8 +3,9 @@ import Logger from './utils/Logger.js';
 import config from './config.js';
 import BotClient from './structures/BotClient.js';
 const logger = new Logger('main');
-logger.log('Starting up...');
-process.on('uncaughtException', (e) => logger.error(e.stack));
-process.on('unhandledRejection', (e) => logger.error(e.stack));
+logger.silly('Starting up...');
+process.on('uncaughtException', (e) => logger.error(e));
+process.on('unhandledRejection', (e) => logger.error(e));
 const client = new BotClient(config.bot.options);
 client.start(config.bot.token);
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYm90LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2JvdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLGVBQWUsQ0FBQTtBQUN0QixPQUFPLE1BQU0sTUFBTSxlQUFlLENBQUE7QUFDbEMsT0FBTyxNQUFNLE1BQU0sYUFBYSxDQUFBO0FBRWhDLE9BQU8sU0FBUyxNQUFNLHVCQUF1QixDQUFBO0FBRTdDLE1BQU0sTUFBTSxHQUFHLElBQUksTUFBTSxDQUFDLE1BQU0sQ0FBQyxDQUFBO0FBRWpDLE1BQU0sQ0FBQyxLQUFLLENBQUMsZ0JBQWdCLENBQUMsQ0FBQTtBQUU5QixPQUFPLENBQUMsRUFBRSxDQUFDLG1CQUFtQixFQUFFLENBQUMsQ0FBQyxFQUFFLEVBQUUsQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUE7QUFDdkQsT0FBTyxDQUFDLEVBQUUsQ0FBQyxvQkFBb0IsRUFBRSxDQUFDLENBQVEsRUFBRSxFQUFFLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFBO0FBRS9ELE1BQU0sTUFBTSxHQUFHLElBQUksU0FBUyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUE7QUFFaEQsTUFBTSxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFBIn0=

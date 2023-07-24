@@ -1,6 +1,7 @@
 import { Event } from '../structures/Event.js';
 import Logger from '../utils/Logger.js';
-const logger = new Logger('bot');
+const logger = new Logger('Bot');
 export default new Event('ready', async (client) => {
     logger.info(`Logged ${client.user?.username}`);
 }, { once: true });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib25SZWFkeS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9ldmVudHMvb25SZWFkeS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEVBQUUsS0FBSyxFQUFFLE1BQU0sbUJBQW1CLENBQUE7QUFDekMsT0FBTyxNQUFNLE1BQU0sZUFBZSxDQUFBO0FBQ2xDLE1BQU0sTUFBTSxHQUFHLElBQUksTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFBO0FBRWhDLGVBQWUsSUFBSSxLQUFLLENBQ3RCLE9BQU8sRUFDUCxLQUFLLEVBQUUsTUFBTSxFQUFFLEVBQUU7SUFDZixNQUFNLENBQUMsSUFBSSxDQUFDLFVBQVUsTUFBTSxDQUFDLElBQUksRUFBRSxRQUFRLEVBQUUsQ0FBQyxDQUFBO0FBQ2hELENBQUMsRUFDRCxFQUFFLElBQUksRUFBRSxJQUFJLEVBQUUsQ0FDZixDQUFBIn0=

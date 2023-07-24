@@ -1,85 +1,25 @@
-import chalk from 'chalk';
-import stripColor from 'strip-ansi';
-import { createLogger, format, transports, addColors } from 'winston';
 import config from '../config.js';
-const { printf, splat, colorize, timestamp, ms, combine } = format;
-const colors = {
-    fatal: chalk.bgWhite.red.bold,
-    error: chalk.red,
-    warn: chalk.yellow,
-    info: chalk.cyanBright,
-    chat: (text) => text,
-    verbose: chalk.blueBright,
-    debug: chalk.blue
-};
-const myFormat = printf(({ level, message, label, ms }) => {
-    const _level = stripColor(level);
-    const colorizer = colors[_level];
-    return `${chalk.grey(`[${new Date().getFullYear() +
-        '-' +
-        new Date().getMonth() +
-        '-' +
-        new Date().getDate() +
-        ' ' +
-        new Date().getHours() +
-        ':' +
-        new Date().getMinutes() +
-        ':' +
-        new Date().getSeconds()}]`)} ${_level === 'chat' ? '' : `[ ${label} ] `}${level} ${colorizer(message)} ${chalk.magentaBright(ms)}`;
-});
-const myCustomLevels = {
-    levels: {
-        fatal: 0,
-        error: 1,
-        warn: 2,
-        info: 3,
-        chat: 4,
-        verbose: 5,
-        debug: 6
-    },
-    colors: {
-        fatal: 'whiteBG red bold',
-        error: 'red',
-        warn: 'yellow',
-        info: 'white',
-        chat: 'grey',
-        verbose: 'cyan',
-        debug: 'blue'
-    }
-};
-addColors(myCustomLevels.colors);
-export default class Logger {
-    scope;
-    logger;
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createStream } from 'rotating-file-stream';
+import { Logger as BaseLogger } from 'tslog';
+export default class Logger extends BaseLogger {
+    stream = createStream(join(dirname(fileURLToPath(import.meta.url)), '../../logs/latest.log'), {
+        size: '10M',
+        interval: '1d',
+        compress: 'gzip'
+    });
     constructor(scope) {
-        this.scope = scope;
-        this.logger = createLogger({
-            levels: myCustomLevels.levels,
-            transports: [
-                new transports.Console({
-                    level: config.logger.dev ? 'debug' : config.logger.level,
-                    format: combine(splat(), colorize(), timestamp(), ms(), myFormat)
-                })
-            ]
+        super({
+            name: scope,
+            type: 'pretty',
+            prettyLogTimeZone: 'local',
+            prettyLogTemplate: '{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}} [ {{logLevelName}} ] [ {{name}} ]  ',
+            minLevel: config.logger.dev ? 2 /* LevelType.Debug */ : config.logger.level
+        });
+        this.attachTransport((data) => {
+            this.stream.write(JSON.stringify(data) + '\n');
         });
     }
-    log(message, ...args) {
-        this.logger.info(message, ...args, { label: this.scope });
-    }
-    info(message, ...args) {
-        this.logger.info(message, ...args, { label: this.scope });
-    }
-    warn(message, ...args) {
-        this.logger.warn(message, ...args, { label: this.scope });
-    }
-    error(message, ...args) {
-        this.logger.error(message, ...args, { label: this.scope });
-    }
-    debug(message, ...args) {
-        this.logger.debug(message, ...args, { label: this.scope });
-    }
-    fatal(message, ...args) {
-        this.logger.error(message, ...args, { label: this.scope });
-        return process.exit(1);
-    }
 }
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTG9nZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL3V0aWxzL0xvZ2dlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLE1BQU0sTUFBTSxRQUFRLENBQUE7QUFDM0IsT0FBTyxFQUFFLE9BQU8sRUFBRSxJQUFJLEVBQUUsTUFBTSxXQUFXLENBQUE7QUFDekMsT0FBTyxFQUFFLGFBQWEsRUFBRSxNQUFNLFVBQVUsQ0FBQTtBQUN4QyxPQUFPLEVBQUUsWUFBWSxFQUFFLE1BQU0sc0JBQXNCLENBQUE7QUFDbkQsT0FBTyxFQUFFLE1BQU0sSUFBSSxVQUFVLEVBQVcsTUFBTSxPQUFPLENBQUE7QUFHckQsTUFBTSxDQUFDLE9BQU8sT0FBTyxNQUFPLFNBQVEsVUFBbUI7SUFDOUMsTUFBTSxHQUFHLFlBQVksQ0FDMUIsSUFBSSxDQUFDLE9BQU8sQ0FBQyxhQUFhLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQyxFQUFFLHVCQUF1QixDQUFDLEVBQ3RFO1FBQ0UsSUFBSSxFQUFFLEtBQUs7UUFDWCxRQUFRLEVBQUUsSUFBSTtRQUNkLFFBQVEsRUFBRSxNQUFNO0tBQ2pCLENBQ0YsQ0FBQTtJQUVELFlBQVksS0FBYTtRQUN2QixLQUFLLENBQUM7WUFDSixJQUFJLEVBQUUsS0FBSztZQUNYLElBQUksRUFBRSxRQUFRO1lBQ2QsaUJBQWlCLEVBQUUsT0FBTztZQUMxQixpQkFBaUIsRUFDZix3RkFBd0Y7WUFDMUYsUUFBUSxFQUFFLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMseUJBQWlCLENBQUMsQ0FBQyxNQUFNLENBQUMsTUFBTSxDQUFDLEtBQUs7U0FDcEUsQ0FBQyxDQUFBO1FBRUYsSUFBSSxDQUFDLGVBQWUsQ0FBQyxDQUFDLElBQUksRUFBRSxFQUFFO1lBQzVCLElBQUksQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLEdBQUcsSUFBSSxDQUFDLENBQUE7UUFDaEQsQ0FBQyxDQUFDLENBQUE7SUFDSixDQUFDO0NBQ0YifQ==
