@@ -52,5 +52,8 @@
     "node": ">=16.9"
   },
   "packageManager": "yarn@3.2.2",
-  "private": true
+  "private": true,
+  "resolutions": {
+    "dokdo@1.0.1": "patch:dokdo@npm:1.0.1#.yarn/patches/dokdo-npm-1.0.1-3b43b27044.patch"
+  }
 }

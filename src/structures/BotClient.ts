@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Client, ClientOptions, ClientEvents, Collection } from 'discord.js'
 import { config as dotenvConfig } from 'dotenv'
-import { Client as Dokdo } from 'dokdo'
+import * as Dokdo from 'dokdo'
 
 import Logger from '@utils/Logger'
 
@@ -37,7 +37,7 @@ export default class BotClient extends Client {
   public error: ErrorManager = new ErrorManager(this)
   public database: DatabaseManager = new DatabaseManager(this)
   public interaction: InteractionManager = new InteractionManager(this)
-  public eval = new Dokdo(this, {
+  public eval = new Dokdo.Client(this, {
     prefix: this.config.bot.prefix,
     noPerm: async (message) =>
       message.reply('You do not have permission to use this command.'),
