@@ -134,7 +134,7 @@ export default class CommandManager extends BaseManager {
   public async slashCommandSetup(
     guildID: string
   ): Promise<ApplicationCommandDataResolvable[] | undefined> {
-    this.logger.scope = 'CommandManager: SlashSetup'
+    this.logger.getSubLogger({ name: 'SlashSetup' })
     const rest = new REST().setToken(this.client.token!)
 
     const interactions: Collection<string, InteractionData> = new Collection()

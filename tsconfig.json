@@ -16,7 +16,8 @@
       "@structures/*": ["structures/*"],
       "@managers/*": ["managers/*"],
       "@utils/*": ["utils/*"]
-    }
+    },
+    "inlineSourceMap": true
   },
   "ts-node": {
     "esm": true

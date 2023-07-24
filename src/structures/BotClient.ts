@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Client, ClientOptions, ClientEvents, Collection } from 'discord.js'
 import { config as dotenvConfig } from 'dotenv'
-import Dokdo from 'dokdo'
+import * as Dokdo from 'dokdo'
 
 import Logger from '@utils/Logger'
 
@@ -17,7 +17,7 @@ import ErrorManager from '@managers/ErrorManager'
 import DatabaseManager from '@managers/DatabaseManager'
 import InteractionManager from '@managers/InteractionManager'
 
-const logger = new Logger('bot')
+const logger = new Logger('Bot')
 
 export default class BotClient extends Client {
   public readonly VERSION: string
@@ -37,10 +37,11 @@ export default class BotClient extends Client {
   public error: ErrorManager = new ErrorManager(this)
   public database: DatabaseManager = new DatabaseManager(this)
   public interaction: InteractionManager = new InteractionManager(this)
-  public dokdo: Dokdo = new Dokdo(this, {
+  public eval = new Dokdo.Client(this, {
     prefix: this.config.bot.prefix,
     noPerm: async (message) =>
-      message.reply('You do not have permission to use this command.')
+      message.reply('You do not have permission to use this command.'),
+    aliases: ['eval', 'dok']
   })
 
   public constructor(options: ClientOptions) {
@@ -62,13 +63,12 @@ export default class BotClient extends Client {
 
   public async start(token: string = config.bot.token): Promise<void> {
     logger.info('Logging in bot...')
-    await this.login(token).then(() => this.setStatus())
+    await this.login(token).then(() => {
+      this.setStatus()
+    })
   }
 
-  public async setStatus(
-    status: 'dev' | 'online' = 'online',
-    name = '점검중...'
-  ) {
+  public setStatus(status: 'dev' | 'online' = 'online', name = '점검중...') {
     if (status.includes('dev')) {
       logger.warn('Changed status to Developent mode')
       this.user?.setPresence({

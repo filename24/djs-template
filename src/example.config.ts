@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 import { IConfig } from '@types'
-import { ReportType } from './utils/Constants'
+import { LevelType, ReportType } from './utils/Constants.js'
 
 const config: IConfig = {
   BUILD_NUMBER: execSync('git rev-parse --short HEAD').toString().trim(),
@@ -30,7 +30,7 @@ const config: IConfig = {
     }
   },
   logger: {
-    level: 'chat',
+    level: LevelType.Info,
     dev: false
   }
 }

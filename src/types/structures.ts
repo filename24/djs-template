@@ -22,7 +22,7 @@ export type MessageCommandFuntion = (
   client: BotClient,
   message: Message<true>,
   args: string[]
-) => Promise<any> | Promise<any>
+) => Promise<any>
 
 export type SlashCommandFunction = (
   client: BotClient,

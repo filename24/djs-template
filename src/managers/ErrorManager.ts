@@ -18,7 +18,7 @@ export default class ErrorManager extends BaseManager {
   public constructor(client: BotClient) {
     super(client)
 
-    this.logger = new Logger('bot')
+    this.logger = new Logger('Bot')
   }
 
   public report(error: Error, options?: ErrorReportOptions) {

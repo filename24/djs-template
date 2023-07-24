@@ -9,7 +9,7 @@ import {
   AnySelectMenuInteraction,
   ShardingManagerOptions
 } from 'discord.js'
-import { ReportType } from '@utils/Constants'
+import { ReportType, LevelType } from '@utils/Constants'
 
 export interface ErrorReportOptions {
   executer?:
@@ -59,15 +59,6 @@ export interface BotConfig {
   prefix: string
   cooldown?: number
 }
-
-export type LevelType =
-  | 'fatal'
-  | 'error'
-  | 'warn'
-  | 'info'
-  | 'verbose'
-  | 'debug'
-  | 'chat'
 
 export type EmbedType =
   | 'default'
