@@ -17,7 +17,8 @@
       "@managers/*": ["managers/*"],
       "@utils/*": ["utils/*"]
     },
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "types": ["bun-types"]
   },
   "ts-node": {
     "esm": true

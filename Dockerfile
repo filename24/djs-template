@@ -1,23 +1,13 @@
-FROM node:16-alpine
+FROM oven/bun
 
 WORKDIR /app
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh python3 build-base
-
 COPY package.json /app/
-COPY yarn.lock /app/
+COPY bun.lockb /app/
 COPY .yarn/ /app/.yarn/
-COPY .yarnrc.yml /app/
 
-RUN yarn install
-RUN yarn cache clean
+RUN bun install
 
 COPY . /app/
 
-RUN yarn build
-RUN yarn generate
-
-RUN rm src/ -rf
-
-CMD yarn start:node
+CMD bun start

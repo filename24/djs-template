@@ -5,5 +5,7 @@
 .eslintrc.json
 .prettierrc
 
+node_modules
+
 README.md
 README-KO.md
